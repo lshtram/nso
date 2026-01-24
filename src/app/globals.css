@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8f9fa;
+  --foreground: #1a1a1a;
+  --charcoal: #1a1a1a;
+  --off-white: #f8f9fa;
+  --chrome-yellow: #ffcc00;
+  --accent-slate: #334155;
+  --sage: #10b981;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
+    font-family: "Inter", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+/* Dynamic Contrast Utilities */
+.section-dark {
+  @apply bg-[var(--charcoal)] text-white;
+}
+
+.section-light {
+  @apply bg-[var(--off-white)] text-[var(--foreground)];
+}
+
+.text-dynamic-summary {
+  @apply text-lg leading-relaxed font-normal opacity-90;
+}
+
+.brand-yellow {
+  @apply text-[var(--chrome-yellow)];
+}
+
+.card-neumorphic {
+  @apply bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300;
+}
