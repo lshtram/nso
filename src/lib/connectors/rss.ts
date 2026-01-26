@@ -175,7 +175,7 @@ export class RssConnector extends BaseConnector {
       sourceName: entity.name,
       url: raw.url,
       title: raw.title,
-      author: raw.author,
+      author: raw.author || entity.name,
       publishedAt: raw.publishedAt,
       fetchedAt: new Date().toISOString(),
       summary: '', 

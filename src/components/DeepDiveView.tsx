@@ -220,7 +220,7 @@ export const DeepDiveView: React.FC<Props> = ({ cluster, onBack, sources, weight
              <div className="flex items-center gap-6 mb-12 text-gray-400">
                 <div className="flex items-center gap-2">
                    <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px]">👤</div>
-                   <span className="text-[10px] font-black uppercase tracking-widest">{primaryItem?.author || 'Unknown Author'}</span>
+                   <span className="text-[10px] font-black uppercase tracking-widest">{primaryItem?.author || primaryItem?.sourceName || 'Unknown Author'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                    <Calendar size={12} />
@@ -231,8 +231,17 @@ export const DeepDiveView: React.FC<Props> = ({ cluster, onBack, sources, weight
              </div>
              
              {mainImage && (
-               <div className="mb-16 overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100">
-                 <img src={mainImage} className="w-full h-auto max-h-[600px] object-contain mx-auto" alt="Article Hero" />
+               <div className="mb-16 overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100 min-h-[100px] flex items-center justify-center">
+                 <img 
+                    src={mainImage} 
+                    className="w-full h-auto max-h-[600px] object-contain mx-auto" 
+                    alt="Article Hero" 
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.parentElement!.style.display = 'none';
+                    }}
+                 />
                </div>
              )}
 
