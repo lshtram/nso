@@ -19,8 +19,21 @@ export class HydrationStage implements PipelineStage<DiscoveredItem[], HydratedI
     const tasks = input.map((item) => async () => {
       if (context.signal.aborted) return null;
 
-      try {
-        const connectorType = (item as any).sourceType || 'rss';
+        // Fix: Use the original entity metadata if available, otherwise fallback
+        const originalEntity = (item as any).entity || (item as any)._originalEntity;
+        
+        let connectorType = 'rss';
+        let sourceName = 'Unknown';
+        
+        if (originalEntity) {
+             connectorType = originalEntity.type;
+             sourceName = originalEntity.name;
+        } else {
+             // Fallback to item-level hints
+             connectorType = (item as any).sourceType || 'rss';
+             sourceName = (item as any).sourceName || 'Unknown';
+        }
+
         const connector = getConnector(connectorType);
 
         // Optimization: "Thin Content Check"
@@ -30,17 +43,18 @@ export class HydrationStage implements PipelineStage<DiscoveredItem[], HydratedI
         let fullContent = item.rawContent || "";
 
         if (hasSubstantialText && hasImage) {
-             // console.log(`[Hydration] Skipping scrape for "${item.title}" (Rich content present)`);
+             // Rich content present, skip scrape
         } else {
              fullContent = await connector.hydrate(item);
         }
         
-        const mockEntity: SourceEntity = {
-          id: 'unknown', name: (item as any).sourceName || 'Unknown', 
+        // Reconstruction of entity for normalization to preserve metadata
+        const entityForNorm: SourceEntity = originalEntity || {
+          id: 'unknown', name: sourceName, 
           type: connectorType, url: '', isActive: true, healthStatus: 'active'
         };
         
-        const normalized = connector.normalize({ ...item, rawContent: fullContent }, mockEntity);
+        const normalized = connector.normalize({ ...item, rawContent: fullContent }, entityForNorm);
         
         const result: HydratedItem = {
           ...normalized,
