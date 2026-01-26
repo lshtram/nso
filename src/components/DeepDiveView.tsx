@@ -1,143 +1,253 @@
 "use client";
 
 import React from "react";
-import { StoryCluster } from "@/types";
-import { ChevronLeft, Share2, Bookmark, ExternalLink, Sparkles, Zap, ArrowRight } from "lucide-react";
+import { StoryCluster, SourceEntity } from "@/types";
+import { ChevronLeft, Share2, Bookmark, ExternalLink, Sparkles, AlertTriangle, ThumbsUp, ThumbsDown, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import { SteeringBar } from "./SteeringBar";
-import { KnowledgeMap } from "./KnowledgeMap";
+import { ContentRenderer } from "@/lib/presentation/ContentRenderer";
 
 interface Props {
   cluster: StoryCluster;
   onBack: () => void;
+  sources: SourceEntity[];
+  weights: Record<string, number>;
+  onAddSource: (source: Partial<SourceEntity>) => void;
 }
 
-export const DeepDiveView: React.FC<Props> = ({ cluster, onBack }) => {
-  const mainImage = cluster.topItems[0]?.imageUrl || "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1200";
+export const DeepDiveView: React.FC<Props> = ({ cluster, onBack, sources, weights, onAddSource }) => {
+  const primaryItem = cluster.items[0];
+  const mainImage = primaryItem?.imageUrl;
+
+  const [leftWidth, setLeftWidth] = React.useState(540); 
+  const [isResizing, setIsResizing] = React.useState(false);
+
+  const startResizing = React.useCallback(() => {
+    setIsResizing(true);
+  }, []);
+
+  const stopResizing = React.useCallback(() => {
+    setIsResizing(false);
+  }, []);
+
+  const resize = React.useCallback((e: MouseEvent) => {
+    if (isResizing) {
+      const newWidth = e.clientX;
+      if (newWidth > 400 && newWidth < (window.innerWidth - 400)) {
+        setLeftWidth(newWidth);
+      }
+    }
+  }, [isResizing]);
+
+  React.useEffect(() => {
+    if (isResizing) {
+      window.addEventListener('mousemove', resize);
+      window.addEventListener('mouseup', stopResizing);
+      document.body.style.cursor = 'col-resize';
+    } else {
+      document.body.style.cursor = 'default';
+    }
+    return () => {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+      document.body.style.cursor = 'default';
+    };
+  }, [isResizing, resize, stopResizing]);
+
+  // Parse refined narrative structure
+  let pulse = {
+    brief: "Analysis pending...",
+    summary: cluster.narrative,
+    takeaways: cluster.highlights || []
+  };
+
+  try {
+    if (cluster.narrative.startsWith('{')) {
+      pulse = JSON.parse(cluster.narrative);
+    }
+  } catch (e) {}
 
   return (
-    <div className="fixed inset-0 z-[100] bg-white flex flex-col md:flex-row overflow-hidden">
-      {/* LEFT PANE: AI Intelligence Overlay (Dark Glassmorphism) */}
+    <div className="fixed inset-0 z-[100] bg-white flex flex-row overflow-hidden select-none">
+      {/* LEFT PANE: AI Intelligence Overlay */}
       <motion.aside 
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="w-full md:w-[480px] bg-[#0a0a0a] text-white p-6 md:p-12 overflow-y-auto flex flex-col relative border-r border-white/5"
+        style={{ width: `${leftWidth}px` }}
+        className="shrink-0 bg-[#0a0a0a] text-white p-6 md:p-12 overflow-y-auto flex flex-col relative border-r border-white/5 no-scrollbar select-text"
       >
-        <button 
-          onClick={onBack}
-          className="flex items-center gap-3 text-gray-500 hover:text-white mb-12 transition-colors uppercase text-[10px] font-black tracking-widest self-start"
-        >
-          <ChevronLeft size={16} /> Dashboard
-        </button>
+        <div className="flex items-center justify-between mb-12 pb-6 border-b border-white/5">
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-3 text-gray-500 hover:text-white transition-colors uppercase text-[10px] font-black tracking-widest"
+          >
+            <ChevronLeft size={16} /> Back
+          </button>
 
-        <div className="flex items-center gap-3 mb-8">
-          <div className="px-2 py-1 bg-[var(--chrome-yellow)] text-black rounded text-[9px] font-black tracking-widest">INTEL V1</div>
-          <div className="h-[1px] w-8 bg-white/10"></div>
-          <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest">Analysis Engine Active</span>
-        </div>
-
-        <div className="mb-12">
-          <h1 className="text-3xl md:text-5xl font-black mb-8 leading-[1] tracking-tighter text-white">
-            {cluster.title}
-          </h1>
-          <div className="flex flex-wrap gap-2">
-            {cluster.topItems[0]?.entities?.slice(0, 4).map(ent => (
-              <span key={ent} className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black text-gray-500 uppercase tracking-tighter hover:bg-white/10 transition-colors">
-                {ent}
-              </span>
-            ))}
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1.5 border-r border-white/10 pr-3">
+               <button className="p-2.5 bg-white/5 rounded-xl hover:bg-white/10 text-gray-500 hover:text-white transition-all">
+                 <Bookmark size={16} />
+               </button>
+               <button className="p-2.5 bg-white/5 rounded-xl hover:bg-white/10 text-gray-500 hover:text-white transition-all">
+                 <Share2 size={16} />
+               </button>
+            </div>
+            
+            <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1.5 px-4 border border-white/5">
+               <button className="text-gray-600 hover:text-green-500 p-1"><ThumbsUp size={16} /></button>
+               <button className="text-gray-600 hover:text-red-500 p-1"><ThumbsDown size={16} /></button>
+            </div>
           </div>
         </div>
 
-        <div className="space-y-12 flex-grow">
-          <section className="space-y-6">
-            <h3 className="text-[10px] font-black text-[var(--chrome-yellow)] uppercase tracking-[0.2em]">Full Synthesis</h3>
-            <p className="text-xl text-gray-300 leading-relaxed font-medium italic border-l-2 border-[var(--chrome-yellow)]/30 pl-8 py-2">
-              {cluster.narrative}
-            </p>
-          </section>
-
-          <section className="space-y-6">
-            <h3 className="text-[10px] font-black text-[var(--chrome-yellow)] uppercase tracking-[0.2em]">Visual Synthesis</h3>
-            <KnowledgeMap />
-          </section>
-
-          <section className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10">
-            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-3">
-               <Sparkles size={14} className="text-[var(--chrome-yellow)]" /> Reasoning
-            </h3>
-            <p className="text-sm text-gray-400 leading-relaxed font-medium">
-              {cluster.whyItMatters}
-            </p>
-          </section>
+        <div className="flex items-center gap-4 mb-12">
+          <div className="px-3 py-1 bg-[var(--chrome-yellow)] text-black rounded-sm text-[9px] font-black tracking-widest uppercase shadow-[0_0_20px_rgba(255,184,0,0.3)]">
+            Intelligence Pulse
+          </div>
+          <div className="h-[1px] w-8 bg-white/10"></div>
+          <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest">Active Synthesis</span>
         </div>
 
-        <div className="mt-16 pt-10 border-t border-white/5 flex items-center justify-between pb-32">
-          <div className="flex gap-4">
-             <button className="p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 text-gray-500 hover:text-white transition-all">
-               <Bookmark size={20} />
-             </button>
-             <button className="p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 text-gray-500 hover:text-white transition-all">
-               <Share2 size={20} />
-             </button>
+        <div className="space-y-16 flex-grow">
+          {/* Brief Section */}
+          <section className="space-y-8">
+            <h3 className="text-[12px] font-black text-[var(--chrome-yellow)] uppercase tracking-[0.4em] border-b border-white/10 pb-4">The Selection Brief</h3>
+            <p className="text-white text-2xl md:text-3xl leading-[1.3] font-bold tracking-tight">
+              {pulse.brief}
+            </p>
+          </section>
+
+          {/* Summary Section */}
+          <section className="space-y-10">
+            <h3 className="text-[12px] font-black text-[var(--chrome-yellow)] uppercase tracking-[0.4em] border-b border-white/10 pb-4">Full Analysis</h3>
+            <div className="text-white text-[18px] md:text-[20px] leading-[1.7] space-y-8 font-medium font-serif">
+               {pulse.summary.split('\n\n').map((p, i) => (
+                 <p key={i} className="drop-shadow-sm">{p}</p>
+               ))}
+            </div>
+          </section>
+
+          {/* Key Takeaways Section */}
+          <section className="space-y-10">
+            <h3 className="text-[12px] font-black text-[var(--chrome-yellow)] uppercase tracking-[0.4em] border-b border-white/10 pb-4">Strategic Intelligence</h3>
+            <ul className="space-y-8">
+              {pulse.takeaways.map((h, i) => (
+                <li key={i} className="flex gap-6 text-[17px] md:text-[19px] text-white leading-relaxed font-bold">
+                  <div className="w-2 h-2 rounded-full bg-[var(--chrome-yellow)] mt-2.5 shrink-0 shadow-[0_0_15px_rgba(255,184,0,0.6)]" />
+                  {h}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* METRICS & VERIFICATION BOTTOM */}
+          <div className="mt-8 space-y-12 opacity-60 hover:opacity-100 transition-opacity">
+            {cluster.items.length > 1 && (
+              <section className="space-y-6">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-white/5 pb-2">Verification Grid</h3>
+                <div className="flex flex-col gap-3">
+                  {Array.from(new Map(cluster.items.map(i => [i.sourceName, i])).values()).map((node, i) => (
+                    <a 
+                      key={i}
+                      href={node.url}
+                      target="_blank"
+                      className="flex items-center justify-between p-4 bg-white/5 rounded-xl text-[10px] text-gray-400 hover:text-white hover:bg-white/10 transition-all border border-white/5"
+                    >
+                      <span className="font-black uppercase tracking-widest">{node.sourceName}</span>
+                      <ExternalLink size={12} className="opacity-40" />
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            <section className="p-8 bg-white/5 border border-white/10 rounded-[2rem] backdrop-blur-md">
+               <h3 className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-6">Neural Signal Metrics</h3>
+               <div className="grid grid-cols-2 gap-8">
+                  <div>
+                     <div className="text-[9px] text-gray-600 uppercase font-black mb-1 tracking-widest">Clusters</div>
+                     <div className="text-lg font-bold text-white tracking-tighter">{cluster.items.length} Nodes</div>
+                  </div>
+                  <div>
+                     <div className="text-[9px] text-gray-600 uppercase font-black mb-1 tracking-widest">Confidence</div>
+                     <div className="text-lg font-bold text-[var(--chrome-yellow)] tracking-tighter">94.8%</div>
+                  </div>
+               </div>
+            </section>
           </div>
         </div>
       </motion.aside>
 
+      {/* RESIZE HANDLE */}
+      <div 
+        onMouseDown={startResizing}
+        className={`w-1.5 relative z-[150] cursor-col-resize group flex items-center justify-center transition-colors ${isResizing ? 'bg-[var(--chrome-yellow)]' : 'bg-white/5 hover:bg-[var(--chrome-yellow)]/30'}`}
+      >
+        <div className="w-[1px] h-32 bg-white/10 group-hover:bg-white/40" />
+      </div>
+
       {/* RIGHT PANE: Original Source Content */}
-      <main className="flex-grow bg-[#fcfcfc] overflow-y-auto scroll-smooth relative">
-        <div className="max-w-4xl mx-auto py-20 px-10 md:px-20 pb-48">
-          <div className="mb-16 flex items-center justify-between border-b border-gray-100 pb-10">
-            <div className="flex items-center gap-5">
-              <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-xl shadow-inner grayscale">
-                {cluster.topItems[0]?.sourceType === 'youtube' ? '📺' : '📰'}
+      <main className="flex-grow bg-[#fff] overflow-y-auto scroll-smooth relative select-text no-scrollbar">
+        <div className="max-w-4xl mx-auto py-12 px-10 md:px-20 pb-48">
+          <div className="mb-12 flex items-center justify-between border-b border-gray-100 pb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-lg grayscale border border-gray-100">
+                {primaryItem?.sourceType === 'github' ? '🛠️' : '📰'}
               </div>
               <div>
-                <div className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{cluster.topItems[0]?.sourceType} origin</div>
-                <div className="text-sm font-black text-gray-900">
-                  {cluster.topItems[0]?.sourceName}
+                <div className="text-[8px] font-black text-gray-400 uppercase tracking-[0.2em] mb-0.5">{primaryItem?.sourceType} SOURCE</div>
+                <div className="text-xs font-black text-gray-900 uppercase">
+                  {primaryItem?.sourceName}
                 </div>
               </div>
             </div>
             
             <a 
-              href={cluster.topItems[0]?.url} 
+              href={primaryItem?.url} 
               target="_blank" 
-              className="px-6 py-3 bg-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition-all flex items-center gap-3"
+              className="px-5 py-2.5 bg-black text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-gray-800 transition-all flex items-center gap-2"
             >
-              Examine Raw <ExternalLink size={14} className="text-[var(--chrome-yellow)]" />
+              Examine Raw <ExternalLink size={12} className="text-[var(--chrome-yellow)]" />
             </a>
           </div>
 
           <article>
-             <h2 className="text-4xl md:text-7xl font-black text-gray-900 mb-12 tracking-tighter leading-[0.95]">
-                {cluster.topItems[0]?.title}
+             <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6 tracking-tighter leading-[1.05]">
+                {primaryItem?.title}
              </h2>
              
-             <div className="mb-20 overflow-hidden rounded-[3rem] shadow-2xl border-[12px] border-white">
-               <img src={mainImage} className="w-full h-[550px] object-cover" alt="Article Hero" />
+             <div className="flex items-center gap-6 mb-12 text-gray-400">
+                <div className="flex items-center gap-2">
+                   <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px]">👤</div>
+                   <span className="text-[10px] font-black uppercase tracking-widest">{primaryItem?.author || 'Unknown Author'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                   <Calendar size={12} />
+                   <span className="text-[10px] font-black uppercase tracking-widest">
+                      {primaryItem?.publishedAt ? new Date(primaryItem.publishedAt).toLocaleDateString() : 'N/A'}
+                   </span>
+                </div>
              </div>
-
-             <div className="max-w-[700px] mx-auto space-y-12">
-               <p className="text-2xl font-bold text-gray-900 leading-snug tracking-tight border-l-4 border-gray-100 pl-10 mb-16 py-3 italic">
-                 {cluster.topItems[0]?.summary}
-               </p>
-               
-               <div className="text-gray-700 text-xl leading-relaxed font-serif space-y-8">
-                 <p className="first-letter:text-6xl first-letter:font-black first-letter:text-black first-letter:mr-3 first-letter:float-left">
-                   The acceleration of research in this sector marks a pivotal shift in how we approach large-scale deployments. As entities transition from prototype to global systems, the focus on signal integrity becomes paramount.
-                 </p>
-                 <p>
-                   Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                 </p>
+             
+             {mainImage && (
+               <div className="mb-16 overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100">
+                 <img src={mainImage} className="w-full h-auto max-h-[600px] object-contain mx-auto" alt="Article Hero" />
                </div>
+             )}
+
+             <div className="max-w-[750px] mx-auto space-y-10">
+                <ContentRenderer item={primaryItem} />
              </div>
           </article>
         </div>
       </main>
 
-      {/* Global Brain Chat - Enabled on all pages */}
-      <SteeringBar />
+      <SteeringBar 
+        sources={sources} 
+        weights={weights} 
+        onAddSource={onAddSource} 
+      />
     </div>
   );
 };

@@ -11,9 +11,11 @@ interface Props {
     content: string;
     detailedNarrative?: string;
   };
+  weights: Record<string, number>;
+  onWeightChange: (id: string, value: number) => void;
 }
 
-export const DailySummaryHero: React.FC<Props> = ({ summary }) => {
+export const DailySummaryHero: React.FC<Props> = ({ summary, weights, onWeightChange }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEqExpanded, setIsEqExpanded] = useState(false);
 
@@ -37,7 +39,7 @@ export const DailySummaryHero: React.FC<Props> = ({ summary }) => {
             </h1>
             
             <div className="relative">
-              <p className="text-base md:text-lg leading-relaxed font-medium text-gray-400 max-w-2xl border-l-[3px] border-[var(--chrome-yellow)] pl-6 py-1">
+              <p className="text-base md:text-lg leading-relaxed font-medium text-gray-100 max-w-2xl border-l-[3px] border-[var(--chrome-yellow)] pl-6 py-1">
                 {summary.content}
                 {!isExpanded && (
                   <button 
@@ -58,8 +60,8 @@ export const DailySummaryHero: React.FC<Props> = ({ summary }) => {
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="pt-6 space-y-4 text-gray-500 text-base leading-relaxed font-serif italic border-t border-white/5 mt-6 relative">
-                    {summary.detailedNarrative || "The global response has been surprisingly unified, with digital sovereignty emerging as the primary point of contention. Major tech hubs are reporting a 30% shift in resource allocation toward safe-AGI development protocols, while civil society groups push for deeper transparency in algorithmic decision-making."}
+                  <div className="pt-6 space-y-4 text-white/90 text-base leading-relaxed font-serif italic border-t border-white/5 mt-6 relative">
+                    {summary.detailedNarrative || "The global response has been surprisingly unified, with digital sovereignty emerging as the primary point of contention."}
                     <div className="flex justify-end mt-4">
                       <button 
                         onClick={() => setIsExpanded(false)}
@@ -92,7 +94,9 @@ export const DailySummaryHero: React.FC<Props> = ({ summary }) => {
             {/* Interest EQ Widget */}
             <InterestEqualizer 
               variant={isEqExpanded ? "full" : "compact"} 
-              onExpand={() => setIsEqExpanded(!isEqExpanded)} 
+              onExpand={() => setIsEqExpanded(!isEqExpanded)}
+              weights={weights}
+              onWeightChange={onWeightChange}
             />
           </div>
         </div>

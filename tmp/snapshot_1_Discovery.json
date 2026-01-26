@@ -1,0 +1,21 @@
+[
+  {
+    "entity": {
+      "id": "test",
+      "name": "Test Source",
+      "isActive": true,
+      "type": "rss",
+      "url": "http://source.com"
+    },
+    "raws": [
+      {
+        "url": "http://test.com/known",
+        "title": "Known Item"
+      },
+      {
+        "url": "http://test.com/new",
+        "title": "New Item"
+      }
+    ]
+  }
+]
