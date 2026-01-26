@@ -15,9 +15,11 @@ export const StoryCard: React.FC<Props> = ({ cluster, onCardClick }) => {
   const lastPos = useRef({ x: 0, y: 0 });
   const primaryItem = cluster.items[0];
   
-  // Only use image if it is a REAL image from the feed
-  const hasRealImage = !!primaryItem?.imageUrl;
+  const [imgError, setImgError] = useState(false);
   
+  // Only use image if it is a REAL image from the feed AND didn't fail
+  const hasRealImage = !!primaryItem?.imageUrl && !imgError;
+
   // Generate a consistent gradient based on the title hash if no image
   const getGradient = () => {
     const hash = cluster.title.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
@@ -60,6 +62,8 @@ export const StoryCard: React.FC<Props> = ({ cluster, onCardClick }) => {
             <img 
               src={primaryItem.imageUrl} 
               alt={cluster.title}
+              onError={() => setImgError(true)}
+              referrerPolicy="no-referrer"
               className="w-full h-full object-cover transition-all duration-700"
             />
           ) : (
