@@ -41,11 +41,16 @@ export class TriageStage implements PipelineStage<DiscoveredItem[], DiscoveredIt
       context.events.emit('progress', `[Triage] Ranked batch ${Math.floor(i/BATCH_SIZE) + 1}`);
     }
 
-    // Sort and Cut
+    // Sort
     const sorted = prioritizedItems.sort((a,b) => b.priorityScore - a.priorityScore);
-    const topN = sorted.slice(0, controls.triage.maxHydrationLimit);
     
-    context.events.emit('progress', `[Triage] Selecting top ${topN.length} items from ${input.length} candidates.`);
+    // Filter by Score Threshold
+    const aboveThreshold = sorted.filter(item => item.priorityScore >= controls.triage.minInterestScore);
+    
+    // Hard Cutoff (Budget Control)
+    const topN = aboveThreshold.slice(0, controls.triage.maxHydrationLimit);
+    
+    context.events.emit('progress', `[Triage] ${aboveThreshold.length} items > ${controls.triage.minInterestScore} score. Keeping top ${topN.length}.`);
     return topN;
   }
 }

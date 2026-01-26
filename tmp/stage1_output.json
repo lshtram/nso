@@ -1,5 +1,25 @@
 [
   {
+    "id": "696f6317590fc20efaaa15e3",
+    "url": "https://www.wired.com/story/story/we-raced-exoskeletons-and-theres-one-clear-winner/",
+    "title": "We Strapped on Exoskeletons and Raced. There’s One Clear Winner",
+    "rawContent": "WIRED put the latest consumer exoskeletons from Dnsys and Hypershell in a head-to-head test on a pro athletic track. On your marks …",
+    "publishedAt": "Mon, 26 Jan 2026 12:00:00 +0000",
+    "author": "Chris Haslam, Jeremy White",
+    "priorityScore": 75,
+    "discoveryNotes": "Found via Wired"
+  },
+  {
+    "id": "69711b3cec79c86b7151d776",
+    "url": "https://www.wired.com/story/data-center-criticism-factories-supply-us/",
+    "title": "People Are Protesting Data Centers—but Embracing the Factories That Supply Them",
+    "rawContent": "As the data center backlash grows, support is growing for server factories and the hundreds of jobs they’re expected to bring.",
+    "publishedAt": "Mon, 26 Jan 2026 11:00:00 +0000",
+    "author": "Paresh Dave",
+    "priorityScore": 75,
+    "discoveryNotes": "Found via Wired"
+  },
+  {
     "id": "696fd2185963d82ddd46cfa9",
     "url": "https://www.wired.com/story/intel-panther-lake-core-ultra-series-3-review/",
     "title": "Intel’s Panther Lake Chips Aren’t Just Good—They Beat Apple's M5",
@@ -480,24 +500,15 @@
     "discoveryNotes": "Found via Wired"
   },
   {
-    "id": "696fae551d9eb7b4565d30e5",
-    "url": "https://www.wired.com/story/ai-powered-disinformation-swarms-are-coming-for-democracy/",
-    "title": "AI-Powered Disinformation Swarms Are Coming for Democracy",
-    "rawContent": "Advances in artificial intelligence are creating a perfect storm for those seeking to spread disinformation at unprecedented speed and scale. And it’s virtually impossible to detect.",
-    "publishedAt": "Thu, 22 Jan 2026 19:00:00 +0000",
-    "author": "David Gilbert",
-    "priorityScore": 75,
-    "discoveryNotes": "Found via Wired"
-  },
-  {
-    "id": "697129ce8c25eb9b6d63a92c",
-    "url": "https://www.wired.com/story/claude-code-success-anthropic-business-model/",
-    "title": "How Claude Code Is Reshaping Software—and Anthropic",
-    "rawContent": "WIRED spoke with Boris Cherny, head of Claude Code, about how the viral coding tool is changing the way Anthropic works.",
-    "publishedAt": "Thu, 22 Jan 2026 19:00:00 +0000",
-    "author": "Maxwell Zeff",
-    "priorityScore": 75,
-    "discoveryNotes": "Found via Wired"
+    "id": "https://www.theverge.com/news/867647/microsoft-windows-11-january-2026-update-bugs-issues",
+    "url": "https://www.theverge.com/news/867647/microsoft-windows-11-january-2026-update-bugs-issues",
+    "title": "Microsoft’s first Windows 11 update of 2026 has been a mess",
+    "rawContent": "\n\t\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\n<figure>\n\n<img alt=\"\" data-caption=\"\" data-portal-copyright=\"\" data-has-syndication-rights=\"1\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK109_WINDOWS_C.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100\" />\n\t<figcaption>\n\t\t</figcaption>\n</figure>\n<p class=\"has-text-align-none\">Microsoft's first update for Windows 11 in 2026 has been a buggy mess, to say the least. After reports of shutdown issues on some machines, Microsoft issued an <a href=\"https://www.theverge.com/news/864032/microsofts-out-of-band-windows-11-update-bug\">emergency update</a> to fix its January 2026 Windows 11 update last weekend. Now, exactly a week later the software maker has been forced to issue a second unusual <a href=\"https://support.microsoft.com/en-us/topic/january-24-2026-kb5078127-os-builds-26200-7628-and-26100-7628-out-of-band-cf5777f6-bb4e-4adb-b9cd-2b64df577491\">out-of-band fix</a> to address OneDrive and Dropbox crashes. </p>\n<p class=\"has-text-align-none\">Microsoft is also <a href=\"https://www.askwoody.com/forums/topic/reports-of-boot-failures-with-the-january-2026-security-update-and-later-updates/\">investigating</a> reports of boot failures that could be related to its January 2026 security update.</p>\n<p class=\"has-text-align-none\">While the first shutdown bug was limited to machines running Enterprise and IoT editions of Windows 11 version 23H2, the latest out-of-band update fixes  …</p>\n<p><a href=\"https://www.theverge.com/news/867647/microsoft-windows-11-january-2026-update-bugs-issues\">Read the full story at The Verge.</a></p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t",
+    "publishedAt": "2026-01-26T12:04:08.000Z",
+    "author": "Tom Warren",
+    "imageUrl": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK109_WINDOWS_C.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100",
+    "priorityScore": 70,
+    "discoveryNotes": "Found via The Verge"
   },
   {
     "id": "https://www.theverge.com/news/867625/tiktok-down-weekend-broke-fyp-video-uploads-review",
@@ -591,21 +602,10 @@
     "id": "https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi",
     "url": "https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi",
     "title": "Microsoft handed the government encryption keys for customer data",
-    "rawContent": "\n\t\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\n<figure>\n\n<img alt=\"\" data-caption=\"\" data-portal-copyright=\"\" data-has-syndication-rights=\"1\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK095_Microsoft_04.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100\" />\n\t<figcaption>\n\t\t</figcaption>\n</figure>\n<p class=\"has-text-align-none\">The FBI went to Microsoft last year with a warrant, asking them to hand over keys to unlock encrypted data stored on three laptops as part of an investigation into potential fraud involving the COVID unemployment assistance program in Guam - and <a href=\"https://www.forbes.com/sites/thomasbrewster/2026/01/22/microsoft-gave-fbi-keys-to-unlock-bitlocker-encrypted-data/\">Microsoft complied</a>. </p>\n<p class=\"has-text-align-none\">Typically, companies resist handing over encryption keys to authorities. Most famously, <a href=\"https://www.theverge.com/2016/2/17/11036306/apple-fbi-iphone-encryption-backdoor-tim-cook\">Apple refused</a> to grant the FBI access to a phone used by the San Bernardino shooters in 2016. The FBI eventually found a third-party to hack their way into the phone, but ultimately <a href=\"https://www.theverge.com/2016/4/22/11492804/fbi-apple-new-york-iphone-unlocking-case-withdrawl\">withdrew</a> its case. Most of the major tech companies, including <a href=\"https://www.theverge.com/2016/2/17/11040266/google-ceo-sundar-pichai-sides-with-apple-encryption\">Google</a> and <a href=\"https://www.theverge.com/2016/2/18/11056074/apple-iphone-encryption-fbi-facebook-twitter-support\">Facebook</a> backed Apple in its battle w …</p>\n<p><a href=\"https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi\">Read the full story at The Verge.</a></p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t",
+    "rawContent": "\n\t\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\n<figure>\n\n<img alt=\"\" data-caption=\"\" data-portal-copyright=\"\" data-has-syndication-rights=\"1\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK095_Microsoft_04.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100\" />\n\t<figcaption>\n\t\t</figcaption>\n</figure>\n<p class=\"has-text-align-none\">The FBI went to Microsoft last year with a warrant, asking them to hand over keys to unlock encrypted data stored on three laptops as part of an investigation into potential fraud involving the COVID unemployment assistance program in Guam - and <a href=\"https://www.forbes.com/sites/thomasbrewster/2026/01/22/microsoft-gave-fbi-keys-to-unlock-bitlocker-encrypted-data/\">Microsoft complied</a>. </p>\n<p class=\"has-text-align-none\">Typically, companies resist handing over encryption keys to authorities. Most famously, <a href=\"https://www.theverge.com/2016/2/17/11036306/apple-fbi-iphone-encryption-backdoor-tim-cook\">Apple refused</a> to grant the FBI access to a phone used by the San Bernardino shooters in 2016. The FBI eventually found a third-party to hack their way into the phone, but ultimately <a href=\"https://www.theverge.com/2016/4/22/11492804/fbi-apple-new-york-iphone-unlocking-case-withdrawl\">withdrew</a> its case. Most of the major tech companies, including <a href=\"https://www.theverge.com/2016/2/17/11040266/google-ceo-sundar-pichai-sides-with-apple-encryption\">Google</a> and <a href=\"https://www.theverge.com/2016/2/18/11056074/apple-iphone-encryption-fbi-facebook-twitter-support\">Facebook</a>, backed Apple in its battle  …</p>\n<p><a href=\"https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi\">Read the full story at The Verge.</a></p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t",
     "publishedAt": "2026-01-24T22:39:57.000Z",
     "author": "Terrence O’Brien",
     "imageUrl": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK095_Microsoft_04.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100",
-    "priorityScore": 70,
-    "discoveryNotes": "Found via The Verge"
-  },
-  {
-    "id": "https://www.theverge.com/gadgets/866788/anker-nano-travel-adapter-samsung-p9-microsd-express-card-deal-sale",
-    "url": "https://www.theverge.com/gadgets/866788/anker-nano-travel-adapter-samsung-p9-microsd-express-card-deal-sale",
-    "title": "MicroSD Express cards and Anker’s travel adapter rule the deal roost this week",
-    "rawContent": "\n\t\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\n<figure>\n\n<img alt=\"\" data-caption=\"\" data-portal-copyright=\"\" data-has-syndication-rights=\"1\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/Anker-Nano-Travel-Adapter-Deal-Image.png?quality=90&#038;strip=all&#038;crop=0,0,100,100\" />\n\t<figcaption>\n\t\t</figcaption>\n</figure>\n<p class=\"has-text-align-none\">Welcome to the weekend, friends! We’re still in a bit of a deals lull before the Presidents Day and V-Day sales begin, the bulk of which we anticipate kicking off the first week of February. However, for now, we’re still seeing some solid discounts on a few newer gadgets and some old, <em>Verge</em>-approved favorites. <a href=\"https://www.amazon.com/Anker-Adapter-Temperature-Compatible-Countries/dp/B0DHVNW1CN/\">Anker’s Nano Travel Adapter</a> has returned to its best price to date, for instance, as has <a href=\"https://electronics.woot.com/offers/samsung-qn43ls03fafxza-samsung-qn43ls03fafxza-frame-b\">Samsung’s last-gen Frame TV</a>. You’ll also find discounts on <a href=\"https://www.amazon.com/Samsung-Express-microSDXC-Nintendo-Switch-AM/dp/B0FT99KCV8/\">microSD Express cards</a>, <a href=\"https://www.amazon.com/dp/B0DGRJKDKC/\">budget-friendly robot vacuums</a>, and more, so let’s get into it.</p>\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity\" />\n\n<p class=\"has-text-align-none\">If you have plans to spend some time outside of the US this year, <strong><a href=\"https://www.theverge.com/news/627648/anker-nano-travel-adapter-5-in-1-us-europe-australia\">Anker’s versatile Nano Travel Adapter</a></strong> is on sale at Amazon in <a href=\"https://www.amazon.com/Anker-Adapter-Temperature-Compatible-Countries/dp/B0DHVNW1CN/\">black</a> and <a href=\"https://www.amazon.com/Anker-Adapter-Temperature-Compatible-Countries/dp/B0DHVNPN7J/\">white</a> — and directly from <a href=\"https://www.anker.com/products/a9215?variant=44790594044054\">Anker</a> with code <strong>WS7DV21AXQQZ</strong> — for $19.99 ($6 off), matching its lowest price to date.</p>\n\n<p class=\"has-text-align-none\">Anker’s thin, foldable charger measures a mere 0.98 inches thick and sports a pair of USB-C ports, two USB-A ports, and a US-style Type A outlet on the front, in addition to four plug types (Type A, C, G, and I). The main drawback, aside from the lack of a voltage converter, is that the maximum power output is 20W (or 15W when sharing power across all four USB ports), meaning you’ll need to bring <em>another</em> adapter if you want to charge a laptop or any other power-hungry device.</p>\n<div class=\"product-block\"><h3>Anker Nano Travel Adapter (5-in-1, 20W)</h3>\n<figure class=\"product-image\"><img width=\"300\" height=\"200\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/anker_travel1.webp?w=300\" class=\"attachment-medium size-medium\" alt=\"\" /></figure>\n<h3>Where to Buy:</h3><ul><li><a href=\"https://www.amazon.com/Anker-Adapter-Temperature-Compatible-Countries/dp/B0DHVNW1CN/\"> <strike>$25.99</strike> $19.99 at <strong>Amazon (black)</strong></a></li><li><a href=\"https://www.amazon.com/Anker-Adapter-Temperature-Compatible-Countries/dp/B0DHVNPN7J/\"> <strike>$25.99</strike> $19.99 at <strong>Amazon (white)</strong></a></li><li><a href=\"https://www.anker.com/products/a9215?variant=44790594044054\"> <strike>$25.99</strike> $19.99 at <strong>Anker</strong></a></li></ul></div>\n<hr class=\"wp-block-separator has-alpha-channel-opacity\" />\n\n<p class=\"has-text-align-none\">It’s been nearly eight months since the launch of the Nintendo Switch 2 — meaning, if you haven’t already purchased a microSD Express card to level up your storage capacity of your console, you’ll likely need to do so soon. Fortunately, <strong>Samsung’s P9 microSD Express card</strong> is currently on sale at <a href=\"https://www.amazon.com/Samsung-Express-microSDXC-Nintendo-Switch-AM/dp/B0FT99KCV8/\">Amazon</a> and <a href=\"https://www.bhphotovideo.com/c/product/1924975-REG/samsung_mb_mk256t_am_256gb_p9_microsd_express.html/\">B&amp;H Photo</a> with 256GB of storage starting at $39.99 ($15 off), matching its second-best price to date.</p>\n\n<p class=\"has-text-align-none\">As you might expect, P9 is&nbsp;built to handle the Switch 2’s faster storage speeds, with sequential read speeds of up to 800 MB/s, resulting in quicker load and launch times. The Switch 2 features 256GB of internal storage, meaning you’re doubling your storage capacity with a 256GB card, or tripling it in the case of <a href=\"https://www.amazon.com/Samsung-Express-microSDXC-Nintendo-Switch-AM/dp/B0FT995SPF/\">Samsung’s 512GB variant</a>. Most first-party Nintendo games aren’t massive, mind you, but third-party titles like <em><a href=\"https://www.theverge.com/games-review/623660/split-fiction-review-hazelight-studios-it-takes-two\">Split Fiction</a></em> (69GB) and <em>Madden NFL 26</em> (59GB) can quickly devour dozens of gigabytes. That makes picking up a discounted microSD Express card a no-brainer, especially since they’re also compatible with cameras, drones, and any gadget with a microSD USH-I slot.</p>\n<div class=\"product-block\"><h3>Samsung P9 microSD Express Card</h3>\n<figure class=\"product-image\"><img width=\"300\" height=\"200\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/Samsung-P9-MicroSD-Express-Card.jpg?w=300\" class=\"attachment-medium size-medium\" alt=\"Samsung&#039;s P9 microSD Express card next to an Android phone with a controller attached.\" /></figure>\n<h3>Where to Buy:</h3><ul><li><a href=\"https://www.amazon.com/Samsung-Express-microSDXC-Nintendo-Switch-AM/dp/B0FT99KCV8/\"> <strike>$54.99</strike> $39.99 at <strong>Amazon (256GB)</strong></a></li><li><a href=\"https://www.bhphotovideo.com/c/product/1924975-REG/samsung_mb_mk256t_am_256gb_p9_microsd_express.html/\"> <strike>$54.99</strike> $39.99 at <strong>B&amp;H Photo (256GB)</strong></a></li><li><a href=\"https://www.amazon.com/Samsung-Express-microSDXC-Nintendo-Switch-AM/dp/B0FT995SPF/\"> <strike>$99.99</strike> $79.99 at <strong>Amazon (512GB)</strong></a></li></ul></div>\n<hr class=\"wp-block-separator has-alpha-channel-opacity\" />\n\n<p class=\"has-text-align-none\">I hate to break it to you, but so-called “art TVs” <a href=\"https://www.theverge.com/tech/829002/youre-buying-a-frame-tv-its-okay-to-cheap-out-a-little\">are not exceptional TVs</a>, at least not in a traditional sense. Still, <strong>Samsung’s 2025 Frame TV</strong> — which is <a href=\"https://electronics.woot.com/offers/samsung-qn43ls03fafxza-samsung-qn43ls03fafxza-frame-b\">on sale at Woot</a> in its&nbsp;43-inch&nbsp;configuration starting at $597.99 ($302 off) through January 31st — is likely to look far better in your living room when idle than your typical LCD or OLED TV.</p>\n\n<p class=\"has-text-align-none\">Samsung’s last-gen 4K TV is vastly different than the <a href=\"https://www.theverge.com/news/864027/samsung-two-new-sizes-of-frame-tvs-ces\">company’s 2026 panels</a>, either. The slim QLED display can cycle through a small selection of free art pieces when idle, all of which take on a more textured, canvas-like appearance thanks to an anti-glare matte coating that helps curb unwanted reflections. The Frame is plenty good enough for bingeing <em>Slow Horses</em> and <em>Stranger Things</em>, even if the refresh rate is capped at 60Hz, and you still get support for both HDR10 Plus and Dolby Atmos, along with access to all your favorite streaming apps.</p>\n<div class=\"product-block\"><h3>Samsung The Frame (2025)</h3>\n<figure class=\"product-image\"><img loading=\"lazy\" width=\"300\" height=\"132\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/samsung43inchtheframe.avif?w=300\" class=\"attachment-medium size-medium\" alt=\"\" /></figure>\n<h3>Where to Buy:</h3><ul><li><a href=\"https://electronics.woot.com/offers/samsung-qn43ls03fafxza-samsung-qn43ls03fafxza-frame-b\"> <strike>$899.99</strike> $597.99 at <strong>Woot (43-inch)</strong></a></li><li><a href=\"https://electronics.woot.com/offers/samsung-qn43ls03fafxza-samsung-qn43ls03fafxza-frame-b\"> <strike>$1099.99</strike> $697.99 at <strong>Woot (50-inch)</strong></a></li></ul></div>\n<hr class=\"wp-block-separator has-alpha-channel-opacity\" />\n\n<p class=\"has-text-align-none\"><span>DJI’s drones might ha</span>ve been <a href=\"https://www.theverge.com/news/831241/dji-ban-us-trump-fcc-customs-import-ndaa\">banned in the United States</a>, but you can still pick up some of the company’s other gear stateside (at least for now).&nbsp;Take <strong><a href=\"https://www.theverge.com/2024/11/26/24305428/dji-mic-mini-osmo-audio-microphone-wireless\">DJI’s Mic Mini</a></strong>, for instance, which&nbsp;is currently on sale at&nbsp;<a href=\"https://www.amazon.com/dp/B0FKL8JYGQ/\">Amazon</a>&nbsp;with a single mic and two transmitters for $59.99 ($20 off), matching the record-low first set during this time last year.</p>\n\n<p class=\"has-text-align-none\">If you want to capture audio that sounds more professional than your smartphone can deliver on the go, the Mic Mini is a commendable option. The compact, 10-gram wireless microphone plugs directly into your phone via USB-C, Lightning, or a standard 3.5mm audio cable, and it can be clipped to clothing or worn using a magnetic mount or lanyard. The receiver lasts up to 10.5 hours and includes an onboard dial, which lets you fine-tune gain settings and adjust your volume levels. The pair of included transmitters, meanwhile, can run for up to 11.5 hours on a single charge and capture audio from up to about 400 meters away, provided they’re connected simultaneously.</p>\n\n<p class=\"has-text-align-none\">Just don’t expect built-in backup recording or the option to connect a smaller lav mic, neither of which is available on the Mic Mini.</p>\n<div class=\"product-block\"><h3>DJI Mic Mini (with one mic and two transmitters)</h3>\n<figure class=\"product-image\"><img loading=\"lazy\" width=\"300\" height=\"200\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25755998/dji_mic_mini3.jpg?w=300\" class=\"attachment-medium size-medium\" alt=\"The DJI Mic Mini system’s new wireless receiver attached to a laptop’s USB-C port.\" /></figure>\n<h3>Where to Buy:</h3><ul><li><a href=\"https://www.amazon.com/dp/B0FKL8JYGQ/\"> <strike>$79</strike> $59 at <strong>Amazon</strong></a></li></ul></div>\n<hr class=\"wp-block-separator has-alpha-channel-opacity\" />\n\n<h2 class=\"wp-block-heading has-text-align-none\">More ways to save this weekend</h2>\n\n<ul class=\"wp-block-list\">\n<li>Of all the games coming out this year, <em><strong><a href=\"https://www.theverge.com/news/681325/resident-evil-requiem-trailer-date\">Resident Evil Requiem</a></strong></em>&nbsp;might be at the top of my list. If you’re in the same camp, you can preorder the Steam version (via a digital key) for PC through&nbsp;<a href=\"https://www.anrdoezrs.net/links/8836598/type/dlg/sid/__vg0123awD__864339____s______________theverge.com/https://www.fanatical.com/en/game/resident-evil-requiem\" target=\"_blank\" rel=\"noreferrer noopener\"></a><a href=\"https://www.fanatical.com/en/game/resident-evil-requiem/\">Fanatical</a> for $57.39 (about $13 off), which is likely the best price we’re going to see in the next mainline <em>RE</em> before it launches on February 27th. I, for one, can’t wait for my return to Racoon City, especially since the ninth installment of the survival horror game will let you toggle between first- and third-person perspectives on the fly.</li>\n\n\n\n<li>If you find the price of most robot vacuums intimidating, <strong>Tapo’s RV30 Max Plus</strong> is down to an all-time low of $179.99 ($150 off) at <a href=\"https://www.amazon.com/dp/B0DGRJKDKC/\">Amazon</a>. The RV30 remains <a href=\"https://www.theverge.com/23846479/best-budget-robot-vacuum-robot-mop\">our favorite budget vacuum / mop</a>, namely because it offers a bevy of features found in robovacs that cost twice the price, including an auto-empty dock, smart lidar-based navigation, multiple suction and water levels, and room-specific cleaning with the ability to add virtual walls and no-go zones via the app. You also get a large 300ml tank and 5,200Pa of suction power, which is terrific for a bot in this price range.</li>\n\n\n\n<li>The <strong>JLab Go Air Pop ANC</strong> are on sale at <a href=\"https://www.amazon.com/gp/product/B0DKB2B55L/\">Amazon</a>, <a href=\"https://www.walmart.com/ip/JLab-Go-Pop-Active-Noise-Cancelling-Bluetooth-Earbuds-Charging-Case-Transparent-Teal/14676171105\">JLab</a>, and <a href=\"https://www.bestbuy.com/product/jlab-go-pop-anc-true-wireless-earbuds-cloud-foam-tips-purple/J3GW8XZHW9/sku/6631192\">Best Buy</a> for $19.99 ($10 off), which is about $2 shy of their best price to date. They come up a little short in terms of audio quality, but you’d be hard-pressed to find another pair of wireless earbuds that offer a customizable EQ, ANC, multipoint connectivity, and seven hours of playback for under $20. Then there’s the translucent design, which is an even bigger selling point in my book.</li>\n</ul>\n\n<p class=\"has-text-align-none\"></p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t",
-    "publishedAt": "2026-01-24T18:21:02.000Z",
-    "author": "Brandon Widder",
-    "imageUrl": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/Anker-Nano-Travel-Adapter-Deal-Image.png?quality=90&#038;strip=all&#038;crop=0,0,100,100",
     "priorityScore": 70,
     "discoveryNotes": "Found via The Verge"
   },
@@ -810,20 +810,29 @@
     "discoveryNotes": "Found via TechCrunch"
   },
   {
+    "id": "https://maplibre.org/news/2026-01-23-mlt-release/",
+    "url": "https://maplibre.org/news/2026-01-23-mlt-release/",
+    "title": "MapLibre Tile: a modern and efficient vector tile format",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763864\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 10:19:51 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://petegoldsmith.com/2026/01/26/2026-01-26-show-hn-trends/",
+    "url": "https://petegoldsmith.com/2026/01/26/2026-01-26-show-hn-trends/",
+    "title": "Show HN posts p/month more than doubled in the last year",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46764284\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 11:16:17 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
     "id": "https://github.com/quaadgras/graphics.gd/discussions/242",
     "url": "https://github.com/quaadgras/graphics.gd/discussions/242",
     "title": "The Holy Grail of Linux Binary Compatibility: Musl and Dlopen",
     "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46762882\">Comments</a>",
     "publishedAt": "Mon, 26 Jan 2026 07:41:52 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://simonwillison.net/2026/Jan/25/the-browser-is-the-sandbox/",
-    "url": "https://simonwillison.net/2026/Jan/25/the-browser-is-the-sandbox/",
-    "title": "The browser is the sandbox",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46762150\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 05:23:01 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -837,29 +846,20 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
+    "id": "https://simonwillison.net/2026/Jan/25/the-browser-is-the-sandbox/",
+    "url": "https://simonwillison.net/2026/Jan/25/the-browser-is-the-sandbox/",
+    "title": "The browser is the sandbox",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46762150\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 05:23:01 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
     "id": "https://gwern.net/blog/2026/make-me-care",
     "url": "https://gwern.net/blog/2026/make-me-care",
     "title": "First, make me care",
     "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46757067\">Comments</a>",
     "publishedAt": "Sun, 25 Jan 2026 19:03:40 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://reclaimthenet.org/uk-house-of-lords-votes-to-extend-age-verification-to-vpns",
-    "url": "https://reclaimthenet.org/uk-house-of-lords-votes-to-extend-age-verification-to-vpns",
-    "title": "UK House of Lords Votes to Extend Age Verification to VPNs",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763548\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 09:35:31 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://www.sciencealert.com/scientists-identify-brain-waves-that-define-the-limits-of-you",
-    "url": "https://www.sciencealert.com/scientists-identify-brain-waves-that-define-the-limits-of-you",
-    "title": "Scientists identify brain waves that define the limits of 'you'",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46760099\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 00:10:42 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -873,11 +873,11 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://github.com/joel-jeremy/emissary",
-    "url": "https://github.com/joel-jeremy/emissary",
-    "title": "Emissary, a fast open-source Java messaging library",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46723049\">Comments</a>",
-    "publishedAt": "Thu, 22 Jan 2026 18:15:47 +0000",
+    "id": "https://www.sciencealert.com/scientists-identify-brain-waves-that-define-the-limits-of-you",
+    "url": "https://www.sciencealert.com/scientists-identify-brain-waves-that-define-the-limits-of-you",
+    "title": "Scientists identify brain waves that define the limits of 'you'",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46760099\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 00:10:42 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -900,20 +900,11 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
-    "url": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
-    "title": "Iran's internet blackout may become permanent, with access for elites only",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761822\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 04:18:19 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://aashvik.com/posts/shell-ssg/",
-    "url": "https://aashvik.com/posts/shell-ssg/",
-    "title": "A static site generator written in POSIX shell",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46690463\">Comments</a>",
-    "publishedAt": "Tue, 20 Jan 2026 10:56:02 +0000",
+    "id": "https://github.com/joel-jeremy/emissary",
+    "url": "https://github.com/joel-jeremy/emissary",
+    "title": "Emissary, a fast open-source Java messaging library",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46723049\">Comments</a>",
+    "publishedAt": "Thu, 22 Jan 2026 18:15:47 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -927,92 +918,20 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
+    "id": "https://aashvik.com/posts/shell-ssg/",
+    "url": "https://aashvik.com/posts/shell-ssg/",
+    "title": "A static site generator written in POSIX shell",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46690463\">Comments</a>",
+    "publishedAt": "Tue, 20 Jan 2026 10:56:02 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
     "id": "https://news.ycombinator.com/item?id=46759387",
     "url": "https://news.ycombinator.com/item?id=46759387",
     "title": "Ask HN: DDD was a great debugger – what would a modern equivalent look like?",
     "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46759387\">Comments</a>",
     "publishedAt": "Sun, 25 Jan 2026 22:47:55 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://onlinegoddess.net/2026/01/apple-what-have-you-done/",
-    "url": "https://onlinegoddess.net/2026/01/apple-what-have-you-done/",
-    "title": "Apple, What Have You Done?",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763592\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 09:43:12 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://swizec.com/blog/the-future-of-software-engineering-is-sre/",
-    "url": "https://swizec.com/blog/the-future-of-software-engineering-is-sre/",
-    "title": "The future of software engineering is SRE",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46759063\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 22:18:38 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://www.bbc.co.uk/programmes/m002pqg6",
-    "url": "https://www.bbc.co.uk/programmes/m002pqg6",
-    "title": "The Science of Fermentation [audio]",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46733306\">Comments</a>",
-    "publishedAt": "Fri, 23 Jan 2026 15:03:08 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://www.nature.com/articles/s41598-026-35389-6",
-    "url": "https://www.nature.com/articles/s41598-026-35389-6",
-    "title": "LED lighting undermines visual performance unless supplemented by wider spectra",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46758644\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 21:44:10 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
-    "url": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
-    "title": "Building a Real-Time HN Display for $15",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46719958\">Comments</a>",
-    "publishedAt": "Thu, 22 Jan 2026 14:52:43 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://www.diljitpr.net/blog-post-postgresql-dlq",
-    "url": "https://www.diljitpr.net/blog-post-postgresql-dlq",
-    "title": "Using PostgreSQL as a Dead Letter Queue for Event-Driven Systems",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46755115\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 15:51:03 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://notes.nora.codes/atproto-again/",
-    "url": "https://notes.nora.codes/atproto-again/",
-    "title": "I was right about ATProto key management",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46757357\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 19:31:23 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://blog.luminal.com/p/compiling-models-to-megakernels",
-    "url": "https://blog.luminal.com/p/compiling-models-to-megakernels",
-    "title": "Compiling models to megakernels",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46750951\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 05:12:12 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://github.com/steffest/DPaint-js",
-    "url": "https://github.com/steffest/DPaint-js",
-    "title": "Web-based image editor modeled after Deluxe Paint",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46753708\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 12:54:53 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -1026,38 +945,74 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://arthur.pizza/2025/12/running-stupid-cricut-software-under-linux/",
-    "url": "https://arthur.pizza/2025/12/running-stupid-cricut-software-under-linux/",
-    "title": "Running the Stupid Cricut Software on Linux",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761761\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 04:05:38 +0000",
+    "id": "https://swizec.com/blog/the-future-of-software-engineering-is-sre/",
+    "url": "https://swizec.com/blog/the-future-of-software-engineering-is-sre/",
+    "title": "The future of software engineering is SRE",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46759063\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 22:18:38 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://davidlazar.github.io/PCPL/",
-    "url": "https://davidlazar.github.io/PCPL/",
-    "title": "The Post Correspondence Programming Language: Domino-oriented Programming (2015)",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46724348\">Comments</a>",
-    "publishedAt": "Thu, 22 Jan 2026 19:54:06 +0000",
+    "id": "https://www.nature.com/articles/s41598-026-35389-6",
+    "url": "https://www.nature.com/articles/s41598-026-35389-6",
+    "title": "LED lighting undermines visual performance unless supplemented by wider spectra",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46758644\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 21:44:10 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://www.sfgate.com/national-parks/article/mount-hood-water-google-21307223.php",
-    "url": "https://www.sfgate.com/national-parks/article/mount-hood-water-google-21307223.php",
-    "title": "Environmentalists worry Google behind bid to control Oregon town's water",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761614\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 03:40:06 +0000",
+    "id": "https://hugues.betakappaphi.com/2026/01/21/sfpark/",
+    "url": "https://hugues.betakappaphi.com/2026/01/21/sfpark/",
+    "title": "SFPark: Interactive map of SF parking regulations",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46720987\">Comments</a>",
+    "publishedAt": "Thu, 22 Jan 2026 15:58:09 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://github.com/clawdbot/clawdbot",
-    "url": "https://github.com/clawdbot/clawdbot",
-    "title": "Clawdbot - open source personal AI assistant",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46760237\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 00:27:41 +0000",
+    "id": "https://www.diljitpr.net/blog-post-postgresql-dlq",
+    "url": "https://www.diljitpr.net/blog-post-postgresql-dlq",
+    "title": "Using PostgreSQL as a Dead Letter Queue for Event-Driven Systems",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46755115\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 15:51:03 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://www.bbc.co.uk/programmes/m002pqg6",
+    "url": "https://www.bbc.co.uk/programmes/m002pqg6",
+    "title": "The Science of Fermentation [audio]",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46733306\">Comments</a>",
+    "publishedAt": "Fri, 23 Jan 2026 15:03:08 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://notes.nora.codes/atproto-again/",
+    "url": "https://notes.nora.codes/atproto-again/",
+    "title": "I was right about ATProto key management",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46757357\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 19:31:23 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
+    "url": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
+    "title": "Building a Real-Time HN Display for $15",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46719958\">Comments</a>",
+    "publishedAt": "Thu, 22 Jan 2026 14:52:43 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
+    "url": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
+    "title": "Iran's internet blackout may become permanent, with access for elites only",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761822\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 04:18:19 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -1071,11 +1026,56 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
+    "id": "https://blog.luminal.com/p/compiling-models-to-megakernels",
+    "url": "https://blog.luminal.com/p/compiling-models-to-megakernels",
+    "title": "Compiling models to megakernels",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46750951\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 05:12:12 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://arthur.pizza/2025/12/running-stupid-cricut-software-under-linux/",
+    "url": "https://arthur.pizza/2025/12/running-stupid-cricut-software-under-linux/",
+    "title": "Running the Stupid Cricut Software on Linux",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761761\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 04:05:38 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://github.com/clawdbot/clawdbot",
+    "url": "https://github.com/clawdbot/clawdbot",
+    "title": "Clawdbot - open source personal AI assistant",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46760237\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 00:27:41 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
     "id": "https://www.lighthouses.app/",
     "url": "https://www.lighthouses.app/",
     "title": "Show HN: An interactive map of US lighthouses and navigational aids",
     "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46756427\">Comments</a>",
     "publishedAt": "Sun, 25 Jan 2026 18:06:26 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://dougallj.wordpress.com/2020/05/10/bitwise-conversion-of-doubles-using-only-floating-point-multiplication-and-addition/",
+    "url": "https://dougallj.wordpress.com/2020/05/10/bitwise-conversion-of-doubles-using-only-floating-point-multiplication-and-addition/",
+    "title": "Bitwise conversion of doubles using only FP multiplication and addition (2020)",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46754522\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 14:55:03 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://davidlazar.github.io/PCPL/",
+    "url": "https://davidlazar.github.io/PCPL/",
+    "title": "The Post Correspondence Programming Language: Domino-oriented Programming (2015)",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46724348\">Comments</a>",
+    "publishedAt": "Thu, 22 Jan 2026 19:54:06 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   }

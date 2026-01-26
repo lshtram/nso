@@ -1,5 +1,15 @@
 [
   {
+    "id": "69711b3cec79c86b7151d776",
+    "url": "https://www.wired.com/story/data-center-criticism-factories-supply-us/",
+    "title": "People Are Protesting Data Centers—but Embracing the Factories That Supply Them",
+    "rawContent": "As the data center backlash grows, support is growing for server factories and the hundreds of jobs they’re expected to bring.",
+    "publishedAt": "Mon, 26 Jan 2026 11:00:00 +0000",
+    "author": "Paresh Dave",
+    "priorityScore": 75,
+    "discoveryNotes": "Found via Wired"
+  },
+  {
     "id": "696fd2185963d82ddd46cfa9",
     "url": "https://www.wired.com/story/intel-panther-lake-core-ultra-series-3-review/",
     "title": "Intel’s Panther Lake Chips Aren’t Just Good—They Beat Apple's M5",
@@ -490,16 +500,6 @@
     "discoveryNotes": "Found via Wired"
   },
   {
-    "id": "697129ce8c25eb9b6d63a92c",
-    "url": "https://www.wired.com/story/claude-code-success-anthropic-business-model/",
-    "title": "How Claude Code Is Reshaping Software—and Anthropic",
-    "rawContent": "WIRED spoke with Boris Cherny, head of Claude Code, about how the viral coding tool is changing the way Anthropic works.",
-    "publishedAt": "Thu, 22 Jan 2026 19:00:00 +0000",
-    "author": "Maxwell Zeff",
-    "priorityScore": 75,
-    "discoveryNotes": "Found via Wired"
-  },
-  {
     "id": "https://www.theverge.com/news/867625/tiktok-down-weekend-broke-fyp-video-uploads-review",
     "url": "https://www.theverge.com/news/867625/tiktok-down-weekend-broke-fyp-video-uploads-review",
     "title": "TikTok broke in its first weekend with US ownership",
@@ -591,7 +591,7 @@
     "id": "https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi",
     "url": "https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi",
     "title": "Microsoft handed the government encryption keys for customer data",
-    "rawContent": "\n\t\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\n<figure>\n\n<img alt=\"\" data-caption=\"\" data-portal-copyright=\"\" data-has-syndication-rights=\"1\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK095_Microsoft_04.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100\" />\n\t<figcaption>\n\t\t</figcaption>\n</figure>\n<p class=\"has-text-align-none\">The FBI went to Microsoft last year with a warrant, asking them to hand over keys to unlock encrypted data stored on three laptops as part of an investigation into potential fraud involving the COVID unemployment assistance program in Guam - and <a href=\"https://www.forbes.com/sites/thomasbrewster/2026/01/22/microsoft-gave-fbi-keys-to-unlock-bitlocker-encrypted-data/\">Microsoft complied</a>. </p>\n<p class=\"has-text-align-none\">Typically, companies resist handing over encryption keys to authorities. Most famously, <a href=\"https://www.theverge.com/2016/2/17/11036306/apple-fbi-iphone-encryption-backdoor-tim-cook\">Apple refused</a> to grant the FBI access to a phone used by the San Bernardino shooters in 2016. The FBI eventually found a third-party to hack their way into the phone, but ultimately <a href=\"https://www.theverge.com/2016/4/22/11492804/fbi-apple-new-york-iphone-unlocking-case-withdrawl\">withdrew</a> its case. Most of the major tech companies, including <a href=\"https://www.theverge.com/2016/2/17/11040266/google-ceo-sundar-pichai-sides-with-apple-encryption\">Google</a> and <a href=\"https://www.theverge.com/2016/2/18/11056074/apple-iphone-encryption-fbi-facebook-twitter-support\">Facebook</a> backed Apple in its battle w …</p>\n<p><a href=\"https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi\">Read the full story at The Verge.</a></p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t",
+    "rawContent": "\n\t\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\n<figure>\n\n<img alt=\"\" data-caption=\"\" data-portal-copyright=\"\" data-has-syndication-rights=\"1\" src=\"https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK095_Microsoft_04.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100\" />\n\t<figcaption>\n\t\t</figcaption>\n</figure>\n<p class=\"has-text-align-none\">The FBI went to Microsoft last year with a warrant, asking them to hand over keys to unlock encrypted data stored on three laptops as part of an investigation into potential fraud involving the COVID unemployment assistance program in Guam - and <a href=\"https://www.forbes.com/sites/thomasbrewster/2026/01/22/microsoft-gave-fbi-keys-to-unlock-bitlocker-encrypted-data/\">Microsoft complied</a>. </p>\n<p class=\"has-text-align-none\">Typically, companies resist handing over encryption keys to authorities. Most famously, <a href=\"https://www.theverge.com/2016/2/17/11036306/apple-fbi-iphone-encryption-backdoor-tim-cook\">Apple refused</a> to grant the FBI access to a phone used by the San Bernardino shooters in 2016. The FBI eventually found a third-party to hack their way into the phone, but ultimately <a href=\"https://www.theverge.com/2016/4/22/11492804/fbi-apple-new-york-iphone-unlocking-case-withdrawl\">withdrew</a> its case. Most of the major tech companies, including <a href=\"https://www.theverge.com/2016/2/17/11040266/google-ceo-sundar-pichai-sides-with-apple-encryption\">Google</a> and <a href=\"https://www.theverge.com/2016/2/18/11056074/apple-iphone-encryption-fbi-facebook-twitter-support\">Facebook</a>, backed Apple in its battle  …</p>\n<p><a href=\"https://www.theverge.com/news/867244/microsoft-bitlocker-privacy-fbi\">Read the full story at The Verge.</a></p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t",
     "publishedAt": "2026-01-24T22:39:57.000Z",
     "author": "Terrence O’Brien",
     "imageUrl": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK095_Microsoft_04.jpg?quality=90&#038;strip=all&#038;crop=0,0,100,100",
@@ -828,6 +828,15 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
+    "id": "https://maplibre.org/news/2026-01-23-mlt-release/",
+    "url": "https://maplibre.org/news/2026-01-23-mlt-release/",
+    "title": "MapLibre Tile: a modern and efficient vector tile format",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763864\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 10:19:51 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
     "id": "https://www.jampa.dev/p/lessons-learned-after-10-years-as",
     "url": "https://www.jampa.dev/p/lessons-learned-after-10-years-as",
     "title": "Things I've learned in my 10 years as an engineering manager",
@@ -846,38 +855,11 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://reclaimthenet.org/uk-house-of-lords-votes-to-extend-age-verification-to-vpns",
-    "url": "https://reclaimthenet.org/uk-house-of-lords-votes-to-extend-age-verification-to-vpns",
-    "title": "UK House of Lords Votes to Extend Age Verification to VPNs",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763548\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 09:35:31 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
     "id": "https://www.sciencealert.com/scientists-identify-brain-waves-that-define-the-limits-of-you",
     "url": "https://www.sciencealert.com/scientists-identify-brain-waves-that-define-the-limits-of-you",
     "title": "Scientists identify brain waves that define the limits of 'you'",
     "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46760099\">Comments</a>",
     "publishedAt": "Mon, 26 Jan 2026 00:10:42 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://walzr.com/sf-graffiti",
-    "url": "https://walzr.com/sf-graffiti",
-    "title": "San Francisco Graffiti",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763721\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 10:02:12 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://github.com/joel-jeremy/emissary",
-    "url": "https://github.com/joel-jeremy/emissary",
-    "title": "Emissary, a fast open-source Java messaging library",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46723049\">Comments</a>",
-    "publishedAt": "Thu, 22 Jan 2026 18:15:47 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -891,6 +873,24 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
+    "id": "https://github.com/joel-jeremy/emissary",
+    "url": "https://github.com/joel-jeremy/emissary",
+    "title": "Emissary, a fast open-source Java messaging library",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46723049\">Comments</a>",
+    "publishedAt": "Thu, 22 Jan 2026 18:15:47 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://walzr.com/sf-graffiti",
+    "url": "https://walzr.com/sf-graffiti",
+    "title": "San Francisco Graffiti",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763721\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 10:02:12 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
     "id": "https://gwern.net/video-game-art",
     "url": "https://gwern.net/video-game-art",
     "title": "Video Games as Art",
@@ -900,20 +900,20 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
-    "url": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
-    "title": "Iran's internet blackout may become permanent, with access for elites only",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761822\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 04:18:19 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
     "id": "https://aashvik.com/posts/shell-ssg/",
     "url": "https://aashvik.com/posts/shell-ssg/",
     "title": "A static site generator written in POSIX shell",
     "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46690463\">Comments</a>",
     "publishedAt": "Tue, 20 Jan 2026 10:56:02 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
+    "url": "https://restofworld.org/2026/iran-blackout-tiered-internet/",
+    "title": "Iran's internet blackout may become permanent, with access for elites only",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761822\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 04:18:19 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -936,11 +936,11 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://onlinegoddess.net/2026/01/apple-what-have-you-done/",
-    "url": "https://onlinegoddess.net/2026/01/apple-what-have-you-done/",
-    "title": "Apple, What Have You Done?",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763592\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 09:43:12 +0000",
+    "id": "https://reclaimthenet.org/uk-house-of-lords-votes-to-extend-age-verification-to-vpns",
+    "url": "https://reclaimthenet.org/uk-house-of-lords-votes-to-extend-age-verification-to-vpns",
+    "title": "UK House of Lords Votes to Extend Age Verification to VPNs",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46763548\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 09:35:31 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -972,15 +972,6 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
-    "url": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
-    "title": "Building a Real-Time HN Display for $15",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46719958\">Comments</a>",
-    "publishedAt": "Thu, 22 Jan 2026 14:52:43 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
     "id": "https://www.diljitpr.net/blog-post-postgresql-dlq",
     "url": "https://www.diljitpr.net/blog-post-postgresql-dlq",
     "title": "Using PostgreSQL as a Dead Letter Queue for Event-Driven Systems",
@@ -990,11 +981,11 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://notes.nora.codes/atproto-again/",
-    "url": "https://notes.nora.codes/atproto-again/",
-    "title": "I was right about ATProto key management",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46757357\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 19:31:23 +0000",
+    "id": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
+    "url": "https://medium.com/@lee.harding/building-a-real-time-hn-display-for-15-3ea1772051ff",
+    "title": "Building a Real-Time HN Display for $15",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46719958\">Comments</a>",
+    "publishedAt": "Thu, 22 Jan 2026 14:52:43 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -1008,20 +999,11 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://github.com/steffest/DPaint-js",
-    "url": "https://github.com/steffest/DPaint-js",
-    "title": "Web-based image editor modeled after Deluxe Paint",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46753708\">Comments</a>",
-    "publishedAt": "Sun, 25 Jan 2026 12:54:53 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://www.experimental-history.com/p/text-is-king",
-    "url": "https://www.experimental-history.com/p/text-is-king",
-    "title": "Text Is King",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46698264\">Comments</a>",
-    "publishedAt": "Tue, 20 Jan 2026 21:57:08 +0000",
+    "id": "https://notes.nora.codes/atproto-again/",
+    "url": "https://notes.nora.codes/atproto-again/",
+    "title": "I was right about ATProto key management",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46757357\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 19:31:23 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -1035,29 +1017,11 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
-    "id": "https://davidlazar.github.io/PCPL/",
-    "url": "https://davidlazar.github.io/PCPL/",
-    "title": "The Post Correspondence Programming Language: Domino-oriented Programming (2015)",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46724348\">Comments</a>",
-    "publishedAt": "Thu, 22 Jan 2026 19:54:06 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://www.sfgate.com/national-parks/article/mount-hood-water-google-21307223.php",
-    "url": "https://www.sfgate.com/national-parks/article/mount-hood-water-google-21307223.php",
-    "title": "Environmentalists worry Google behind bid to control Oregon town's water",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761614\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 03:40:06 +0000",
-    "priorityScore": 90,
-    "discoveryNotes": "Found via Hacker News"
-  },
-  {
-    "id": "https://github.com/clawdbot/clawdbot",
-    "url": "https://github.com/clawdbot/clawdbot",
-    "title": "Clawdbot - open source personal AI assistant",
-    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46760237\">Comments</a>",
-    "publishedAt": "Mon, 26 Jan 2026 00:27:41 +0000",
+    "id": "https://www.experimental-history.com/p/text-is-king",
+    "url": "https://www.experimental-history.com/p/text-is-king",
+    "title": "Text Is King",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46698264\">Comments</a>",
+    "publishedAt": "Tue, 20 Jan 2026 21:57:08 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   },
@@ -1071,11 +1035,47 @@
     "discoveryNotes": "Found via Hacker News"
   },
   {
+    "id": "https://github.com/clawdbot/clawdbot",
+    "url": "https://github.com/clawdbot/clawdbot",
+    "title": "Clawdbot - open source personal AI assistant",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46760237\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 00:27:41 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://davidlazar.github.io/PCPL/",
+    "url": "https://davidlazar.github.io/PCPL/",
+    "title": "The Post Correspondence Programming Language: Domino-oriented Programming (2015)",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46724348\">Comments</a>",
+    "publishedAt": "Thu, 22 Jan 2026 19:54:06 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
     "id": "https://www.lighthouses.app/",
     "url": "https://www.lighthouses.app/",
     "title": "Show HN: An interactive map of US lighthouses and navigational aids",
     "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46756427\">Comments</a>",
     "publishedAt": "Sun, 25 Jan 2026 18:06:26 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://www.sfgate.com/national-parks/article/mount-hood-water-google-21307223.php",
+    "url": "https://www.sfgate.com/national-parks/article/mount-hood-water-google-21307223.php",
+    "title": "Environmentalists worry Google behind bid to control Oregon town's water",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46761614\">Comments</a>",
+    "publishedAt": "Mon, 26 Jan 2026 03:40:06 +0000",
+    "priorityScore": 90,
+    "discoveryNotes": "Found via Hacker News"
+  },
+  {
+    "id": "https://dougallj.wordpress.com/2020/05/10/bitwise-conversion-of-doubles-using-only-floating-point-multiplication-and-addition/",
+    "url": "https://dougallj.wordpress.com/2020/05/10/bitwise-conversion-of-doubles-using-only-floating-point-multiplication-and-addition/",
+    "title": "Bitwise conversion of doubles using only FP multiplication and addition (2020)",
+    "rawContent": "<a href=\"https://news.ycombinator.com/item?id=46754522\">Comments</a>",
+    "publishedAt": "Sun, 25 Jan 2026 14:55:03 +0000",
     "priorityScore": 90,
     "discoveryNotes": "Found via Hacker News"
   }

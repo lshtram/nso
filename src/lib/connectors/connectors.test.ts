@@ -8,7 +8,7 @@ vi.mock('rss-parser', () => {
   return {
     default: vi.fn().mockImplementation(() => {
       return {
-        parseURL: vi.fn().mockResolvedValue({
+        parseString: vi.fn().mockResolvedValue({
           items: [
             {
               guid: '1',
@@ -37,6 +37,11 @@ describe('Connectors', () => {
         isActive: true,
         healthStatus: 'active'
       };
+      
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: () => Promise.resolve('<rss><channel><item></item></channel></rss>')
+      });
 
       const raws = await connector.discover(entity);
       expect(raws).toHaveLength(1);
@@ -59,7 +64,8 @@ describe('Connectors', () => {
         url: 'https://example.com/1',
         title: 'Title',
         rawContent: '<img src="https://example.com/img.jpg" /> content',
-        publishedAt: '2024-01-01'
+        publishedAt: '2024-01-01',
+        imageUrl: 'https://example.com/img.jpg'
       };
 
       const item = connector.normalize(raw, entity);
