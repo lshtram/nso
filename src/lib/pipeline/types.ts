@@ -39,6 +39,7 @@ export interface PipelineControlParams {
 export interface DiscoveredItem extends RawItem {
   priorityScore: number; 
   discoveryNotes?: string;
+  _originalEntity?: SourceEntity; // Preserved metadata from source
 }
 
 // Stage 2/3 Output: Enriched but not fully clustered

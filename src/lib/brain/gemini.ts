@@ -49,7 +49,7 @@ export class GeminiProvider implements BrainProvider {
       Task: Entity & Summary Extraction.
       Return a FLAT JSON object:
       {
-        "topics": ["TECH"|"SCIENCE"|"PHILOSOPHY"|"GEOPOLITICS"|"GENERAL"],
+        "topics": ["TECH", "SCIENCE", "POLITICS", "ECONOMY", "CULTURE", "HEALTH", "LIFESTYLE", "GENERAL"],
         "entities": ["Organization Names"],
         "summary": "2-paragraph editorial summary"
       }

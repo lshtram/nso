@@ -28,7 +28,8 @@ export class DiscoveryStage implements PipelineStage<SourceEntity[], DiscoveredI
          const findings: DiscoveredItem[] = rawItems.map(raw => ({
            ...raw,
            priorityScore: source.signalScore || 50,
-           discoveryNotes: `Found via ${source.name}`
+           discoveryNotes: `Found via ${source.name}`,
+           _originalEntity: source
          }));
 
          // Emit progress

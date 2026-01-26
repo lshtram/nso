@@ -124,6 +124,50 @@ export class RssConnector extends BaseConnector {
     }
   }
 
+  async hydrate(item: RawItem): Promise<string> {
+    try {
+      if (!item.url) return item.rawContent;
+
+      console.log(`[RssConnector] Hydrating: ${item.url}`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch(item.url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' },
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) return item.rawContent;
+      const html = await response.text();
+
+      // Lazy Image Extraction: If we don't have an image yet, try to find og:image
+      if (!item.imageUrl) {
+        const ogMatch = html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i);
+        if (ogMatch) {
+           (item as any).imageUrl = ogMatch[1];
+           console.log(`[RssConnector] Found og:image for ${item.title}: ${ogMatch[1]}`);
+        }
+      }
+
+      // Lazy Author Extraction
+      if (!item.author || item.author === 'Unknown' || item.author === 'Unknown Author') {
+         const authorMatch = html.match(/<meta\s+name=["']author["']\s+content=["']([^"']+)["']/i) || 
+                             html.match(/<meta\s+property=["']article:author["']\s+content=["']([^"']+)["']/i);
+         if (authorMatch) {
+             item.author = authorMatch[1];
+             console.log(`[RssConnector] Found author for ${item.title}: ${item.author}`);
+         }
+      }
+
+      return html;
+      
+    } catch (e) {
+      console.warn(`[RssConnector] Hydration skipped for ${item.url}`, e);
+      return item.rawContent;
+    }
+  }
+
   normalize(raw: RawItem, entity: SourceEntity): ContentItem {
     return {
       id: raw.id,
