@@ -1,10 +1,11 @@
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Command, X, Send, Sparkles, Plus, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SourceEntity } from "@/types";
-import { discoveryChatAction } from "@/lib/actions/discovery";
+import { ChatSession, ChatSessionHandle } from "./chat/ChatSession";
 
 interface Props {
   sources: SourceEntity[];
@@ -12,43 +13,17 @@ interface Props {
   onAddSource: (source: Partial<SourceEntity>) => void;
 }
 
-interface Message {
-  id: string;
-  role: 'user' | 'bot';
-  text: string;
-  tools?: any[];
-}
-
 export const SteeringBar: React.FC<Props> = ({ sources, weights, onAddSource }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { id: '1', role: 'bot', text: "Brain ready. Steering parameters active." }
-  ]);
+  const chatRef = useRef<ChatSessionHandle>(null);
 
-  const handleSend = async () => {
-    if (!query.trim() || isTyping) return;
+  const handleSend = () => {
+    if (!query.trim() || isTyping || !chatRef.current) return;
     
-    const userMsg: Message = { id: Date.now().toString(), role: 'user', text: query };
-    setMessages(prev => [...prev, userMsg]);
+    chatRef.current.sendMessage(query);
     setQuery("");
-    setIsTyping(true);
-
-    try {
-      const { response, tools } = await discoveryChatAction(query, sources, weights);
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'bot',
-        text: response,
-        tools: tools
-      };
-      setMessages(prev => [...prev, botMsg]);
-    } catch (err) {
-      setMessages(prev => [...prev, { id: 'err', role: 'bot', text: "Synapse timeout. Re-establishing link..." }]);
-    } finally {
-      setIsTyping(false);
-    }
   };
 
   return (
@@ -76,50 +51,18 @@ export const SteeringBar: React.FC<Props> = ({ sources, weights, onAddSource }) 
                 </button>
               </div>
 
-              <div className="flex-grow overflow-y-auto p-8 space-y-6 no-scrollbar">
-                {messages.map((m) => (
-                  <div key={m.id} className="space-y-4">
-                    <div className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] p-5 rounded-[1.8rem] text-[13px] font-medium leading-relaxed ${m.role === 'user' ? 'bg-black text-white shadow-lg rounded-br-none' : 'bg-white text-gray-800 rounded-bl-none border border-gray-100 shadow-sm'}`}>
-                        {m.text.replace(/\{[\s\S]*?\}/g, '').trim()}
-                      </div>
-                    </div>
-                    
-                    {/* Tool/Recommendation Rendering */}
-                    {m.tools && m.tools.some(t => t.action === 'ADD_SOURCE') && (
-                      <div className="grid grid-cols-1 gap-2 pl-4">
-                        {m.tools.filter(t => t.action === 'ADD_SOURCE').map((tool, i) => (
-                           <div key={i} className="bg-white/40 border border-white/60 p-4 rounded-2xl flex items-center justify-between gap-4 backdrop-blur-md">
-                             <div className="flex items-center gap-3">
-                               <div className="w-10 h-10 rounded-xl bg-[var(--chrome-yellow)] flex items-center justify-center text-lg shadow-sm">
-                                 {tool.type === 'rss' ? '📰' : '🛠️'}
-                               </div>
-                               <div className="flex flex-col">
-                                 <span className="text-[10px] font-black uppercase text-gray-900">{tool.name}</span>
-                                 <span className="text-[8px] font-mono text-gray-400 truncate max-w-[150px]">{tool.url}</span>
-                               </div>
-                             </div>
-                             <button 
-                               onClick={() => {
-                                 onAddSource({ id: tool.name.toLowerCase().replace(/\s/g, '-'), name: tool.name, url: tool.url, type: tool.type || 'rss', isActive: true });
-                               }}
-                               className="px-4 py-2 bg-black text-[var(--chrome-yellow)] text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-md"
-                             >
-                               Subscribe
-                             </button>
-                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="bg-white/40 backdrop-blur-md p-4 rounded-2xl text-[10px] italic text-gray-400 font-bold animate-pulse">
-                      Processing neural signals...
-                    </div>
-                  </div>
-                )}
+              {/* Chat Session Area */}
+              <div className="flex-grow overflow-hidden relative">
+                  <ChatSession 
+                    ref={chatRef}
+                    sources={sources}
+                    weights={weights}
+                    onAddSource={onAddSource}
+                    variant="overlay"
+                    initialMessage="Brain ready. Steering parameters active."
+                    onTypingChange={setIsTyping}
+                    className="h-full"
+                  />
               </div>
 
               <div className="p-6 border-t border-white/20 bg-white/10 flex gap-4 pb-16">
@@ -149,6 +92,7 @@ export const SteeringBar: React.FC<Props> = ({ sources, weights, onAddSource }) 
               onFocus={() => setIsOpen(true)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Steer the collection..."
+              suppressHydrationWarning
               className="bg-transparent border-none outline-none flex-grow text-black placeholder-black/30 font-bold text-sm h-8"
             />
           </div>
@@ -157,7 +101,7 @@ export const SteeringBar: React.FC<Props> = ({ sources, weights, onAddSource }) 
             disabled={!query.trim() || isTyping}
             className="bg-black text-[var(--chrome-yellow)] p-4 rounded-[2rem] hover:scale-105 active:scale-95 transition-all shadow-lg border border-[var(--chrome-yellow)]/20"
           >
-            {isTyping ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} className="stroke-[3px]" />}
+             {isTyping ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} className="stroke-[3px]" />}
           </button>
         </div>
       </motion.div>
