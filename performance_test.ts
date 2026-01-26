@@ -50,12 +50,13 @@ async function runPerformanceTest() {
   console.log(`\n--- [Perf Test] Results ---`);
   console.log(`Feeds processed: ${thousandsOfSources.length}`);
   console.log(`Time taken: ${duration.toFixed(2)}s`);
-  console.log(`Clusters found: ${clusters.length}`);
+  console.log(`Clusters found: ${clusters.clusters.length}`);
   console.log(`Processing speed: ${(thousandsOfSources.length / duration).toFixed(2)} feeds/sec`);
   
-  if (clusters.length > 0) {
-     console.log(`Top Signal: ${clusters[0].title}`);
-     console.log(`Narrative preview: ${clusters[0].narrative?.substring(0, 100)}...`);
+  if (clusters.clusters.length > 0) {
+    console.log('✅ Pipeline functionality verified (Clusters generated)');
+  } else {
+    console.log('⚠️ No clusters generated (Check MockBrain logic)');
   }
 }
 

@@ -19,6 +19,7 @@ export class HydrationStage implements PipelineStage<DiscoveredItem[], HydratedI
     const tasks = input.map((item) => async () => {
       if (context.signal.aborted) return null;
 
+      try {
         // Fix: Use the original entity metadata if available, otherwise fallback
         const originalEntity = (item as any).entity || (item as any)._originalEntity;
         
@@ -34,7 +35,7 @@ export class HydrationStage implements PipelineStage<DiscoveredItem[], HydratedI
              sourceName = (item as any).sourceName || 'Unknown';
         }
 
-        const connector = getConnector(connectorType);
+        const connector = getConnector(connectorType as any);
 
         // Optimization: "Thin Content Check"
         const hasSubstantialText = item.rawContent && item.rawContent.length > 2000;

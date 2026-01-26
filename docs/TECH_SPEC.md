@@ -67,7 +67,7 @@ interface SteeringContext {
   globalStrategy: string; // Current focus (e.g., "Deep tech priority")
   componentPrompts?: string[]; // Specific overrides for this stage
   parameters: Record<string, any>; // Numeric weights/thresholds
-}
+  }
 ```
 
 #### Pipeline Stages:

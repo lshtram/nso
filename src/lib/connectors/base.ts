@@ -36,11 +36,16 @@ export abstract class BaseConnector implements Connector {
    * Advanced scraper using JSDOM and Readability.
    * Replicates "Reader Mode" for clean, structured content.
    */
-  private async scrapeWithReadability(url: string): Promise<{
+  private async scrapeWithReadability(url: string, depth = 0): Promise<{
     content: string;
     textContent: string;
     excerptImage: string | undefined;
   } | null> {
+    if (depth > 2) {
+      console.warn(`[Readability] Max redirect depth reached for ${url}`);
+      return null;
+    }
+    
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 20000);
@@ -67,7 +72,7 @@ export abstract class BaseConnector implements Connector {
         if (match && match[1]) {
           const redirectUrl = new URL(match[1], url).href;
           console.log(`[Readability] Following meta redirect to: ${redirectUrl}`);
-          return this.scrapeWithReadability(redirectUrl);
+          return this.scrapeWithReadability(redirectUrl, depth + 1);
         }
       }
 

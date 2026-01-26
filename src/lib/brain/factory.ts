@@ -4,7 +4,7 @@ import { GeminiProvider } from './gemini';
 
 export function getActiveBrainName(): string {
   const apiKey = process.env.GOOGLE_AI_KEY;
-  return (apiKey && apiKey !== 'YOUR_KEY_HERE') ? 'Gemini 3.0 Flash / 2.0 Lite' : 'Mock Brain (Local)';
+  return (apiKey && apiKey !== 'YOUR_KEY_HERE') ? 'Gemini 1.5 Flash-8B (Tiered Economy)' : 'Mock Brain (Local)';
 }
 
 export function getBrainProvider(): BrainProvider {

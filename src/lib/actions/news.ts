@@ -1,6 +1,6 @@
 'use server';
 
-import { IngestionOrchestrator } from '../pipeline/orchestrator';
+import { IngestionOrchestratorV2 } from '../pipeline/orchestrator_v2';
 import { AI_SEED_SOURCES } from '../pipeline/seed';
 import { getActiveBrainName } from '../brain/factory';
 import { updatePipelineStatus } from './status';
@@ -15,8 +15,8 @@ export async function getAggregatedNews(
   persona?: string, 
   sources?: SourceEntity[]
 ): Promise<{ clusters: StoryCluster[], dailySummary: any, activeBrain: string }> {
-  await updatePipelineStatus("STAGE:1:Pipeline Initiated...", false);
-  const orchestrator = new IngestionOrchestrator();
+  await updatePipelineStatus("STAGE:1:Pipeline Initiated (V2)...", false);
+  const orchestrator = new IngestionOrchestratorV2();
   const activeBrain = getActiveBrainName();
   const targetSources = sources || AI_SEED_SOURCES;
 
@@ -26,12 +26,21 @@ export async function getAggregatedNews(
     parameters: { interests: weights }
   };
 
+  let lastStage = "1";
   try {
     const { clusters, dailySummary } = await orchestrator.runIngestion(
       targetSources, 
       context, 
-      forceRefresh,
-      (msg) => updatePipelineStatus(msg, false)
+      { forceRefresh: forceRefresh },
+      (msg) => {
+        const stageMatch = msg.match(/STAGE:(\d+):/);
+        if (stageMatch) {
+          lastStage = stageMatch[1];
+          updatePipelineStatus(msg, false);
+        } else {
+          updatePipelineStatus(`STAGE:${lastStage}:${msg}`, false);
+        }
+      }
     );
     
     const optimizedResults = clusters.map(cluster => {

@@ -52,13 +52,14 @@ export default function Home() {
     // Timer for user feedback
     const timer = setInterval(() => setTimeElapsed(prev => prev + 1), 1000);
 
-    // Start polling status
+    // Start polling status (using API route to avoid Server Action queuing)
     const pollInterval = setInterval(async () => {
       try {
-        const status = await getPipelineStatus();
+        const res = await fetch('/api/status', { cache: 'no-store' });
+        const status = await res.json();
         if (status.message) setStatusMessage(status.message);
       } catch (e) {}
-    }, 1500);
+    }, 1000);
 
     // Safety timeout - 15 minutes max
     const safetyTimeout = setTimeout(() => {

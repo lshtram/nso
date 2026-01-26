@@ -34,10 +34,10 @@ async function runDetailedPerfAudit() {
   console.log(`\n=== FINAL AUDIT REPORT ===`);
   console.log(`- Feeds Sampled: ${sources.length}`);
   console.log(`- Total Duration: ${totalDuration.toFixed(2)}s`);
-  console.log(`- Clusters Generated: ${clusters.length}`);
-  if (clusters.length > 0) {
+  console.log(`- Clusters Generated: ${clusters.clusters.length}`);
+  if (clusters.clusters.length > 0) {
     console.log(`- Top Signal Integrity: 94% (MockBrain Baseline)`);
-    console.log(`- Signal Density: ${(clusters.length / totalDuration).toFixed(2)} signals/sec`);
+    console.log(`- Signal Density: ${(clusters.clusters.length / totalDuration).toFixed(2)} signals/sec`);
   }
   console.log(`===========================\n`);
 }

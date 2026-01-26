@@ -25,8 +25,8 @@ export default function Dashboard() {
     setLoading(true);
     
     try {
-      const results = await getAggregatedNews(weights);
-      setClusters(results);
+      const { clusters } = await getAggregatedNews(weights);
+      setClusters(clusters);
     } catch (err) {
       console.error('Pipeline Error:', err);
     } finally {

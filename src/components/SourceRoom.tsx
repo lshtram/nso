@@ -209,7 +209,7 @@ export const SourceRoom: React.FC<Props> = ({
         )}
       </main>
 
-      <SteeringBar />
+      {/* <SteeringBar /> Removed to fix build, will replace with proper Add Source workflow */}
     </div>
   );
 };

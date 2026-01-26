@@ -3,7 +3,8 @@ import { PipelineContext, PipelineControlParams, PipelineStage, DiscoveredItem }
 
 export class NoiseFilterStage implements PipelineStage<DiscoveredItem[], DiscoveredItem[]> {
   name = 'Stage 3: Noise Filtering';
-  description = 'Removes obviously low-quality items using heuristics (RegEx).'
+  description = 'Removes obviously low-quality items using heuristics (RegEx).';
+  summary = 'Pattern-based noise reduction.';
 
   async run(
     input: DiscoveredItem[], 
