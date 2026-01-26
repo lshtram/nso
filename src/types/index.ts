@@ -34,6 +34,8 @@ export interface StoryCluster {
   finalRank: number;
   category: 'TECH' | 'POLITICS' | 'PHILOSOPHY' | 'MUSIC' | 'COOKING' | 'GENERAL';
   trendIndicator: 'rising' | 'stable' | 'new';
+  conflictSummary?: string; // Summary of contradictory points found across sources
+  highlights?: string[]; // Bullet points for the deep dive
 }
 
 export interface DailySummary {
@@ -51,9 +53,11 @@ export interface SourceEntity {
   lastSyncedAt?: string;
   healthStatus: 'active' | 'error' | 'muted';
   signalScore?: number; // 0-100
+  steering?: Record<string, any>; // Per-source steering "knobs"
 }
 
 export interface SteeringContext {
   globalStrategy: string;
+  persona?: string;
   parameters: Record<string, any>;
 }

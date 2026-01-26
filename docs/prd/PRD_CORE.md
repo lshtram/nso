@@ -23,88 +23,67 @@ Summarized in `docs/prd/MPA_CORE.md`. Major focus on **Signal Integrity** and **
 
 ### 4.1 ContentItem (Atomic Input)
 
-| Field                 | Description                                         |
-| :-------------------- | :-------------------------------------------------- |
-| `id` / `url`          | Primary keys for uniqueness and navigation.         |
-| `sourceType`          | `rss`, `reddit`, `x`, `youtube`, `github`, `arxiv`. |
-| `rawText`             | Full hydrated content (article text, transcript).   |
-| `summary`             | AI-generated 2-3 sentence summary.                  |
-| `entities` / `topics` | Extracted metadata for clustering.                  |
-| `embedding`           | Vector representation (1536d or similar).           |
+Detailed in `docs/PIPELINE_ARCHITECTURE.md`. Key fields: `id`, `sourceType`, `rawText`, `summary`, `embedding`.
 
 ### 4.2 StoryCluster (Primary Output)
 
-| Field            | Description                                                  |
-| :--------------- | :----------------------------------------------------------- |
-| `id`             | Unique cluster identifier.                                   |
-| `generatedTitle` | High-level synthesis headline.                               |
-| `narrative`      | 1-2 sentence story synthesis.                                |
-| `whyItMatters`   | 1-line justification of rank/relevance.                      |
-| `items[]`        | Collection of member ContentItems.                           |
-| `scores`         | Dimensional breakdown (Relevance, Momentum, Novelty, Depth). |
+Detailed in `docs/PIPELINE_ARCHITECTURE.md`. Key fields: `generatedTitle`, `narrative`, `whyItMatters`, `items[]`, `scores`.
 
 ## 5. The Steerable Intelligence Pipeline
 
-The system processes data in 9 strictly ordered, interchangeable, and steerable stages.
+The engine follows a strict 9-stage sequence. See **`docs/PIPELINE_ARCHITECTURE.md`** for the formal definition of Stage responsibilities.
 
-| Stage            | Process                                             | Steerable Parameter                     |
-| :--------------- | :-------------------------------------------------- | :-------------------------------------- |
-| **1. Ingest**    | Discovery of raw items via Connectors.              | Focus sources/filters.                  |
-| **2. Hydrate**   | Fetching full text, transcripts, or PDF content.    | Depth of extraction.                    |
-| **3. Normalize** | Mapping raw data to canonical `ContentItem` schema. | N/A                                     |
-| **4. Dedupe**    | Exact and semantic duplicate suppression.           | Similarity threshold.                   |
-| **5. Embed**     | Vector generation for semantic logic.               | Model choice (Cost vs. Quality).        |
-| **6. Cluster**   | Grouping items into semantic trends/stories.        | Granularity (Broad vs. Niche).          |
-| **7. Score**     | Dimensional ranking of clusters + items.            | User Weights + **Forgetting Constant**. |
-| **8. Summarize** | Multi-level synthesis (Narrative/Cluster).          | Persona, Length, Focus.                 |
-| **9. Publish**   | Rendering outputs to Dashboard/Email.               | Layout/Channel preference.              |
+### 5.1 Special Handling: Stage 4 (Scrutiny)
 
-### 5.1 Dimensional Ranking Signals (Stage 7)
+Stage 4 is the "Intelligence Gate."
 
-The `Score` stage calculates a final weighted rank for every cluster based on:
+- **Contradiction Detection**: LLM cross-references multiple items in a cluster to identify factual disagreements. If conflicts are found, the system generates a **Conflict Summary** to be displayed later in the Deep Dive.
+- **Credibility Selection**: Instead of simple dedupe, the system selects a **Canonical Survival Item** based on source weight and content integrity (Stage 4 Scrutiny).
 
-- **Relevance**: Direct alignment with user topic weights from the **Interest Equalizer**.
-- **Temporal Decay**: Reduction of score over time based on a **Forgetting Constant ($\lambda$)**.
-  - **Concept**: $Score_{final} = Score_{base} \times e^{-\lambda t}$.
-  - **Topic-Aware Tuning**: The "Brain" (Stage 3) assigns $\lambda$ based on topic understanding:
-    - _Gossip/Breaking_: High $\lambda$ (Half-life: 1-2 days).
-    - _Tech/Trends_: Med $\lambda$ (Half-life: 2-4 weeks).
-    - _Philosophy/Evergreen_: Low $\lambda$ (Half-life: 1-5 years).
-  - **Control**: Defaults are LLM-assigned; Advanced Users can override these in hidden settings.
-- **Momentum**: Cross-channel velocity (e.g., story appearing on both GitHub and RSS simultaneously).
-- **Novelty**: Surfacing what hasn't been recently seen or digested in the last 7-day rolling window.
-- **Depth**: Weighting curated/primary sources (Papers, GitHub Repos) higher than commentary or threads.
-- **Diversity**: A "Collision Check" that prevents any single source (e.g. X.com) from dominating a cluster.
+### 5.2 Special Handling: Stage 7 (Ranking & Decay)
 
-### 5.2 Connector Roadmap (Stage 1)
+- **Cluster-Level Scoring**: Ranking signals are calculated for the aggregate **StoryCluster**. Two clusters on the same topic will have different scores based on Stage 4 Scrutiny (detail, credibility).
+- **Independent Dimensions**: High Momentum (Virality) does not strictly imply High Interest (Relevance). Ranking is multi-dimensional.
+- **Daily Persistence**: Temporal decay ($e^{-\lambda t}$) is calculated and cached once per 24-hour window to ensure UI stability.
+- **Topic Half-Life**: $\lambda$ values are default-assigned by the LLM based on topic volatility (Gossip vs. Philosophy).
 
-To ensure system stability, sources are onboarded in tiers:
+### 5.4 Scalability: The Ingestion Funnel
 
-- **Phase 1 (Current)**: RSS (Global news, blogs), GitHub Releases (Code-first updates).
-- **Phase 2 (Rich Media)**: Reddit (Community sentiment), YouTube (Transcripts).
-- **Phase 3 (High-Velocity)**: X.com (Direct API or aggregator), Arxiv (Academic papers).
+To handle **1000+ sources** per user, the system implements a tiered funnel:
 
-### 5.3 Operational Strategy: Two-Tier Brain
+- **Bulk Discovery**: Parallel polling of metadata only.
+- **Intelligent Triage**: Interests-based ranking and **Noise Suppression** (automatic removal of version tags `v1.2` and release technicalities) _before_ high-cost operations.
+- **Selective Hydration**: Full scraping (Mozilla Readability) and semantic analysis only for top-ranked signals.
 
-To manage performance and LLM costs, tasks are divided by "Brain Tier":
+### 5.6 Tiered Brain Strategy (Cost-Performance Optimization)
 
-- **Low-Brain Tasks**: Topic tagging, short summaries, dedup heuristics. Uses faster, cost-efficient models.
-- **High-Brain Tasks**: Daily narrative synthesis, cluster synthesis, ranking explanations. Uses state-of-the-art reasoning models.
+The system implements a dual-model approach for the intelligence layer:
+
+- **Low Brain (Gemini 1.5 Flash)**: Executes high-volume tasks including **Stage 3 Triage** and **Stage 4 Normalization**. Optimized for speed and low token cost across 1000+ items.
+- **High Brain (Gemini 1.5 Pro)**: Reserved for high-stakes reasoning including **Stage 5 Scrutiny** (Contradiction detection) and **Stage 8 Synthesis** (Final Narrative generation).
+- **BYOM Implementation**: Configuration driven via `GOOGLE_AI_KEY`. Pipeline fallback to `MockBrain` if keys are absent.
+
+### 5.7 Categorization: Absolute Fit Rule
+
+- The system MUST NOT use "best-fit" logic for categorization.
+- Categories (SCIENCE, PHILOSOPHY, GEOPOLITICS) require **Absolute Fit** based on core substance.
+- If a signal is ambiguous but within the tech sphere, it defaults to TECH or GENERAL.
 
 ## 6. Functional Requirements
 
-| ID             | Requirement             | Acceptance Criteria                                            | Verification Path        |
-| :------------- | :---------------------- | :------------------------------------------------------------- | :----------------------- |
-| `REQ-CORE-001` | **Pipeline Strictness** | Data MUST flow through all 9 stages in sequence                | `tests/pipeline.test.ts` |
-| `REQ-CORE-002` | **Steerable Interface** | Every pipeline stage MUST accept an optional `SteeringContext` | `tests/steering.test.ts` |
-| `REQ-CORE-003` | **Aggressive Dedupe**   | Items with >90% similarity are merged into a single cluster    | `tests/dedupe.test.ts`   |
-| `REQ-CORE-004` | **Momentum Ranking**    | Rankings boost clusters with high cross-channel velocity       | `tests/ranking.test.ts`  |
-| `REQ-CORE-005` | **Two-Tier Brain**      | High-Brain (Synthesizer) vs Low-Brain (Categorizer) tasks      | `tests/brain.test.ts`    |
-| `REQ-CORE-006` | **Ingestion Policy**    | Media > 5k words summarized at edge; transcripts hydrated      | `tests/ingest.test.ts`   |
-| `REQ-CORE-007` | **Topic-Aware Decay**   | LLM assigns $\lambda$ during Stage 3; Stage 7 applies decay    | `tests/ranking.test.ts`  |
+| ID             | Requirement             | Acceptance Criteria                                           | Verification Path          |
+| :------------- | :---------------------- | :------------------------------------------------------------ | :------------------------- |
+| `REQ-CORE-001` | **Pipeline Strictness** | Data MUST flow through all 9 stages independently             | `tests/pipeline.test.ts`   |
+| `REQ-CORE-002` | **Implicit Sync**       | Pull-to-refresh triggers JIT Tiered Ingestion                 | `tests/ui/refresh.spec.ts` |
+| `REQ-CORE-003` | **Stage 4 Scrutiny**    | Contradictions are identified and flagged during dedupe phase | `tests/scrutiny.test.ts`   |
+| `REQ-CORE-004` | **Daily Cache**         | Decay and Cluster calculations stored for 24h stability       | `tests/caching.test.ts`    |
+| `REQ-CORE-005` | **Noise Suppression**   | Automatic exclusion of version bumps and release tags         | `verify_noise.ts`          |
+| `REQ-CORE-006` | **Absolute Fit**        | Categorization requires unambiguous matching                  | `tests/brain.test.ts`      |
+| `REQ-CORE-010` | **Pulse Structure**     | Deep Dive sidebar split into Brief, Summary, Key Takeaways    | UI Verification            |
 
-## 7. Constraints & Operational Strategy
+## 7. Operational Constraints
 
-- **Transparency**: Every cluster MUST expose which stages contributed to its final SURVIVAL in the dashboard (Explainability).
-- **Steering Latency**: Changes to the Interest EQ must trigger a re-run of stages 7-8 in < 3s.
-- **Data Locality**: No source-specific logic is allowed in any stage from Dedupe (4) onwards.
+- **Polling**: 6-hour cron interval for Stage 1.
+- **Storage**: Smart Waste Management (48h Eager Deletion for non-favorites).
+- **Images**: **On-Demand Loading**. Images are never stored locally; they are pulled from the source URL only when the user enters the Deep Dive or Dashboard viewport.
+- **Hero Image Rule**: Skip hero images in Deep Dive if they are generic or not directly from the source paper.
