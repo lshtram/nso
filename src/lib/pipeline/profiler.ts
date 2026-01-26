@@ -1,27 +1,30 @@
+import * as fs from 'fs';
+import * as path from 'path';
 
-import fs from 'fs';
-import path from 'path';
-
-export interface StageStats {
-  stage: string;
-  durationMs: number;
-  inputCount: number;
-  outputCount: number;
-  ratePer1k: number;
-  timestamp: string;
+export interface StageMetric {
+  name: string;
+  startTime: number;
+  endTime?: number;
+  durationMs?: number;
+  inputCount?: number;
+  outputCount?: number;
+  metadata?: any;
 }
 
 export class PipelineProfiler {
   private static instance: PipelineProfiler;
-  private stats: Record<string, StageStats> = {};
+  private metrics: StageMetric[] = [];
   private startTime: number = Date.now();
-  private debugDir: string = path.join(process.cwd(), 'tmp', 'latest_profile');
-
+  private outputDir: string;
+  
   private constructor() {
-    if (!fs.existsSync(this.debugDir)) fs.mkdirSync(this.debugDir, { recursive: true });
+     this.outputDir = path.join(process.cwd(), 'tmp');
+     if (!fs.existsSync(this.outputDir)) {
+       fs.mkdirSync(this.outputDir, { recursive: true });
+     }
   }
 
-  static getInstance(): PipelineProfiler {
+  public static getInstance(): PipelineProfiler {
     if (!PipelineProfiler.instance) {
       PipelineProfiler.instance = new PipelineProfiler();
     }
@@ -29,64 +32,81 @@ export class PipelineProfiler {
   }
 
   startRun() {
-    this.stats = {};
+    this.metrics = [];
     this.startTime = Date.now();
-    // Clear previous profile
-    if (fs.existsSync(this.debugDir)) {
-      const files = fs.readdirSync(this.debugDir);
-      for (const file of files) {
-        fs.unlinkSync(path.join(this.debugDir, file));
+    this.save();
+  }
+
+  // Compatible with V1 Orchestrator
+  startPipeline() {
+    this.startRun();
+  }
+
+  // V1 startStage
+  startStage(name: string, metadata?: any) {
+    this.metrics.push({
+      name,
+      startTime: Date.now(),
+      metadata
+    });
+    this.save();
+  }
+
+  // V1 endStage
+  endStage(name: string, metadata?: any) {
+    const stage = this.metrics.find(m => m.name === name && !m.endTime);
+    if (stage) {
+      stage.endTime = Date.now();
+      stage.durationMs = stage.endTime - stage.startTime;
+      if (metadata) {
+         if (metadata.count) stage.outputCount = metadata.count;
+         stage.metadata = { ...stage.metadata, ...metadata };
       }
     }
+    this.save();
   }
 
-  recordStage(
-    stageName: string, 
-    durationMs: number, 
-    inputItems: number, 
-    outputItems: any[]
-  ) {
-    const outputCount = Array.isArray(outputItems) ? outputItems.length : 1;
-    const rate = inputItems > 0 ? (durationMs / inputItems) * 1000 : 0;
+  // V2 recordStage (Atomic recording)
+  recordStage(name: string, durationMs: number, inputCount: number, output: any[]) {
+    // If we had a running stage with this name (from V1 calls), close it.
+    const openStage = this.metrics.find(m => m.name === name && !m.endTime);
+    if (openStage) {
+        openStage.endTime = Date.now();
+        openStage.durationMs = durationMs; // Trust the passed duration
+        openStage.inputCount = inputCount;
+        openStage.outputCount = output.length;
+    } else {
+        // Create new record
+        this.metrics.push({
+            name,
+            startTime: Date.now() - durationMs,
+            endTime: Date.now(),
+            durationMs,
+            inputCount,
+            outputCount: output.length
+        });
+    }
+    this.save();
+  }
 
-    const stat: StageStats = {
-      stage: stageName,
-      durationMs,
-      inputCount: inputItems,
-      outputCount,
-      ratePer1k: rate,
-      timestamp: new Date().toISOString()
+  private save() {
+    const report = {
+      pipelineStartTime: new Date(this.startTime).toISOString(),
+      currentDuration: Date.now() - this.startTime,
+      stages: this.metrics,
+      summary: this.getSummary()
     };
-
-    this.stats[stageName] = stat;
-
-    // Persist Stage Analytics
-    this.saveStageProfile(stageName, stat, outputItems);
     
-    // Update Accumulative Summary
-    this.saveSummary();
+    // Save "latest"
+    const filePath = path.join(this.outputDir, 'profiling_latest.json');
+    fs.writeFileSync(filePath, JSON.stringify(report, null, 2));
   }
 
-  private saveStageProfile(name: string, stat: StageStats, data: any[]) {
-    const safeName = name.replace(/[: ]/g, '_').toLowerCase();
-    const filePath = path.join(this.debugDir, `${safeName}.json`);
-    
-    const payload = {
-      analytics: stat,
-      // Store first 50 items for inspection to avoid massive files
-      sampleData: data.slice(0, 50) 
-    };
-
-    fs.writeFileSync(filePath, JSON.stringify(payload, null, 2));
-  }
-
-  private saveSummary() {
-    const summaryPath = path.join(this.debugDir, 'full_analytics_summary.json');
-    const summary = {
-      runId: `run-${this.startTime}`,
-      totalDuration: Date.now() - this.startTime,
-      stages: Object.values(this.stats)
-    };
-    fs.writeFileSync(summaryPath, JSON.stringify(summary, null, 2));
+  private getSummary() {
+    return this.metrics.map(m => ({
+      stage: m.name,
+      duration: m.durationMs ? `${m.durationMs.toFixed(2)}ms` : 'Running...',
+      io: `${m.inputCount || '-'} -> ${m.outputCount || '-'}`
+    }));
   }
 }

@@ -1,6 +1,7 @@
 
 import { PipelineContext, PipelineControlParams, PipelineStage, DiscoveredItem } from '../types';
 import { getBrainProvider } from '../../brain/factory';
+import { pLimit } from '../utils';
 
 export class TriageStage implements PipelineStage<DiscoveredItem[], DiscoveredItem[]> {
   name = 'Stage 4: Intelligent Triage';
@@ -18,28 +19,47 @@ export class TriageStage implements PipelineStage<DiscoveredItem[], DiscoveredIt
     
     // Batch processing to save API calls
     const BATCH_SIZE = 50; 
+    const CONCURRENCY = 5;
     const prioritizedItems: DiscoveredItem[] = [];
 
+    const batches = [];
     for (let i = 0; i < input.length; i += BATCH_SIZE) {
-      if (context.signal.aborted) break;
-      
-      const batch = input.slice(i, i + BATCH_SIZE);
-      const ranks = await this.brain.rank(
-        batch.map(b => ({ title: b.title, snippet: b.rawContent || "" })),
-        {} // We need the interests map here! controls.triage.interests?
-        // Note: The previous orchestrator passed `context.parameters.interests`. 
-        // We might need to expand `PipelineControlParams` to include `interests`.
-      );
-      
-      batch.forEach((item, idx) => {
-        const interestScore = ranks[idx] || 50;
-        const totalScore = (interestScore * 0.7) + (item.priorityScore * 0.3);
-        item.priorityScore = totalScore;
-        prioritizedItems.push(item);
-      });
-      
-      context.events.emit('progress', `[Triage] Ranked batch ${Math.floor(i/BATCH_SIZE) + 1}`);
+      batches.push(input.slice(i, i + BATCH_SIZE));
     }
+
+    const runner = pLimit; // Use the custom runner directly
+    let completedBatches = 0;
+
+    context.events.emit('progress', `[Triage] Processing ${batches.length} batches with concurrency=${CONCURRENCY}...`);
+
+    const tasks = batches.map((batch, idx) => async () => {
+       if (context.signal.aborted) return [];
+
+       try {
+         const ranks = await this.brain.rank(
+            batch.map(b => ({ title: b.title, snippet: b.rawContent || "" })),
+            {} 
+         );
+         
+         const batchResults: DiscoveredItem[] = [];
+         batch.forEach((item, innerIdx) => {
+            const interestScore = ranks[innerIdx] || 50;
+            const totalScore = (interestScore * 0.7) + (item.priorityScore * 0.3);
+            item.priorityScore = totalScore;
+            batchResults.push(item);
+         });
+
+         completedBatches++;
+         context.events.emit('progress', `[Triage] Ranked batch ${idx + 1}/${batches.length} (${completedBatches} done)`);
+         return batchResults;
+       } catch (e) {
+         console.error(`[Triage] Batch ${idx} failed`, e);
+         return [];
+       }
+    });
+
+    const results = await runner(CONCURRENCY, tasks);
+    results.flat().forEach(i => prioritizedItems.push(i));
 
     // Sort
     const sorted = prioritizedItems.sort((a,b) => b.priorityScore - a.priorityScore);

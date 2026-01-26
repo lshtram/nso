@@ -9,6 +9,8 @@ import { RawItem } from '../connectors/types';
 import * as fs from 'fs';
 import * as path from 'path';
 import { PipelineAuditor } from './auditor';
+import { PipelineProfiler } from './profiler';
+import { pLimit } from './utils';
 
 export class IngestionOrchestrator {
   private brain = getBrainProvider();
@@ -16,6 +18,7 @@ export class IngestionOrchestrator {
   private clusterer = new Clusterer();
   private scorer = new Scorer();
   private synthesizer = new Synthesizer(this.brain);
+  private profiler = new PipelineProfiler();
 
   private static cachedItems: ContentItem[] | null = null;
   private static lastIngestTime = 0;
@@ -72,11 +75,11 @@ export class IngestionOrchestrator {
         console.log(`[Pipeline] Serving from memory cache (${IngestionOrchestrator.cachedItems.length} items)`);
         itemsToProcess = IngestionOrchestrator.cachedItems;
       } else {
-        this.telemetry.startTime = Date.now();
+        this.profiler.startPipeline();
         console.log(`--- [Pipeline] Starting Scalable User Ingestion ---`);
         
         wrappedProgress(1, "Discovery from high-signal intelligence nodes...");
-        const startDiscovery = Date.now();
+        this.profiler.startStage('Stage 1: Discovery');
 
         // 1. Discover ALL sources (fast IO)
         // If forceRefresh is TRUE, we act like standard RSS reader: fetch feed, check for new items.
@@ -97,12 +100,12 @@ export class IngestionOrchestrator {
             }
           })
         );
-        this.telemetry.stageTimings['Stage 1: Bulk Discovery'] = Date.now() - startDiscovery;
+        this.profiler.endStage('Stage 1: Discovery', { count: discoveryResults.length });
         saveSnapshot("1_Discovery", discoveryResults);
 
         // STAGE 2: Smart Link Deduplication & Incremental Filter
         wrappedProgress(2, "Data Validation & Link Deduplication...");
-        const startDedupe = Date.now();
+        this.profiler.startStage('Stage 2: Link Deduplication');
         const bulkPool: { entity: SourceEntity; raw: RawItem; priority: number }[] = [];
         const seenInThisBatch = new Set<string>();
 
@@ -149,7 +152,7 @@ export class IngestionOrchestrator {
            // Let's re-use cached items to be safe and fast.
            itemsToProcess = IngestionOrchestrator.cachedItems;
         } else {
-             this.telemetry.stageTimings['Stage 2: Link Deduplication'] = Date.now() - startDedupe;
+             this.profiler.endStage('Stage 2: Link Deduplication');
         }
 
         // CONTROL FLOW: New Items vs. Zero New Items
@@ -157,14 +160,16 @@ export class IngestionOrchestrator {
 
         if (bulkPool.length > 0) {
           // --- STAGE 3: Fast Intelligent Triage (Processing NEW items) ---
-          const startTriage = Date.now();
+          this.profiler.startStage('Stage 3: Noise Filtering');
           const initialPool = bulkPool.filter(item => {
             const isNoisy = this.isNoisySignal(item.raw.title);
             if (isNoisy) this.telemetry.noiseFiltered.push(item.raw.title);
             return !isNoisy;
           });
+          this.profiler.endStage('Stage 3: Noise Filtering');
           
           if (initialPool.length > 0) {
+            this.profiler.startStage('Stage 4: Triage');
             wrappedProgress(3, "Triage - Filtering and neural scoring...");
             const rankItems = initialPool.map(item => ({ title: item.raw.title, snippet: item.raw.rawContent }));
             
@@ -190,35 +195,35 @@ export class IngestionOrchestrator {
             }).sort((a, b) => b.priority - a.priority);
   
             const triagedPool = scoredPool.slice(0, IngestionOrchestrator.MAX_HIGH_FIDELITY_ITEMS);
+            this.profiler.endStage('Stage 4: Triage', { count: triagedPool.length });
             this.telemetry.triagedCount = triagedPool.length;
             
-            // --- STAGE 4: Parallel High-Fidelity Hydration ---
+            // --- STAGE 5: Parallel High-Fidelity Hydration ---
             wrappedProgress(4, "Hydration - Content extraction and normalization...");
-            const startHydration = Date.now();
+            this.profiler.startStage('Stage 5: Hydration');
             const normalizedItems: ContentItem[] = await this.processHighFidelity(triagedPool, (msg) => {
                wrappedProgress(4, `Hydration - ${msg.includes(': ') ? msg.split(': ')[1] : msg}`);
             });
             saveSnapshot("3_Hydrated_Items", normalizedItems);
-            this.telemetry.stageTimings['Stage 4: High-Fid Hydration'] = Date.now() - startHydration;
+            this.profiler.endStage('Stage 5: Hydration', { count: normalizedItems.length });
   
-            // --- STAGE 5: Near-Deduplication ---
+            // --- STAGE 6: Near-Dedupe ---
             wrappedProgress(5, "Performing semantic near-deduplication...");
-            const startScrutiny = Date.now();
+            this.profiler.startStage('Stage 6: Near-Dedupe');
             newProcessedItems = await this.deduplicator.dedupeAndScrutinize(normalizedItems);
             saveSnapshot("4_Deduped_Items", newProcessedItems);
-            this.telemetry.stageTimings['Stage 5: Near-Dedupe'] = Date.now() - startScrutiny;
+            this.profiler.endStage('Stage 6: Near-Dedupe');
   
-            // --- STAGE 6: Embedding Generation ---
+            // --- STAGE 7: Embedding Generation ---
             wrappedProgress(6, "Embedding - Generating semantic vectors...");
-            const startEmbed = Date.now();
+            this.profiler.startStage('Stage 7: Embedding');
             await Promise.all(newProcessedItems.map(async (item) => {
               if (!item.embedding) {
                 item.embedding = await this.brain.embed(item.title + " " + item.summary || "");
               }
             }));
-            this.telemetry.stageTimings['Stage 6: Embeddings'] = Date.now() - startEmbed;
+            this.profiler.endStage('Stage 7: Embedding');
           }
-          this.telemetry.stageTimings['Stage 3: Intelligent Triage'] = Date.now() - startTriage;
         } else {
           // Zero new items fund. Fast-forward progress for UX.
           wrappedProgress(3, "Triage - No new signals to score.");
@@ -249,17 +254,27 @@ export class IngestionOrchestrator {
         IngestionOrchestrator.lastIngestTime = Date.now();
       }
 
-      // STAGE 7-10: Clustering, Scoring, Synthesis
+      // STAGE 8: Clustering
       wrappedProgress(5, "Synthesis - Semantic clustering and discovery...");
-      const startPost = Date.now();
+      this.profiler.startStage('Stage 8: Clustering');
       const rawClusters = await this.clusterer.cluster(itemsToProcess);
+      this.profiler.endStage('Stage 8: Clustering', { count: rawClusters.length });
+      
+      // STAGE 9: Scoring
+      this.profiler.startStage('Stage 9: Scoring');
       const rankedClusters = await this.scorer.score(rawClusters, context);
+      this.profiler.endStage('Stage 9: Scoring');
+      
+      // STAGE 10: Cluster Synthesis
+      this.profiler.startStage('Stage 10: Cluster Synthesis');
       const synthesizedClusters = await this.synthesizer.synthesize(rankedClusters, context.persona);
-      this.telemetry.stageTimings['Stage 7-10: Synthesis'] = Date.now() - startPost;
+      this.profiler.endStage('Stage 10: Cluster Synthesis');
 
-      // STAGE 11: Daily Summary
+      // STAGE 11: Global Synthesis
+      this.profiler.startStage('Stage 11: Global Synthesis');
       wrappedProgress(5, "Synthesis - Generating overarching daily state...");
       const dailySummary = await this.brain.synthesizeGlobal(synthesizedClusters, context.persona);
+      this.profiler.endStage('Stage 11: Global Synthesis');
 
       // Audit Log
       PipelineAuditor.log(
@@ -279,34 +294,32 @@ export class IngestionOrchestrator {
   }
 
   private async processHighFidelity(items: any[], onProgress?: (msg: string) => void): Promise<ContentItem[]> {
-    const batchSize = 10;
-    const results: ContentItem[] = [];
+    // Stage 5 Optimization: Use rolling window concurrency instead of strict batching.
+    const CONCURRENCY_LIMIT = 10;
     
-    for (let i = 0; i < items.length; i += batchSize) {
-      const batch = items.slice(i, i + batchSize);
-      if (onProgress) onProgress(`Scraping high-fid batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(items.length/batchSize)}...`);
+    const tasks = items.map((it, idx) => async () => {
+      // Logic from previous implementation, wrapped in a task factory
+      if (onProgress && idx % 5 === 0) onProgress(`Hydrating item ${idx + 1}/${items.length}...`);
       
-      const batchHydrated = await Promise.all(batch.map(async (it) => {
-        try {
-          const connector = getConnector(it.entity.type);
-          const fullContent = await connector.hydrate(it.raw);
-          it.raw.rawContent = fullContent;
-          
-          if ((it.raw as any)._discoveredImage && !it.raw.imageUrl) {
-            it.raw.imageUrl = (it.raw as any)._discoveredImage;
-          }
-
-          return connector.normalize(it.raw, it.entity);
-        } catch (e) {
-          console.error(`[Hydration] Failed for ${it.raw.title}:`, e);
-          return null;
+      try {
+        const connector = getConnector(it.entity.type);
+        const fullContent = await connector.hydrate(it.raw);
+        it.raw.rawContent = fullContent;
+        
+        if ((it.raw as any)._discoveredImage && !it.raw.imageUrl) {
+          it.raw.imageUrl = (it.raw as any)._discoveredImage;
         }
-      }));
 
-      results.push(...batchHydrated.filter((x): x is ContentItem => x !== null));
-    }
-    
-    return results;
+        return connector.normalize(it.raw, it.entity);
+      } catch (e) {
+        console.error(`[Hydration] Failed for ${it.raw.title}:`, e);
+        return null;
+      }
+    });
+
+    // Execute with concurrency limit
+    const results = await pLimit(CONCURRENCY_LIMIT, tasks);
+    return results.filter((x): x is ContentItem => x !== null);
   }
 
   private isNoisySignal(title: string): boolean {

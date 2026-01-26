@@ -9,8 +9,8 @@ export class GeminiProvider implements BrainProvider {
 
   constructor(apiKey: string) {
     this.genAI = new GoogleGenerativeAI(apiKey);
-    // Low Brain: Hyper-efficient 2.5 Flash Lite (latest efficiency champion)
-    this.flashLiteModel = this.genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+    // Low Brain: Hyper-efficient 2.0 Flash (Fastest available)
+    this.flashLiteModel = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
     // High Brain: Frontier 3.0 Flash (latest reasoning champion)
     this.proModel = this.genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
   }
