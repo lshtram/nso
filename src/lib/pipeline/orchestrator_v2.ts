@@ -74,6 +74,11 @@ export class IngestionOrchestratorV2 {
     onProgress?: (msg: string) => void
   ): Promise<{ clusters: StoryCluster[], dailySummary: any }> {
 
+    // MVP: If forcing refresh, clear the seen cache so we re-process everything
+    if (options.forceRefresh) {
+      this.repo = new InMemoryRepository();
+    }
+    
     const profiler = PipelineProfiler.getInstance();
     profiler.startRun();
     
