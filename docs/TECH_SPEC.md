@@ -72,15 +72,19 @@ interface SteeringContext {
 
 #### Pipeline Stages:
 
-1.  **Ingest**: Collect raw items via Connector `discover()`.
-2.  **Hydrate**: Fetch full text/transcripts.
-3.  **Normalize**: Map to canonical `ContentItem` schema.
-4.  **Dedupe**: Exact/near-duplicate detection (Thresholds steerable by Brain).
-5.  **Embed**: Vector generation.
-6.  **Cluster**: Semantic grouping (Granularity steerable by Brain).
-7.  **Score**: Rank items + clusters (Weights steerable by User/Brain).
-8.  **Summarize**: Multi-level synthesis (Persona/Style steerable by Brain).
-9.  **Publish**: Render and distribute.
+The system processes data in 11 strictly ordered modular stages. Every stage is a standalone component verified by dedicated integration tests.
+
+1.  **Discovery**: Collect raw pointers via Connector `discover()`. [Test: `01_discovery.integration.test.ts`]
+2.  **Deduplication (URL)**: Filter out previously seen URLs using a scalable batch check. [Test: `02_deduplication.integration.test.ts`]
+3.  **Noise Filter**: Heuristic removal of low-signal content (sponsored, roundups). [Test: `03_noise_filter.integration.test.ts`]
+4.  **Triage**: Neural ranking of discovered items to prioritize heavy scraping. [Test: `04_triage.integration.test.ts`]
+5.  **Hydration**: Full content extraction/scraping of prioritized leads. [Test: `05_hydration.integration.test.ts`]
+6.  **Embedding**: Generation of semantic vector representations. [Test: `06_embedding.integration.test.ts`]
+7.  **Semantic Deduplication**: Near-duplicate resolution via vector similarity (>0.95). [Test: `07_semantic_deduplication.integration.test.ts`]
+8.  **Clustering**: Grouping survivors into narrative story clusters. [Test: `08_clustering.integration.test.ts`]
+9.  **Synthesis**: LLM generation of narratives and "Why It Matters". [Test: `09_synthesis.integration.test.ts`]
+10. **Scoring**: Final weighted ranking including temporal decay ($\lambda$). [Test: `10_scoring.integration.test.ts`]
+11. **Persistence**: Commitment of final state to the repository. [Test: `11_persistence.integration.test.ts`]
 
 ### C. The “Brain” Orchestrator
 

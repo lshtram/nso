@@ -11,9 +11,10 @@
 1. **Never "Vibe" silently**: If a requirement is ambiguous, use `strong-prompt` to clarify before planning.
 2. **Token Stewardship**: Do not read large directories or files unless necessary. Use `find` or `grep` to scope research.
 3. **Atomic Changes**: Commit or present changes in logical, reviewable units.
-4. **Self-Correction**: If a tool fails, enter a "Thinking Loop" to investigate why before retrying.
+4. **Self-Correction**: If a tool fails, enter a "Thinking Loop" to investigation why before retrying.
 5. **Single Source of Truth**: Requirements must live in ONE document. Reference them via links, never duplicate. Feature PRDs supersede summary PRDs.
 6. **Code-First Prototyping**: NEVER use image generation for UI Design. Always create `prototypes/filename.html` (single-file HTML+CSS) to inspect layout and interaction.
+7. **Testing Methodology**: ALWAYS use headless HTTP clients (e.g., `curl`, `fetch`, scripting) for verification and data collection. Do NOT use visual browser automation (e.g., `browser_subagent`) or GUI inspection unless explicitly instructed otherwise or validating purely visual/interactive elements that cannot be tested headlessly.
 
 ## Conflict Resolution
 

@@ -45,19 +45,21 @@ Summarized in `docs/prd/MPA_CORE.md`. Major focus on **Signal Integrity** and **
 
 ## 5. The Steerable Intelligence Pipeline
 
-The system processes data in 9 strictly ordered, interchangeable, and steerable stages.
+The system processes data in 11 strictly ordered, modular, and steerable stages. Each stage is an independent component with its own verification suite.
 
-| Stage            | Process                                             | Steerable Parameter                     |
-| :--------------- | :-------------------------------------------------- | :-------------------------------------- |
-| **1. Ingest**    | Discovery of raw items via Connectors.              | Focus sources/filters.                  |
-| **2. Hydrate**   | Fetching full text, transcripts, or PDF content.    | Depth of extraction.                    |
-| **3. Normalize** | Mapping raw data to canonical `ContentItem` schema. | N/A                                     |
-| **4. Dedupe**    | Exact and semantic duplicate suppression.           | Similarity threshold.                   |
-| **5. Embed**     | Vector generation for semantic logic.               | Model choice (Cost vs. Quality).        |
-| **6. Cluster**   | Grouping items into semantic trends/stories.        | Granularity (Broad vs. Niche).          |
-| **7. Score**     | Dimensional ranking of clusters + items.            | User Weights + **Forgetting Constant**. |
-| **8. Summarize** | Multi-level synthesis (Narrative/Cluster).          | Persona, Length, Focus.                 |
-| **9. Publish**   | Rendering outputs to Dashboard/Email.               | Layout/Channel preference.              |
+| Stage                  | Process                                  | Steerable Parameter       | Verification Path                                                       |
+| :--------------------- | :--------------------------------------- | :------------------------ | :---------------------------------------------------------------------- |
+| **1. Discovery**       | Bulk fetch from RSS/API nodes.           | Search window, max items. | `src/lib/pipeline/stages/01_discovery.integration.test.ts`              |
+| **2. Dedupe (URL)**    | Suppressing known URLs (Scalable batch). | Lookback window.          | `src/lib/pipeline/stages/02_deduplication.integration.test.ts`          |
+| **3. Noise Filter**    | Dropping marketing/roundup content.      | Blocklist patterns.       | `src/lib/pipeline/stages/03_noise_filter.integration.test.ts`           |
+| **4. Triage**          | Brain-driven "Quick Scan" ranking.       | Interest weights.         | `src/lib/pipeline/stages/04_triage.integration.test.ts`                 |
+| **5. Hydration**       | Headless scraping of top-tier leads.     | Scrape depth.             | `src/lib/pipeline/stages/05_hydration.integration.test.ts`              |
+| **6. Embedding**       | Vector generation for semantic logic.    | Model choice.             | `src/lib/pipeline/stages/06_embedding.integration.test.ts`              |
+| **7. Semantic Dedupe** | Near-duplicate suppression (0.95 sim).   | Similarity threshold.     | `src/lib/pipeline/stages/07_semantic_deduplication.integration.test.ts` |
+| **8. Cluster**         | Grouping items into narrative stories.   | Epsilon (density).        | `src/lib/pipeline/stages/08_clustering.integration.test.ts`             |
+| **9. Synthesis**       | LLM narrative generation for clusters.   | Persona, Detail level.    | `src/lib/pipeline/stages/09_synthesis.integration.test.ts`              |
+| **10. Score**          | Dimensional ranking & Temporal decay.    | Forgetting constant.      | `src/lib/pipeline/stages/10_scoring.integration.test.ts`                |
+| **11. Persistence**    | State commitment to repository/DB.       | N/A                       | `src/lib/pipeline/stages/11_persistence.integration.test.ts`            |
 
 ### 5.1 Dimensional Ranking Signals (Stage 7)
 
@@ -93,15 +95,15 @@ To manage performance and LLM costs, tasks are divided by "Brain Tier":
 
 ## 6. Functional Requirements
 
-| ID             | Requirement             | Acceptance Criteria                                            | Verification Path        |
-| :------------- | :---------------------- | :------------------------------------------------------------- | :----------------------- |
-| `REQ-CORE-001` | **Pipeline Strictness** | Data MUST flow through all 9 stages in sequence                | `tests/pipeline.test.ts` |
-| `REQ-CORE-002` | **Steerable Interface** | Every pipeline stage MUST accept an optional `SteeringContext` | `tests/steering.test.ts` |
-| `REQ-CORE-003` | **Aggressive Dedupe**   | Items with >90% similarity are merged into a single cluster    | `tests/dedupe.test.ts`   |
-| `REQ-CORE-004` | **Momentum Ranking**    | Rankings boost clusters with high cross-channel velocity       | `tests/ranking.test.ts`  |
-| `REQ-CORE-005` | **Two-Tier Brain**      | High-Brain (Synthesizer) vs Low-Brain (Categorizer) tasks      | `tests/brain.test.ts`    |
-| `REQ-CORE-006` | **Ingestion Policy**    | Media > 5k words summarized at edge; transcripts hydrated      | `tests/ingest.test.ts`   |
-| `REQ-CORE-007` | **Topic-Aware Decay**   | LLM assigns $\lambda$ during Stage 3; Stage 7 applies decay    | `tests/ranking.test.ts`  |
+| ID             | Requirement             | Acceptance Criteria                                              | Verification Path                                                       |
+| :------------- | :---------------------- | :--------------------------------------------------------------- | :---------------------------------------------------------------------- |
+| `REQ-CORE-001` | **Pipeline Modularity** | Every stage MUST be a standalone class in `stages/`.             | `src/lib/pipeline/orchestrator_v2.ts`                                   |
+| `REQ-CORE-002` | **Steerable Controls**  | Every stage MUST accept `PipelineControlParams`.                 | `src/lib/pipeline/stages/01_discovery.integration.test.ts`              |
+| `REQ-CORE-003` | **Scalable Dedupe**     | History checks MUST use batch URL filters, not full loading.     | `src/lib/pipeline/stages/02_deduplication.integration.test.ts`          |
+| `REQ-CORE-004` | **Neural Triage**       | High-volume noise filtering MUST happen before scraping.         | `src/lib/pipeline/stages/04_triage.integration.test.ts`                 |
+| `REQ-CORE-005` | **Semantic Resonance**  | Near-duplicates MUST be resolved via cosine similarity >0.95.    | `src/lib/pipeline/stages/07_semantic_deduplication.integration.test.ts` |
+| `REQ-CORE-006` | **Narrative Funnel**    | Pipeline MUST output `StoryCluster` objects with LLM narratives. | `src/lib/pipeline/stages/09_synthesis.integration.test.ts`              |
+| `REQ-CORE-007` | **Topic-Aware Decay**   | Time-decay MUST apply correctly to different news categories.    | `src/lib/pipeline/stages/10_scoring.integration.test.ts`                |
 
 ## 7. Constraints & Operational Strategy
 

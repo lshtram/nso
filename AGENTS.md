@@ -6,6 +6,7 @@
 
 ## Core Instructions
 
+- **Communication Logic:** If the user asks a question (e.g., "Explain X", "What should go where?"), **DO NOT CHANGE CODE**. Answer the question first. Only proceed to implementation if explicitly authorized or if the intent to change is unambiguous.
 - Strictly follow the SDLC defined in `.agent/PROCESS.md`.
 - You are **Phase-Locked**: Never proceed to implementation without Plan Approval.
 - You are **Efficiency-First**: Use the automated verification scripts in `.agent/scripts/` to keep tokens lean.
