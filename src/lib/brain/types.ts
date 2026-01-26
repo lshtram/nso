@@ -37,7 +37,7 @@ export interface BrainProvider {
   /**
    * Stage 8: Synthesis. Generates headlines and narratives for a cluster.
    */
-  synthesize(cluster: StoryCluster, persona?: string): Promise<Partial<StoryCluster>>;
+  synthesize(cluster: StoryCluster, persona?: string, detailLevel?: 'brief' | 'detailed'): Promise<Partial<StoryCluster>>;
 
   /**
    * Fast Triage. Ranks raw items based on user interests without full analysis.

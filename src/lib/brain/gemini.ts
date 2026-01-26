@@ -76,24 +76,31 @@ export class GeminiProvider implements BrainProvider {
     return { integrityScore: 98, isControverial: false, conflictPoints: [] };
   }
 
-  async synthesize(cluster: StoryCluster, persona?: string): Promise<Partial<StoryCluster>> {
+  async synthesize(cluster: StoryCluster, persona?: string, detailLevel: 'brief' | 'detailed' = 'brief'): Promise<Partial<StoryCluster>> {
     const personaInstruction = persona ? `Persona: ${persona}` : "Style: Elite Intelligence Briefing";
+    
+    // Dynamic Prompting based on Detail Level
+    const formatInstruction = detailLevel === 'detailed'
+      ? `"summary": "A deep-dive 3-paragraph executive analysis covering technical nuances.",`
+      : `"summary": "3 concise bullet points summarizing the key facts.",`;
       const prompt = `
         ${personaInstruction}
-        Task: Synthesize these ${cluster.items.length} news signals into a briefing.
+        Task: Synthesize these ${cluster.items.length} news signals into a fast executive briefing.
+        
         Return a FLAT JSON object:
         {
           "title": "A Compelling Editorial Headline",
-          "brief": "A 2-sentence 'Bottom Line Up Front' (BLUF) summary",
-          "summary": "A 3-paragraph executive analysis",
-          "takeaways": ["Novel insight 1", "Novel insight 2", "Novel insight 3"],
-          "whyItMatters": "Strategic industry/human impact"
+          "brief": "One punchy sentence summarizing the event.",
+          ${formatInstruction}
+          "takeaways": ["Insight 1", "Insight 2", "Insight 3"],
+          "whyItMatters": "Strategic/Future impact statement"
         }
         
         CRITICAL RULES:
         1. "whyItMatters" MUST be generated. Never return "N/A".
-        2. If the impact is unclear, infer the broader strategic or cultural significance.
-        3. LATEX: Use $ or $$ for math/equations.
+        2. "summary" MUST be 3 markdown bullet points, NOT a paragraph.
+        3. Keep it FAST and ELITE. No fluff.
+        4. LATEX: Use $ or $$ for math/equations.
         
         INPUTS:
         ${cluster.items.map(it => `[${it.sourceName}] ${it.title}: ${it.summary}`).join("\n\n")}

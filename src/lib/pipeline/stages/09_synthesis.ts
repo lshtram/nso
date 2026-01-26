@@ -27,7 +27,7 @@ export class SynthesisStage implements PipelineStage<StoryCluster[], StoryCluste
       
       const results = await Promise.all(batch.map(async (cluster) => {
         try {
-          const result = await this.brain.synthesize(cluster, controls.synthesis.persona);
+          const result = await this.brain.synthesize(cluster, controls.synthesis.persona, controls.synthesis.detailLevel || 'brief');
           return { ...cluster, ...result };
         } catch (e) {
           console.error(`[Synthesis] Failed for ${cluster.id}`, e);

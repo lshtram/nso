@@ -48,7 +48,7 @@ export class MockBrain implements BrainProvider {
     return vector.map(v => v / mag);
   }
 
-  async synthesize(cluster: StoryCluster, persona?: string): Promise<Partial<StoryCluster>> {
+  async synthesize(cluster: StoryCluster, persona?: string, detailLevel?: 'brief' | 'detailed'): Promise<Partial<StoryCluster>> {
     const primaryTopic = cluster.category || cluster.items[0]?.topics?.[0] || 'TECH';
     const mainText = cluster.items[0]?.fullText?.replace(/<[^>]*>?/gm, '') || cluster.items[0]?.summary || '';
     
