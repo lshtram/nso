@@ -1,0 +1,46 @@
+{
+  "description": "Per-agent MCP access configuration for NSO",
+  "version": "1.0.0",
+  "last_updated": "2026-02-07",
+  "agents": {
+    "oracle": {
+      "mcpServers": ["memory", "parallel", "context7"],
+      "nativeTools": ["fetch", "web_search", "web_fetch"],
+      "rationale": "Research and memory for architecture decisions"
+    },
+    "builder": {
+      "mcpServers": ["memory", "tree-sitter", "parallel", "context7"],
+      "nativeTools": ["read", "write", "edit", "bash", "gh", "grep", "glob"],
+      "rationale": "Code development with semantic navigation and research"
+    },
+    "janitor": {
+      "mcpServers": ["memory", "tree-sitter", "chrome-devtools", "parallel"],
+      "nativeTools": ["read", "bash", "gh", "grep", "glob", "lsp"],
+      "rationale": "Code review with debugging and impact analysis"
+    },
+    "librarian": {
+      "mcpServers": ["memory", "parallel"],
+      "nativeTools": ["read", "write", "edit", "bash", "gh", "grep", "glob"],
+      "rationale": "Memory management and documentation"
+    },
+    "designer": {
+      "mcpServers": ["memory", "playwright", "chrome-devtools", "parallel"],
+      "nativeTools": ["read", "write", "edit", "chrome-devtools", "bash"],
+      "rationale": "UI/UX with browser testing and debugging"
+    },
+    "scout": {
+      "mcpServers": ["memory", "playwright", "parallel", "context7"],
+      "nativeTools": ["fetch", "web_search", "web_fetch", "bash", "gh", "grep", "glob"],
+      "rationale": "Research with browser automation and documentation"
+    }
+  },
+  "defaults": {
+    "mcpServers": ["memory"],
+    "nativeTools": ["read", "write", "edit", "bash", "grep", "glob"]
+  },
+  "notes": {
+    "gh_cli": "gh CLI is accessed via native bash tool, not MCP",
+    "filesystem": "Native Read/Write/Edit tools are used instead of MCP filesystem",
+    "per_agent_access": "Each agent has access to specific MCPs based on their role"
+  }
+}
