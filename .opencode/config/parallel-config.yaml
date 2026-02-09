@@ -1,0 +1,193 @@
+# Parallel Execution Configuration
+# Main configuration for parallel execution system
+
+parallel_execution:
+  # Enable/disable parallel execution system
+  enabled: false  # Default: false for backward compatibility
+  
+  # Execution mode
+  mode: "hybrid"  # Options: "sequential", "parallel", "hybrid"
+  
+  # Hybrid mode: Analyze and decide per-task
+  hybrid_rules:
+    # Only parallelize tasks with > N subtasks
+    max_task_size_for_parallel: 3
+    
+    # Complexity threshold for parallelization
+    min_task_complexity: "medium"  # low, medium, high
+    
+    # Check if agents are available before parallelizing
+    agent_availability_check: true
+    
+    # Specific workflows that should never be parallelized
+    disable_for_workflows:
+      - "DEBUG"   # Debugging needs sequential attention
+      - "REVIEW"  # Code review needs focused attention
+      
+    # Time-based restrictions
+    disable_during:
+      - "business_hours"      # 9AM-5PM weekdays (if configured)
+      - "maintenance_window"  # Scheduled maintenance
+      
+    # Resource-based restrictions  
+    disable_if_resources_low:
+      cpu_threshold: 80    # percent
+      memory_threshold: 512  # MB
+      disk_threshold: 90   # percent
+      
+  # Parallel execution limits
+  concurrency:
+    max_parallel_agents: 3
+    max_queue_length: 10
+    default_priority: "medium"  # high, medium, low
+    
+  # Timeout & recovery
+  timeouts:
+    agent_heartbeat_interval: 30    # seconds
+    agent_response_timeout: 120     # seconds
+    task_completion_timeout: 300    # seconds
+    max_recovery_attempts: 3
+    
+  # State preservation
+  state_preservation:
+    checkpoint_interval: 60         # seconds
+    max_checkpoints_per_task: 5
+    preserve_on_failure: true
+    
+  # Communication
+  communication:
+    status_update_interval: 10     # seconds
+    result_aggregation_timeout: 30  # seconds
+    partial_result_threshold: 0.7  # 70% completion → partial success
+    
+  # Opt-out per agent type
+  agent_opt_out:
+    builder: false
+    janitor: false  
+    designer: false
+    scout: false
+    librarian: false
+    
+  # Task isolation integration
+  task_isolation:
+    # Link to task isolation config
+    config_path: ".opencode/config/task-isolation.yaml"
+    
+    # Use task isolation for parallel execution
+    enabled: true
+    
+    # Strict mode for parallel tasks
+    strict_mode: true
+    
+# Performance monitoring
+performance:
+  enable_monitoring: true
+  
+  metrics:
+    # Agent performance
+    - agent_completion_rate
+    - agent_execution_time
+    - agent_failure_rate
+    
+    # Parallel execution performance
+    - parallel_utilization
+    - speedup_factor
+    - task_decomposition_time
+    
+    # Resource usage
+    - cpu_usage
+    - memory_usage
+    - disk_usage
+    
+  # Performance thresholds
+  thresholds:
+    min_completion_rate: 0.95      # 95%
+    max_execution_time: 300        # 5 minutes
+    max_resource_usage: 0.8        # 80%
+    
+# Integration with existing NSO
+integration:
+  # Memory system integration
+  memory:
+    update_global_memory: true
+    archive_parallel_results: true
+    sync_with_legacy: true
+    
+  # Workflow integration
+  workflow:
+    # How to handle each workflow type
+    BUILD:
+      enable_parallel: true
+      task_decomposition: true
+      agent_coordination: true
+      
+    DEBUG:
+      enable_parallel: false
+      task_decomposition: false
+      agent_coordination: false
+      
+    REVIEW:
+      enable_parallel: false
+      task_decomposition: false
+      agent_coordination: false
+      
+    PLAN:
+      enable_parallel: true
+      task_decomposition: true
+      agent_coordination: true
+      
+  # Agent system integration
+  agents:
+    # How to modify agent behavior for parallel execution
+    modify_instructions: true
+    inject_task_awareness: true
+    add_isolation_rules: true
+    
+# Fallback configuration
+fallback:
+  # When to fall back to sequential execution
+  conditions:
+    - task_isolation.disabled: true
+    - contamination_detected: true
+    - resource_exceeded: true
+    - multiple_failures: true
+    - user_requested: true
+    
+  # Sequential fallback behavior
+  sequential:
+    use_legacy_workflow: true
+    preserve_parallel_artifacts: true
+    notify_user: true
+    
+    # Recovery from parallel failure
+    recovery:
+      attempt_recovery: true
+      max_recovery_time: 60  # seconds
+      fallback_to_last_checkpoint: true
+      
+# Development and debugging
+development:
+  # Debug mode
+  debug_mode: false
+  
+  # Logging level
+  log_level: "info"  # debug, info, warning, error
+  
+  # Test mode
+  test_mode: false
+  
+  # Dry run (simulate without execution)
+  dry_run: false
+  
+# Project-specific overrides
+# These can be set in project-specific config files
+project_overrides:
+  # Example: Project can override these
+  allowed_overrides:
+    - parallel_execution.enabled
+    - parallel_execution.mode
+    - parallel_execution.agent_opt_out
+    - performance.thresholds
+    
+  # Path to project-specific config
+  project_config_path: ".opencode/config/project-parallel-config.yaml"

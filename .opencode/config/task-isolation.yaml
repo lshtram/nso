@@ -1,0 +1,201 @@
+# Task Isolation Configuration
+# Enables safe parallel execution with context isolation
+
+task_isolation:
+  # Enable/disable task isolation system
+  enabled: true
+  
+  # Strict mode rejects any file operation without task ID
+  strict_mode: true
+  
+  # File naming conventions
+  naming:
+    task_prefix: "task_"
+    subtask_prefix: "subtask_"
+    delimiter: "_"
+    
+    # Required patterns for file validation
+    required_patterns:
+      - "{task_id}_"
+      - "_{task_id}."
+      - "global_"
+      
+    # Forbidden patterns (reject)
+    forbidden_patterns:
+      - "^requirements\\.md$"           # Must be REQ-{task_id}.md
+      - "^active_context\\.md$"         # Must be active_context_{task_id}.md
+      - "^progress\\.md$"               # Must be progress_{task_id}.md
+      
+  # Directory structure
+  directories:
+    base: ".opencode/context"
+    tasks: "tasks"
+    global: "00_meta"
+    workspace: "workspace"
+    artifacts: "artifacts"
+    memory: "01_memory"
+    requirements: "requirements"
+    
+  # Cleanup policies
+  cleanup:
+    # Retention periods (days)
+    keep_completed_tasks: 7
+    keep_failed_tasks: 1
+    keep_in_progress_tasks: 30
+    
+    # Limits
+    max_tasks_per_project: 100
+    max_disk_usage_mb: 1024  # 1GB
+    
+    # Auto-cleanup
+    auto_cleanup_enabled: true
+    cleanup_check_interval: 86400  # 24 hours in seconds
+    
+  # Contamination detection
+  contamination:
+    scan_interval: 300  # seconds
+    auto_quarantine: true
+    alert_on_detection: true
+    
+    # Detection rules
+    detection_rules:
+      - name: "missing_task_id"
+        pattern: "^(?!.*{task_id}).*\\.(md|json|txt)$"
+        severity: "high"
+        
+      - name: "cross_task_reference"
+        pattern: "task_[0-9]+_[0-9]+_[a-z]+_[a-f0-9]+_[0-9]+"
+        exclude_self: true
+        severity: "medium"
+        
+      - name: "global_modification"
+        pattern: "^.*/00_meta/.*$"
+        allowed_operations: ["read"]
+        severity: "critical"
+        
+  # Agent instructions configuration
+  agent_instructions:
+    inject_task_awareness: true
+    validate_before_execution: true
+    include_isolation_rules: true
+    
+    # Template injection points
+    injection_points:
+      - location: "beginning"
+        template: "task_isolation_header.md"
+        
+      - location: "after_tools"
+        template: "task_isolation_rules.md"
+        
+      - location: "end"
+        template: "task_isolation_examples.md"
+        
+  # Task ID generation
+  task_id:
+    format: "task_{timestamp}_{workflow}_{hash}_{counter}"
+    
+    timestamp_format: "%Y%m%d_%H%M%S"
+    
+    hash:
+      algorithm: "sha256"
+      length: 8
+      
+    counter:
+      start: 1
+      max: 9999
+      
+  # Parallel execution limits
+  parallel:
+    max_concurrent_tasks: 3
+    max_concurrent_subtasks_per_task: 5
+    
+    # Resource limits per task
+    resource_limits:
+      max_memory_mb: 512
+      max_cpu_percent: 80
+      max_disk_mb: 100
+      
+    # Timeout settings
+    timeouts:
+      task_heartbeat_interval: 30    # seconds
+      task_response_timeout: 120     # seconds
+      task_completion_timeout: 300   # seconds
+      subtask_completion_timeout: 180 # seconds
+      
+  # Fallback behavior
+  fallback:
+    # When to fall back to sequential execution
+    conditions:
+      - contamination_detected: true
+      - resource_exceeded: true
+      - isolation_failure: true
+      - agent_opt_out: true
+      
+    # Sequential fallback configuration
+    sequential:
+      use_legacy_context: true
+      preserve_task_artifacts: true
+      notify_user: true
+      
+  # Monitoring and logging
+  monitoring:
+    enable_logging: true
+    log_level: "info"  # debug, info, warning, error
+    
+    metrics_to_track:
+      - tasks_created
+      - tasks_completed
+      - tasks_failed
+      - contamination_events
+      - fallback_events
+      - resource_usage
+      
+    alerting:
+      enable_alerts: true
+      alert_channels:
+        - log_file
+        - memory_update
+        
+      alert_conditions:
+        - contamination_detected
+        - resource_exceeded_80_percent
+        - multiple_failures
+        - isolation_failure
+        
+  # Integration with existing NSO
+  integration:
+    # How to integrate with existing memory system
+    memory_integration:
+      sync_task_progress: true
+      update_global_progress: true
+      archive_completed_tasks: true
+      
+    # Workflow integration
+    workflow_integration:
+      BUILD:
+        enable_parallel: true
+        subtask_decomposition: true
+        
+      DEBUG:
+        enable_parallel: false  # Debugging needs sequential attention
+        subtask_decomposition: false
+        
+      REVIEW:
+        enable_parallel: false  # Code review needs focused attention
+        subtask_decomposition: false
+        
+      PLAN:
+        enable_parallel: true
+        subtask_decomposition: true
+        
+# Default values for backward compatibility
+defaults:
+  # Projects without this config file will use these defaults
+  task_isolation:
+    enabled: false  # Safe default - sequential execution
+    strict_mode: false
+    fallback:
+      conditions:
+        - always: true  # Always fall back to sequential
+      sequential:
+        use_legacy_context: true
