@@ -264,30 +264,60 @@ bash(workdir="{{task_context_path}}",
 
 When implementation is complete:
 
-1. **Create completion file**:
+1. **Run automated checks (MANDATORY before result.md):**
    ```python
-   write("{{task_context_path}}/{{task_id}}_task_complete.json",
-         '''{
-           "task_id": "{{task_id}}",
-           "status": "completed",
-           "agent": "builder",
-           "output_files": [
-             "{{task_id}}_implementation.py",
-             "{{task_id}}_tests.py",
-             "{{task_id}}_requirements.md"
-           ],
-           "tests_passed": true,
-           "contamination_checked": true,
-           "ready_for_review": true
-         }''')
+   # Type checking
+   bash(command="npx tsc --noEmit")
+   
+   # Tests
+   bash(command="npx vitest run")
    ```
 
-2. **Signal coordinator** (optional - via file pattern):
-   ```python
-   write("{{task_context_path}}/{{task_id}}_READY_FOR_REVIEW", "")
+2. **Write result.md (MANDATORY FORMAT — gate checks parse these fields):**
+   ```markdown
+   # Implementation Result
+
+   ## Status
+   - **status:** COMPLETE (or FAIL)
+
+   ## Automated Checks
+   - **typecheck_status:** PASS or FAIL
+   - **test_status:** PASS or FAIL (N/N tests passing)
+
+   ## Files Changed
+   - {list each file created or modified}
+
+   ## Notes
+   - {any notes for the Janitor reviewer}
    ```
 
-3. **Wait for next instructions** from Oracle/coordinator
+   **Example:**
+   ```markdown
+   # Implementation Result
+
+   ## Status
+   - **status:** COMPLETE
+
+   ## Automated Checks
+   - **typecheck_status:** PASS
+   - **test_status:** PASS (16/16 tests passing)
+
+   ## Files Changed
+   - src/services/rss/fetcher.ts (new)
+   - src/services/rss/parser.ts (new)
+   - src/services/rss/tests/fetcher.test.ts (new)
+
+   ## Notes
+   - Used fast-xml-parser as specified in TECHSPEC
+   ```
+
+   **Gate will REJECT if:**
+   - typecheck_status is not PASS
+   - test_status is not PASS
+   - status is FAIL
+
+3. **For DEBUG/FIX workflow, result.md must ALSO include:**
+   - **regression_test:** description of regression test added
 
 ---
 

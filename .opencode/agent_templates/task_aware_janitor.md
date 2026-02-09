@@ -259,54 +259,75 @@ write("{{task_context_path}}/{{task_id}}_confidence_score.json",
 
 ---
 
-## VALIDATION WORKFLOW
+## VALIDATION WORKFLOW (BUILD Phase 4)
 
-### Step 1: Run Validation Harness
+### Step 1: Run Automated Checks
 ```python
-# Run tests
-bash(workdir="{{task_context_path}}",
-     command="python -m pytest {{task_id}}_*.py -v --tb=short")
+# Run type checking (MANDATORY — gate-enforced)
+bash(command="npx tsc --noEmit")
 
-# Run linting
-bash(workdir="{{task_context_path}}",
-     command="python -m pylint {{task_id}}_*.py --exit-zero || true")
-
-# Run any other validation scripts
-bash(workdir="{{task_context_path}}",
-     command="[ -f {{task_id}}_validate.sh ] && bash {{task_id}}_validate.sh || echo 'No custom validation'")
+# Run tests (MANDATORY — gate-enforced)
+bash(command="npx vitest run")
 ```
 
-### Step 2: Analyze Results
+### Step 2: Code Review
 ```python
-# Check test results
-test_output = bash(workdir="{{task_context_path}}",
-                   command="python -m pytest {{task_id}}_*.py --tb=no -q")
+# Review each file systematically
+# Check for silent failures (empty catches, log-only error handlers)
+grep(path="src/", pattern="catch.*{\\s*}")
 
-# Parse for failures
-if "FAILED" in test_output:
-    write("{{task_context_path}}/{{task_id}}_validation_failures.md",
-          "Test failures detected. See details above.")
+# Check for traceability (implementation matches TECHSPEC)
+read(".opencode/docs/architecture/TECHSPEC-{Feature}.md")
+
+# Verify code quality and assign confidence score
+# Score must be >= 80 to pass gate
 ```
 
-### Step 3: Generate Validation Report
-```python
-write("{{task_context_path}}/{{task_id}}_validation_report.json",
-      '''{
-        "task_id": "{{task_id}}",
-        "validation_timestamp": "2026-02-08T10:30:00Z",
-        "tests": {
-          "total": 15,
-          "passed": 14,
-          "failed": 1,
-          "pass_rate": 93.3
-        },
-        "linting": {
-          "score": 8.5,
-          "issues": 3
-        },
-        "overall_status": "requires_fix",
-        "blocking_issues": ["test_feature_edge_case failed"]
-      }''')
+### Step 3: Generate result.md (MANDATORY FORMAT)
+
+**CRITICAL: Your result.md MUST contain these exact fields. The gate check parses them.**
+
+```markdown
+# Validation Result
+
+## Automated Checks
+- **typecheck_status:** PASS or FAIL
+- **test_status:** PASS or FAIL
+
+## Code Review
+- **code_review_score:** {0-100} (minimum 80 to pass gate)
+- **issues_found:**
+  - {list each issue with severity: HIGH/MEDIUM/LOW}
+
+## Recommendation
+- **recommendation:** APPROVE or REJECT
+- **reason:** {why approve or reject}
+```
+
+**Example result.md:**
+```markdown
+# Validation Result
+
+## Automated Checks
+- **typecheck_status:** PASS
+- **test_status:** PASS (16/16 tests passing)
+
+## Code Review
+- **code_review_score:** 88
+- **issues_found:**
+  - MEDIUM: Missing JSDoc on exported function `parseFeed`
+  - LOW: Consider using `readonly` on FeedItem properties
+
+## Recommendation
+- **recommendation:** APPROVE
+- **reason:** All checks pass, code follows TECHSPEC, minor non-blocking issues noted
+```
+
+**Gate will REJECT if:**
+- typecheck_status is not PASS
+- test_status is not PASS
+- code_review_score < 80
+- recommendation is REJECT or missing
 ```
 
 ---
