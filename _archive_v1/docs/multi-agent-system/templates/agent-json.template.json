@@ -1,0 +1,7 @@
+{
+  "name": "<agent-name>",
+  "description": "Brief description of this agent",
+  "mcp": ["filesystem"],
+  "skills": ["skill1", "skill2"],
+  "useWorktree": false
+}
