@@ -1,0 +1,151 @@
+{
+  "pipelineStartTime": "2026-02-10T13:15:11.208Z",
+  "currentDuration": 0,
+  "stages": [
+    {
+      "name": "Stage 1: Discovery",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 20,
+      "outputCount": 40
+    },
+    {
+      "name": "Stage 2: URL Dedupe",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 40,
+      "outputCount": 2
+    },
+    {
+      "name": "Stage 3: Noise Filter",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 2,
+      "outputCount": 2
+    },
+    {
+      "name": "Stage 4: Intelligent Triage",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 2,
+      "outputCount": 1
+    },
+    {
+      "name": "Stage 5: High-Fidelity Hydration",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 1,
+      "outputCount": 1
+    },
+    {
+      "name": "Stage 6: Semantic Embedding",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 1,
+      "outputCount": 1
+    },
+    {
+      "name": "Stage 7: Near-Dedupe",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 1,
+      "outputCount": 1
+    },
+    {
+      "name": "Stage 8: Semantic Clustering",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 1,
+      "outputCount": 1
+    },
+    {
+      "name": "Stage 9: Narrative Synthesis",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 1,
+      "outputCount": 1
+    },
+    {
+      "name": "Stage 10: Scoring",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 1,
+      "outputCount": 1
+    },
+    {
+      "name": "Stage 11: Persistence",
+      "startTime": 1770729311208,
+      "endTime": 1770729311208,
+      "durationMs": 0,
+      "inputCount": 1,
+      "outputCount": 1
+    }
+  ],
+  "summary": [
+    {
+      "stage": "Stage 1: Discovery",
+      "duration": "Running...",
+      "io": "20 -> 40"
+    },
+    {
+      "stage": "Stage 2: URL Dedupe",
+      "duration": "Running...",
+      "io": "40 -> 2"
+    },
+    {
+      "stage": "Stage 3: Noise Filter",
+      "duration": "Running...",
+      "io": "2 -> 2"
+    },
+    {
+      "stage": "Stage 4: Intelligent Triage",
+      "duration": "Running...",
+      "io": "2 -> 1"
+    },
+    {
+      "stage": "Stage 5: High-Fidelity Hydration",
+      "duration": "Running...",
+      "io": "1 -> 1"
+    },
+    {
+      "stage": "Stage 6: Semantic Embedding",
+      "duration": "Running...",
+      "io": "1 -> 1"
+    },
+    {
+      "stage": "Stage 7: Near-Dedupe",
+      "duration": "Running...",
+      "io": "1 -> 1"
+    },
+    {
+      "stage": "Stage 8: Semantic Clustering",
+      "duration": "Running...",
+      "io": "1 -> 1"
+    },
+    {
+      "stage": "Stage 9: Narrative Synthesis",
+      "duration": "Running...",
+      "io": "1 -> 1"
+    },
+    {
+      "stage": "Stage 10: Scoring",
+      "duration": "Running...",
+      "io": "1 -> 1"
+    },
+    {
+      "stage": "Stage 11: Persistence",
+      "duration": "Running...",
+      "io": "1 -> 1"
+    }
+  ]
+}

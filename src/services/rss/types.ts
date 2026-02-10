@@ -21,6 +21,7 @@ export interface FeedResult {
   items: NewsItem[];
   error?: string;
   latency?: number;
+  ttl?: number; // Minutes
 }
 
 export interface ParsedFeed {

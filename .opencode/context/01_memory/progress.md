@@ -3,39 +3,44 @@
 ## Current Milestones
 
 ### M1: RSS Feed Collector Service (Backend)
-- [x] **Discovery**: Define requirements and scope
-- [x] **Architecture**: Design service interface and data models
-- [x] **Implementation**: Project setup, Fetcher, Parser/Normalizer, Tests
-- [x] **Validation**: Verified with unit tests and benchmark (<100ms for 10 feeds)
+- [x] Discovery, Architecture, Implementation, Validation
+- 16 tests passing, ~17ms benchmark
 
 ### M2: NSO v2 Corrective Fixes (Post-Mortem)
-- [x] **Fix 1+4**: Oracle Template Rewrite — tool boundaries, self-check, inline contracts (~290 lines)
-- [x] **Fix 2**: gate_check.py — filesystem-based artifact validation (5 gates defined)
-- [x] **Fix 3**: close_session.py — non-interactive mode, JSON output, type fixes
-- [x] **Fix 5**: workflow_orchestrator.py — phase enforcement (start/transition/status/list/cancel)
+- [x] Oracle template rewrite, gate_check.py, close_session.py, workflow_orchestrator.py
 
 ### M3: Quality Gate Enrichment (All Workflows)
-- [x] **gate_check.py**: 10 quality-enriched gates (BUILD:4, DEBUG:3, REVIEW:3)
-- [x] **workflow_orchestrator.py**: PHASE_GATES for all workflows
-- [x] **Oracle template**: Gate table + required sections/fields per phase
-- [x] **Builder template**: Mandatory result.md format (typecheck_status, test_status)
-- [x] **Janitor template**: Mandatory result.md format (typecheck_status, test_status, code_review_score ≥ 80)
-- [x] **Validation**: Fresh Oracle session test with Article Storage Service (PASSED)
+- [x] 10 quality-enriched gates (BUILD:4, DEBUG:3, REVIEW:3)
+- [x] Oracle/Builder/Janitor templates with mandatory result formats
 
 ### M4: Article Storage Service (In-Memory)
-- [x] **Discovery**: REQ-ArticleStorage.md (PASSED gate)
-- [x] **Architecture**: TECHSPEC-ArticleStorage.md (PASSED gate)
-- [x] **Implementation**: src/services/storage/ArticleStorage.ts (PASS typecheck, PASS 7/7 tests)
-- [x] **Validation**: Verified by Janitor with code_review_score: 95
+- [x] REQ + TECHSPEC + Implementation + Validation (score 95)
+- 7 tests passing (dedup, search, date range)
+
+### M5: NSO Directive Architecture Redesign
+- [x] **Compliance audit** — Found 34% compliance (15/44). Root cause: 875+ lines of contradicting directives loaded per agent.
+- [x] **Layer 1: instructions.md** — Rewritten from 267→68 lines. Universal, all agents.
+- [x] **Layer 2: opencode.json** — Per-agent prompts with enforcement rules. Removed AGENTS.md from instructions array.
+- [x] **Layer 3: Project AGENTS.md** — Rewritten to context-only (no process). 65→55 lines.
+- [x] **nso_init.py** — Created. Conflict detection, template generation.
+- [x] **REQ & TECHSPEC templates** — Created in `.opencode/templates/`.
+- [x] **Archived .agent/** — 48-file competing SDLC moved to `_archive/.agent/`.
+- [x] **USER_GUIDE.md** — Rewritten from 126→53 lines. Natural language start, no /new-feature command.
+- [x] **NSO AGENTS.md** — Slimmed from 399→48 lines. Reference doc only.
+- [x] **Memory files updated** — This file.
+
+### M6: Feed Scheduler Service
+- [x] Discovery, Architecture, Implementation, Validation (score 95)
+- 8 tests passing, TTL & concurrency handled
 
 ## Validation Status
 
-- Article Storage: 7 tests passing (dedup, search, date range)
-- RSS Feed Collector: 16 tests passing, ~17ms benchmark
-- gate_check.py: 10 gates tested (list command, smoke test against existing REQ)
-- workflow_orchestrator.py: REVIEW + DEBUG gate enforcement verified (SCOPE blocks without scope.md)
-- close_session.py: Syntax validated, JSON output added
+- Feed Scheduler: 8 tests passing (score 95)
+- Article Storage: 7 tests passing
+- RSS Feed Collector: 16 tests passing
+- NSO directive total per agent: ~160-180 lines (was 875+)
 
-## Historical Progress (Archived)
+## Next Up
 
-- **Phase 1A - 1D**: NSO System Implementation (Completed and Archived in `_archive_v1/`)
+- Test with a real BUILD workflow in a fresh session (e.g., Feed Scheduler Service)
+- Verify Oracle stops for approval and delegates to Builder/Janitor/Librarian

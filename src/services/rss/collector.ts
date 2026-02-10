@@ -23,12 +23,13 @@ export class RSSCollector {
       try {
         const xml = await this.fetcher.fetch(url, options);
         const parsed = this.parser.parse(xml);
-        const items = this.normalizer.normalize(parsed);
+        const normalized = this.normalizer.normalize(parsed);
         const end = performance.now();
         
         return {
           url,
-          items,
+          items: normalized.items,
+          ttl: normalized.ttl,
           latency: end - start,
         };
       } catch (error) {

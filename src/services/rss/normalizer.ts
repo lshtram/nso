@@ -93,12 +93,25 @@ export class FeedNormalizer {
     };
   }
 
-  normalize(parsed: any): NewsItem[] {
+  normalize(parsed: any): { items: NewsItem[], ttl?: number } {
     const items: NewsItem[] = [];
+    let ttl: number | undefined;
     
     if (parsed.rss && parsed.rss.channel) {
       // RSS 2.0
       const channel = parsed.rss.channel;
+      
+      // Extract TTL
+      if (channel.ttl) {
+        const val = parseInt(channel.ttl, 10);
+        if (!isNaN(val)) ttl = val;
+      }
+      
+      // RSS 1.0 Extension in RSS 2.0
+      if (!ttl && channel['sy:updatePeriod']) {
+        ttl = this.calculateTTLFromSy(channel['sy:updatePeriod'], channel['sy:updateFrequency']);
+      }
+
       // Handle items which might be single object or array
       const rawItems = Array.isArray(channel.item) ? channel.item : (channel.item ? [channel.item] : []);
       rawItems.forEach((item: any) => {
@@ -110,14 +123,39 @@ export class FeedNormalizer {
       rawEntries.forEach((entry: any) => {
         items.push(this.normalizeItem(entry, 'atom'));
       });
+      
+      // Atom might have sy extensions at root
+      if (parsed.feed['sy:updatePeriod']) {
+        ttl = this.calculateTTLFromSy(parsed.feed['sy:updatePeriod'], parsed.feed['sy:updateFrequency']);
+      }
     } else if (parsed['rdf:RDF']) {
       // RDF (RSS 1.0)
-      const rawItems = Array.isArray(parsed['rdf:RDF'].item) ? parsed['rdf:RDF'].item : (parsed['rdf:RDF'].item ? [parsed['rdf:RDF'].item] : []);
+      const rdf = parsed['rdf:RDF'];
+      
+      // RSS 1.0 sy extensions are common
+      const channel = rdf.channel;
+      if (channel && channel['sy:updatePeriod']) {
+        ttl = this.calculateTTLFromSy(channel['sy:updatePeriod'], channel['sy:updateFrequency']);
+      }
+
+      const rawItems = Array.isArray(rdf.item) ? rdf.item : (rdf.item ? [rdf.item] : []);
       rawItems.forEach((item: any) => {
         items.push(this.normalizeItem(item, 'rdf'));
       });
     }
 
-    return items;
+    return { items, ttl };
+  }
+
+  private calculateTTLFromSy(period: string, frequency?: string): number | undefined {
+    const freq = parseInt(frequency || '1', 10) || 1;
+    switch (period) {
+      case 'hourly': return 60 / freq;
+      case 'daily': return (24 * 60) / freq;
+      case 'weekly': return (7 * 24 * 60) / freq;
+      case 'monthly': return (30 * 24 * 60) / freq;
+      case 'yearly': return (365 * 24 * 60) / freq;
+      default: return undefined;
+    }
   }
 }

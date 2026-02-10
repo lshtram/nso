@@ -1,94 +1,94 @@
 {
-  "runId": "run-1769429291689",
-  "totalDuration": 10947,
+  "runId": "run-1769451652591",
+  "totalDuration": 57422,
   "stages": [
     {
-      "stage": "Stage 1: Discovery",
-      "durationMs": 2171.114,
-      "inputCount": 20,
-      "outputCount": 1229,
-      "ratePer1k": 108555.7,
-      "timestamp": "2026-01-26T12:08:13.862Z"
-    },
-    {
-      "stage": "Stage 2: URL Dedupe",
-      "durationMs": 1.8629169999999249,
-      "inputCount": 1229,
-      "outputCount": 1229,
-      "ratePer1k": 1.5157990235963588,
-      "timestamp": "2026-01-26T12:08:13.865Z"
-    },
-    {
-      "stage": "Stage 3: Noise Filter",
-      "durationMs": 2.625332999999955,
-      "inputCount": 1229,
-      "outputCount": 1229,
-      "ratePer1k": 2.1361537835638367,
-      "timestamp": "2026-01-26T12:08:13.869Z"
-    },
-    {
-      "stage": "Stage 4: Intelligent Triage",
-      "durationMs": 8.686208000000079,
-      "inputCount": 1229,
-      "outputCount": 40,
-      "ratePer1k": 7.0677038242474195,
-      "timestamp": "2026-01-26T12:08:13.878Z"
-    },
-    {
-      "stage": "Stage 5: High-Fidelity Hydration",
-      "durationMs": 8674.789165999999,
-      "inputCount": 40,
-      "outputCount": 40,
-      "ratePer1k": 216869.72914999994,
-      "timestamp": "2026-01-26T12:08:22.554Z"
-    },
-    {
-      "stage": "Stage 6: Semantic Embedding",
-      "durationMs": 4.233874999999898,
-      "inputCount": 40,
-      "outputCount": 40,
-      "ratePer1k": 105.84687499999745,
-      "timestamp": "2026-01-26T12:08:22.561Z"
-    },
-    {
-      "stage": "Stage 7: Near-Dedupe",
-      "durationMs": 2.152583000000959,
-      "inputCount": 40,
-      "outputCount": 20,
-      "ratePer1k": 53.81457500002398,
-      "timestamp": "2026-01-26T12:08:22.577Z"
-    },
-    {
-      "stage": "Stage 8: Semantic Clustering",
-      "durationMs": 2.05737500000032,
-      "inputCount": 20,
-      "outputCount": 11,
-      "ratePer1k": 102.86875000001601,
-      "timestamp": "2026-01-26T12:08:22.586Z"
-    },
-    {
-      "stage": "Stage 9: Narrative Synthesis",
-      "durationMs": 1.9008340000000317,
+      "stage": "STAGE:1:Discovery - Scouting Intelligence Nodes",
+      "durationMs": 4785.791915999958,
       "inputCount": 11,
-      "outputCount": 11,
-      "ratePer1k": 172.80309090909378,
-      "timestamp": "2026-01-26T12:08:22.600Z"
+      "outputCount": 19,
+      "ratePer1k": 435071.99236363254,
+      "timestamp": "2026-01-26T18:20:57.380Z"
     },
     {
-      "stage": "Stage 10: Scoring",
-      "durationMs": 0.19187500000043656,
-      "inputCount": 11,
-      "outputCount": 11,
-      "ratePer1k": 17.443181818221507,
-      "timestamp": "2026-01-26T12:08:22.611Z"
+      "stage": "STAGE:2:Filtering - De-duplicating Signals",
+      "durationMs": 5.105792000016663,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 268.7258947377191,
+      "timestamp": "2026-01-26T18:20:57.392Z"
     },
     {
-      "stage": "Stage 11: Persistence",
-      "durationMs": 0.08899999999994179,
-      "inputCount": 11,
-      "outputCount": 11,
-      "ratePer1k": 8.090909090903798,
-      "timestamp": "2026-01-26T12:08:22.624Z"
+      "stage": "STAGE:3:Cleaning - Noise Suppression",
+      "durationMs": 1.1077919999952428,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 58.30484210501278,
+      "timestamp": "2026-01-26T18:20:57.403Z"
+    },
+    {
+      "stage": "STAGE:4:Triage - Strategic Interest Scoring",
+      "durationMs": 8960.764749999973,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 471619.1973684196,
+      "timestamp": "2026-01-26T18:21:06.372Z"
+    },
+    {
+      "stage": "STAGE:5:Hydration - High-Fidelity Signal Analysis",
+      "durationMs": 4520.640916000004,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 237928.4692631581,
+      "timestamp": "2026-01-26T18:21:10.900Z"
+    },
+    {
+      "stage": "STAGE:6:Vectorizing - Semantic Embedding",
+      "durationMs": 1449.3699589999742,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 76282.62942105127,
+      "timestamp": "2026-01-26T18:21:12.354Z"
+    },
+    {
+      "stage": "STAGE:7:Refining - Near-Deduplication",
+      "durationMs": 3.515292000025511,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 185.0153684223953,
+      "timestamp": "2026-01-26T18:21:12.373Z"
+    },
+    {
+      "stage": "STAGE:8:Clustering - Theme Convergence",
+      "durationMs": 4.481124999991152,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 235.84868421006067,
+      "timestamp": "2026-01-26T18:21:12.381Z"
+    },
+    {
+      "stage": "STAGE:9:Synthesis - Intelligence Narrative Generation",
+      "durationMs": 37532.30054200004,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 1975384.2390526338,
+      "timestamp": "2026-01-26T18:21:49.936Z"
+    },
+    {
+      "stage": "STAGE:10:Ranking - Executive Prioritization",
+      "durationMs": 0.7848330000415444,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 41.30700000218655,
+      "timestamp": "2026-01-26T18:21:49.970Z"
+    },
+    {
+      "stage": "STAGE:11:Finalizing - Knowledge Base Update",
+      "durationMs": 0.9319579999428242,
+      "inputCount": 19,
+      "outputCount": 19,
+      "ratePer1k": 49.05042104962233,
+      "timestamp": "2026-01-26T18:21:49.992Z"
     }
   ]
 }
