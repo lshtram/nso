@@ -1,34 +1,33 @@
-# Active Context
+<file>
+00001| # Active Context
+00002| 
+00003| **Project:** Dream News - AI-Powered News Aggregation Platform
+00004| 
+00005| ## Current Focus
+00006| 
+00007| - **Status:** COMPLETE
+00008| - **Current Workflow:** BUILD (Article Storage Service)
+00009| - **Last Activity:** Completed Validation Phase (PASSED all quality gates)
+00010| - **Current Phase:** Closure (Memory Updated)
+00011| 
+00012| ## Completed This Session
+00013| 
+00014| 1. **M3: Quality Gate Enrichment** — Validated by running a full BUILD workflow.
+00015| 2. **Discovery Phase** — REQ-ArticleStorage.md (PASSED gate).
+00016| 3. **Architecture Phase** — TECHSPEC-ArticleStorage.md (PASSED gate).
+00017| 4. **Implementation Phase** — src/services/storage/ArticleStorage.ts (PASS typecheck, PASS 7/7 tests).
+00018| 5. **Validation Phase** — Janitor approved with score 95.
+00019| 
+00020| ## Active Decisions
+00021| 
+00022| 1. **In-Memory Storage** — MVP implementation.
+00023| 2. **ID Generation** — Deterministic hash of URL if ID missing.
+00024| 3. **Test Colocation** — Tests placed next to source in `src/` (updated vitest.config.ts).
+00025| 
+00026| ## Open Questions
+00027| 
+00028| 1. **None.** All systems operational.
+00029| 
 
-**Project:** Dream News - AI-Powered News Aggregation Platform
-
-## Current Focus
-
-- **Status:** COMPLETE
-- **Current Workflow:** Quality Gate Enrichment (all workflows)
-- **Last Activity:** Added quality-based gates for all BUILD/DEBUG/REVIEW workflow phases
-- **Current Phase:** Ready for validation with a fresh real-world BUILD task
-
-## Completed This Session
-
-1. **gate_check.py** — Rewrote with 10 quality-enriched gates (was 5 artifact-only):
-   - BUILD: 4 gates with content section checks + typecheck/test/review score enforcement
-   - DEBUG: 3 gates (Investigation, Fix, Validation) — was only 1
-   - REVIEW: 3 gates (Scope, Analysis, Report) — was 0
-2. **workflow_orchestrator.py** — Added PHASE_GATES for all DEBUG and REVIEW phases
-3. **Oracle template** — Updated gate table, Phase 1-4 instructions with required sections/fields
-4. **Builder template** — Mandatory result.md format with typecheck_status + test_status fields
-5. **Janitor template** — Mandatory result.md format with typecheck_status + test_status + code_review_score (≥80) fields
-
-## Active Decisions
-
-1. **Option A chosen** — Enrich existing gates, not add sub-phases (keeps phase count stable)
-2. **ESLint deferred** — Only tsc --noEmit + vitest enforced; lint added when ESLint is actually installed
-3. **Filesystem is the database** — scripts check state by reading context files
-4. **Unique Agent IDs** — every agent instance gets a unique ID for traceability
-5. **Parallel-safe** — multiple Oracle sessions via `active_tasks/{task_id}/` directories
-6. **Self-enforcing** — workflow_orchestrator.py enforces phase sequence, gate_check.py enforces quality
-
-## Open Questions
-
-1. **None.** All quality gate gaps closed. Next: fresh Oracle session to validate the full BUILD workflow.
+(End of file - total 29 lines)
+</file>

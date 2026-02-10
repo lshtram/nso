@@ -20,10 +20,17 @@
 - [x] **Oracle template**: Gate table + required sections/fields per phase
 - [x] **Builder template**: Mandatory result.md format (typecheck_status, test_status)
 - [x] **Janitor template**: Mandatory result.md format (typecheck_status, test_status, code_review_score ≥ 80)
-- [ ] **Validation**: Fresh Oracle session test with a new real-world BUILD task
+- [x] **Validation**: Fresh Oracle session test with Article Storage Service (PASSED)
+
+### M4: Article Storage Service (In-Memory)
+- [x] **Discovery**: REQ-ArticleStorage.md (PASSED gate)
+- [x] **Architecture**: TECHSPEC-ArticleStorage.md (PASSED gate)
+- [x] **Implementation**: src/services/storage/ArticleStorage.ts (PASS typecheck, PASS 7/7 tests)
+- [x] **Validation**: Verified by Janitor with code_review_score: 95
 
 ## Validation Status
 
+- Article Storage: 7 tests passing (dedup, search, date range)
 - RSS Feed Collector: 16 tests passing, ~17ms benchmark
 - gate_check.py: 10 gates tested (list command, smoke test against existing REQ)
 - workflow_orchestrator.py: REVIEW + DEBUG gate enforcement verified (SCOPE blocks without scope.md)
