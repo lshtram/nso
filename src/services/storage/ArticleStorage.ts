@@ -1,4 +1,5 @@
 import type { NewsItem } from '../rss/types';
+import { DeduplicationService } from './DeduplicationService';
 
 export interface StorageStats {
   totalCount: number;
@@ -53,6 +54,8 @@ export class ArticleStorageService implements StorageService {
   // Deduplication index: URL -> ID
   private urlIndex: Map<string, string> = new Map();
 
+  private deduplicationService = new DeduplicationService();
+
   /**
    * Simple hash function for generating deterministic IDs from URLs.
    * Uses a DJB2-like algorithm.
@@ -70,14 +73,34 @@ export class ArticleStorageService implements StorageService {
     let added = 0;
     let skipped = 0;
 
+    // Prune deduplication index (items older than 7 days)
+    this.deduplicationService.prune(7);
+
     for (const item of items) {
       if (!item.link) {
-        console.warn('Skipping item without link:', item.title);
         continue;
       }
 
-      // Check for duplicate by URL
+      // 1. Basic URL-based deduplication
       if (this.urlIndex.has(item.link)) {
+        skipped++;
+        continue;
+      }
+
+      // 2. Smart deduplication (Title/Content similarity)
+      const dedupResult = this.deduplicationService.check(item);
+      if (dedupResult.isDuplicate && dedupResult.originalId) {
+        console.log(`[ArticleStorageService] Skipping smart duplicate: "${item.title}" (Reason: ${dedupResult.reason}, Original ID: ${dedupResult.originalId})`);
+        
+        // Merge metadata (alternate links)
+        const existing = this.articles.get(dedupResult.originalId);
+        if (existing) {
+          existing.alternateLinks = existing.alternateLinks || [];
+          if (!existing.alternateLinks.includes(item.link)) {
+            existing.alternateLinks.push(item.link);
+          }
+        }
+        
         skipped++;
         continue;
       }
@@ -90,6 +113,7 @@ export class ArticleStorageService implements StorageService {
       
       this.articles.set(id, storedItem);
       this.urlIndex.set(item.link, id);
+      this.deduplicationService.index(storedItem, id);
       added++;
     }
 
@@ -102,7 +126,6 @@ export class ArticleStorageService implements StorageService {
 
   getByDateRange(start: Date, end: Date): NewsItem[] {
     const results: NewsItem[] = [];
-    // Validate range
     if (start > end) {
         return [];
     }
@@ -114,7 +137,6 @@ export class ArticleStorageService implements StorageService {
       }
     }
     
-    // Sort by date descending (newest first)
     return results.sort((a, b) => 
       new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
     );
@@ -144,7 +166,6 @@ export class ArticleStorageService implements StorageService {
     let newest: Date | null = null;
 
     if (this.articles.size > 0) {
-      // Linear scan for min/max date - could be optimized with index but acceptable for MVP
       for (const item of this.articles.values()) {
         const date = new Date(item.pubDate);
         if (!oldest || date < oldest) oldest = date;
@@ -162,5 +183,6 @@ export class ArticleStorageService implements StorageService {
   clear(): void {
     this.articles.clear();
     this.urlIndex.clear();
+    this.deduplicationService.clear();
   }
 }

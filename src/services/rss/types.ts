@@ -9,6 +9,7 @@ export interface NewsItem {
   categories?: string[];
   isoDate?: string;
   source?: string;
+  alternateLinks?: string[];
 }
 
 export interface CollectorOptions {
