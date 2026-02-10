@@ -19,6 +19,7 @@
 <!-- What this feature does NOT include -->
 
 ## Constraints
+<!-- MANDATORY: Every constraint here must have a corresponding "Constraint Validation" test case. -->
 <!-- Technical or business constraints -->
 
 ## Risks & Mitigations

@@ -7,13 +7,13 @@
 |-------|------|-----------|---------|
 | 1 | `instructions.md` | All agents | Universal: memory protocol, workflows, boundaries (~68 lines) |
 | 2 | `opencode.json` prompts | Per-agent | Agent-specific enforcement (~30-60 lines each) |
-| 3 | Project `AGENTS.md` | All agents | Project context: tech stack, coding standards (~55 lines) |
+| 3 | Project `PROJECT_CONTEXT.md` | All agents | Project context: tech stack, coding standards (~55 lines) |
 | 4 | `.opencode/context/` | As needed | Memory files, tech-stack, patterns |
 
 **Total per agent: ~160-180 lines (was 875+)**
 
 ### NSO Precedence (DECIDED, ENFORCED)
-- NSO process directives override project-level SDLC (AGENTS.md, .agent/, CLAUDE.md, etc.)
+- NSO process directives override project-level SDLC (PROJECT_CONTEXT.md, .agent/, CLAUDE.md, etc.)
 - Project files provide context (tech stack, coding standards), not process
 - Run `/nso-init` on new projects to detect and resolve conflicts
 

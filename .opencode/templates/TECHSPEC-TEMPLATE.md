@@ -29,4 +29,5 @@
 2. Step 2
 
 ## Testing Strategy
+<!-- MANDATORY: Include explicit "Constraint Validation" tests for all safety limits. -->
 <!-- What tests are needed -->
