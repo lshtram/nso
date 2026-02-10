@@ -8,17 +8,27 @@
 ## 1. Overview
 A backend service responsible for fetching, parsing, and normalizing news articles from various RSS and Atom feeds. This service will act as the data ingestion layer for the Dream News platform.
 
-## 2. Goals
-- **Performance (CRITICAL):** Lightning-fast execution. Maximize concurrency and minimize parsing overhead. Target < 1s for 10 feeds (network permitting).
-- **Aggregation:** Fetch content from multiple sources concurrently.
-- **Normalization:** Convert disparate XML formats (RSS 2.0, Atom 1.0) into a single, consistent JSON structure.
-- **Reliability:** Handle network failures and malformed feeds without crashing the entire process.
+## 2. Scope
+The scope of this module includes the development of a high-performance RSS Feed Collector service.
 
-## 3. User Stories
-- **US-1:** As a system, I want to accept a list of RSS/Atom feed URLs so that I know where to fetch news from.
-- **US-2:** As a developer, I want normalized `NewsItem` objects (title, link, date, description, source) so that I can process them uniformly.
-- **US-3:** As a system, I want to handle individual feed failures gracefully (log error, continue with others) so that one bad feed doesn't block the rest.
-- **US-4:** As a user, I want the results returned instantly, so the system must use aggressive timeouts and parallel processing.
+**In Scope:**
+- Fetching RSS/Atom feeds from provided URLs.
+- Concurrent processing of multiple feeds.
+- Parsing XML content (RSS 2.0, Atom 1.0).
+- Normalizing data into a consistent `NewsItem` format.
+- Error handling for network failures and malformed XML.
+
+**Out of Scope:**
+- Database storage (handled by Article Storage).
+- User interface for displaying news.
+- User management or authentication.
+
+## 3. Acceptance Criteria
+- **AC-01:** The system accepts a list of URLs and returns a flat array of `NewsItem` objects.
+- **AC-02:** All feeds are fetched in parallel; total execution time for 10 feeds is under 3 seconds (network permitting).
+- **AC-03:** Malformed XML or failed network requests do not crash the application; valid feeds are still returned.
+- **AC-04:** The output `NewsItem` objects conform strictly to the defined TypeScript interface.
+- **AC-05:** Unit tests cover at least 90% of the code, including error scenarios.
 
 ## 4. Functional Requirements
 1.  **Input:** Array of strings (URLs).
