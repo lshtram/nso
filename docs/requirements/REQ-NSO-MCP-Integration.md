@@ -17,7 +17,7 @@ This document defines MCP (Model Context Protocol) server integration for each N
 
 ### What CC10X Uses
 
-Based on `.opencode/docs/cc10x/cc10x-features.md`:
+Based on `docs/cc10x/cc10x-features.md`:
 
 | MCP Server | Purpose | Tools |
 |------------|---------|-------|
@@ -355,8 +355,8 @@ Add to `.opencode/opencode.json`:
 
 | File | Purpose |
 |------|---------|
-| `.opencode/docs/requirements/REQ-NSO-MCP-Integration.md` | This document |
-| `.opencode/docs/architecture/TECHSPEC-NSO-MCP-Integration.md` | Tech spec |
+| `docs/requirements/REQ-NSO-MCP-Integration.md` | This document |
+| `docs/architecture/TECHSPEC-NSO-MCP-Integration.md` | Tech spec |
 | `.opencode/config/mcp-agents.json` | Per-agent MCP mapping |
 
 ---

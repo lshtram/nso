@@ -234,8 +234,8 @@ Ensure testing covers:
 
 ## References
 
-- Requirements: `.opencode/docs/requirements/REQ-NSO-BUILD-Workflow.md`
-- Tech Spec: `.opencode/docs/architecture/TECHSPEC-NSO-WorkflowSystem.md`
+- Requirements: `docs/requirements/REQ-NSO-BUILD-Workflow.md`
+- Tech Spec: `docs/architecture/TECHSPEC-NSO-WorkflowSystem.md`
 - Bug-Investigator Skill: `.opencode/skills/bug-investigator/SKILL.md`
 - Router: `.opencode/skills/router/scripts/router_logic.py`
 - Agents: `.opencode/AGENTS.md`

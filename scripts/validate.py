@@ -111,22 +111,22 @@ def validate_doc_naming() -> Tuple[bool, List[str]]:
     """
     errors: List[str] = []
 
-    requirements_dir = Path(".opencode/docs/requirements")
-    architecture_dir = Path(".opencode/docs/architecture")
+    requirements_dir = Path("docs/requirements")
+    architecture_dir = Path("docs/architecture")
 
     if requirements_dir.exists():
         for path in requirements_dir.glob("*.md"):
             if not path.name.startswith("REQ-"):
                 errors.append(f"Requirements file must start with 'REQ-': {path}")
     else:
-        errors.append("Missing .opencode/docs/requirements directory")
+        errors.append("Missing docs/requirements directory")
 
     if architecture_dir.exists():
         for path in architecture_dir.glob("*.md"):
             if not path.name.startswith("TECHSPEC-"):
                 errors.append(f"Tech spec file must start with 'TECHSPEC-': {path}")
     else:
-        errors.append("Missing .opencode/docs/architecture directory")
+        errors.append("Missing docs/architecture directory")
 
     if errors:
         return False, errors

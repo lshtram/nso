@@ -184,13 +184,20 @@ def check_session_state() -> dict:
     return state
 
 
-def should_route(message: str, agent: str = "Oracle", check_state: bool = True) -> dict:
+def should_route(message: str, source: str = "user", agent: str = "Oracle", check_state: bool = True) -> dict:
     """
     Determine if message should be routed to a workflow.
     
     SAFETY CHECKS:
+    - Only routes USER messages (source="user")
     - Only routes if agent is Oracle
     - Only routes if NOT in active workflow (unless check_state=False)
+    
+    Args:
+        message: The message text to analyze
+        source: Message origin - "user" | "builder" | "janitor" | "designer" | "scout" | "system"
+        agent: Current agent role (default: Oracle)
+        check_state: Whether to check session state for active workflows
     
     Returns dict with:
     - should_route: bool
@@ -199,6 +206,18 @@ def should_route(message: str, agent: str = "Oracle", check_state: bool = True) 
     - reason: str
     - suggested_response: str
     """
+    # Safety Check 0: Only route USER messages — agent/system messages bypass routing entirely
+    if source != "user":
+        return {
+            "should_route": False,
+            "workflow": None,
+            "confidence": 0.0,
+            "reason": f"Message from {source} agent, not user intent",
+            "suggested_response": None,
+            "safety_check": "AGENT_SOURCE",
+            "handler": "pass_through"
+        }
+    
     # Safety Check 1: Only Oracle can route
     if agent != "Oracle":
         return {
@@ -296,12 +315,14 @@ def main():
     parser = argparse.ArgumentParser(description="NSO Router Monitor")
     parser.add_argument("message", help="User message to analyze")
     parser.add_argument("--agent", default="Oracle", help="Current agent (default: Oracle)")
+    parser.add_argument("--source", default="user", help="Message source: user|builder|janitor|designer|scout|system (default: user)")
     parser.add_argument("--no-state-check", action="store_true", help="Skip workflow state checking")
     
     args = parser.parse_args()
     
     result = should_route(
         message=args.message,
+        source=args.source,
         agent=args.agent,
         check_state=not args.no_state_check
     )

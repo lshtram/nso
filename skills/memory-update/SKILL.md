@@ -14,7 +14,7 @@ Librarian (or Oracle when invoked manually)
 - Current session summary: what was worked on, decisions made, issues found.
 - Existing memory files in `.opencode/context/01_memory/`.
 - Active feature context: `.opencode/context/active_features/<feature>/` (if any).
-- Approved requirements and tech specs in `.opencode/docs/`.
+- Approved requirements and tech specs in `docs/`.
 
 # Outputs
 - Updated `active_context.md`, `patterns.md`, and `progress.md` with comprehensive, actionable entries.

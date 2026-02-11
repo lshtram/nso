@@ -10,7 +10,7 @@ Oracle
 - Before finalizing `REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`).
 
 # Inputs
-- Draft `.opencode/docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`).
+- Draft `docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`).
 
 # Outputs
 - Added “Risks & Mitigations” section in requirements.

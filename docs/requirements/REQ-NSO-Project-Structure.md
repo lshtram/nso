@@ -41,9 +41,9 @@ Update `.opencode/ARCHITECTURE.md` to:
 
 ### FR-5: Documentation Structure
 Adopt the following NSO doc structure:
-- `.opencode/docs/requirements/`
-- `.opencode/docs/architecture/`
-- `.opencode/docs/plans/`
+- `docs/requirements/`
+- `docs/architecture/`
+- `docs/plans/`
 
 ### FR-6: Migration of NSO Artifacts
 Identify and move any NSO artifacts that currently live outside `.opencode/` (excluding `opencode.json`). Provide a mapping of **old path → new path** and update references accordingly.
@@ -64,7 +64,7 @@ When a required skill is missing:
 
 ## 7. Acceptance Criteria
 1) `.opencode/ARCHITECTURE.md` reflects the two-level project model and `.opencode`‑only NSO artifacts rule.
-2) A clear NSO doc structure exists under `.opencode/docs/`.
+2) A clear NSO doc structure exists under `docs/`.
 3) A policy is documented that agents must refuse to write NSO artifacts outside `.opencode/` without explicit permission.
 4) Any NSO artifacts found outside `.opencode/` are moved and references updated.
 5) Missing-skill resolution process is documented and enforced.

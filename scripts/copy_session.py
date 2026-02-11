@@ -8,8 +8,8 @@ from pathlib import Path
 
 def copy_session():
     # Target project name and workspace root
-    project_name = "openspace"
-    workspace_root = "/Users/Shared/dev/openspace"
+    project_name = Path.cwd().name
+    workspace_root = str(Path.cwd())
     storage_path = "/Users/opencode/.local/share/opencode/storage/message"
     
     # We look for the most recent session that has messages related to this workspace

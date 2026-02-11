@@ -18,7 +18,7 @@ Oracle
 - Existing requirements (if extending a feature)
 
 # Outputs
-- Complete PRD: `.opencode/docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`)
+- Complete PRD: `docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`)
 - Traceability Matrix (Requirement ID → Verification Method)
 - Scope definition (what's in vs. out)
 

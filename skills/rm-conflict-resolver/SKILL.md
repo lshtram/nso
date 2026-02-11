@@ -10,8 +10,8 @@ Oracle
 - Before finalizing `TECHSPEC-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/tech_spec.md`).
 
 # Inputs
-- `.opencode/docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`)
-- `.opencode/docs/architecture/` docs
+- `docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`)
+- `docs/architecture/` docs
 - Codebase keywords related to the new requirements
 
 # Outputs

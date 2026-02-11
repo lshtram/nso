@@ -7,7 +7,7 @@ Implement a unified workflow system with three workflows: BUILD (formalized), DE
 
 ### 2.1 Workflow Directory Structure
 ```
-.opencode/docs/workflows/
+docs/workflows/
   ├── BUILD.md         # BUILD workflow definition
   ├── DEBUG.md         # DEBUG workflow definition
   └── REVIEW.md        # REVIEW workflow definition
@@ -49,7 +49,7 @@ Workflow Complete
 
 ### 3.1 BUILD Workflow Template
 
-**File:** `.opencode/docs/workflows/BUILD.md`
+**File:** `docs/workflows/BUILD.md`
 
 ```markdown
 # BUILD Workflow
@@ -102,7 +102,7 @@ router_contract:
 
 ### 3.2 DEBUG Workflow Template
 
-**File:** `.opencode/docs/workflows/DEBUG.md`
+**File:** `docs/workflows/DEBUG.md`
 
 ```markdown
 # DEBUG Workflow
@@ -173,7 +173,7 @@ router_contract:
 
 ### 3.3 REVIEW Workflow Template
 
-**File:** `.opencode/docs/workflows/REVIEW.md`
+**File:** `docs/workflows/REVIEW.md`
 
 ```markdown
 # REVIEW Workflow

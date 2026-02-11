@@ -14,11 +14,15 @@ Options:
     --force                      Skip confirmation prompts
 """
 
+from __future__ import annotations
+
 import subprocess
 import sys
 import argparse
+import json as json_mod
 from pathlib import Path
 from datetime import datetime
+from typing import Union
 
 
 def run_command(cmd, cwd=None, capture_output=True):
@@ -36,17 +40,22 @@ def run_command(cmd, cwd=None, capture_output=True):
         return False, "", str(e)
 
 
-def check_git_status():
-    """Check if there are uncommitted changes."""
+def check_git_status() -> tuple[bool, dict | str]:
+    """Check if there are uncommitted changes.
+    
+    Returns:
+        (True, details_dict) on success
+        (False, error_string) on failure
+    """
     success, stdout, stderr = run_command("git status --porcelain")
     
     if not success:
         return False, f"Error checking git status: {stderr}"
     
     # Parse git status output
-    modified_files = []
-    new_files = []
-    deleted_files = []
+    modified_files: list[str] = []
+    new_files: list[str] = []
+    deleted_files: list[str] = []
     
     for line in stdout.strip().split('\n'):
         if not line:
@@ -63,7 +72,7 @@ def check_git_status():
     
     has_changes = bool(modified_files or new_files or deleted_files)
     
-    details = {
+    details: dict = {
         "has_changes": has_changes,
         "modified": modified_files,
         "new": new_files,
@@ -189,8 +198,19 @@ def create_commit_message(custom_message=None):
     return f"Session closure: Memory updates [{timestamp}]"
 
 
-def prompt_user(question, default="yes"):
-    """Prompt user for confirmation."""
+def is_interactive():
+    """Check if running in an interactive terminal."""
+    return sys.stdin.isatty()
+
+
+def prompt_user(question, default="yes", force_non_interactive=False):
+    """Prompt user for confirmation. Auto-accepts in non-interactive mode."""
+    if force_non_interactive or not is_interactive():
+        # Non-interactive: use default answer
+        result = default.lower() == "yes"
+        print(f"{question} → {'yes' if result else 'no'} (non-interactive default)")
+        return result
+    
     if default.lower() == "yes":
         prompt = f"{question} [Y/n]: "
     else:
@@ -211,6 +231,11 @@ def main():
     parser.add_argument("--no-push", action="store_true", help="Commit but don't push")
     parser.add_argument("--dry-run", action="store_true", help="Show what would happen")
     parser.add_argument("--force", action="store_true", help="Skip confirmation prompts")
+    parser.add_argument("--non-interactive", action="store_true",
+                        help="Non-interactive mode: auto-accept defaults, no input() calls. "
+                             "Use when called by Librarian agent via task().")
+    parser.add_argument("--json", action="store_true",
+                        help="Output results as JSON (for programmatic use)")
     args = parser.parse_args()
     
     print("=" * 70)
@@ -229,12 +254,15 @@ def main():
         sys.exit(1)
     
     # Step 2: Check for uncommitted changes
-    print("📊 Checking repository status...")
+    print("Checking repository status...")
     success, git_status = check_git_status()
     
     if not success:
-        print(f"❌ Error: {git_status}")
+        print(f"Error: {git_status}")
         sys.exit(1)
+    
+    # Type narrowing: if success is True, git_status is a dict
+    assert isinstance(git_status, dict)
     
     has_code_changes = git_status["has_changes"]
     code_changes_count = git_status["total_changes"]
@@ -309,100 +337,152 @@ def main():
     print()
     
     # Step 6: User confirmation
-    if not args.force and not args.dry_run:
+    non_interactive = args.non_interactive or args.force or not is_interactive()
+    
+    if not non_interactive and not args.dry_run:
         if has_code_changes and not tests_passed:
-            print("⚠️  WARNING: You have code changes but tests are failing!")
+            print("WARNING: You have code changes but tests are failing!")
             print()
-            choice = input("What would you like to do?\n"
-                          "[1] Fix tests first (recommended)\n"
-                          "[2] Commit only memory files\n"
-                          "[3] Commit everything anyway\n"
-                          "[4] Cancel\n"
-                          "Choice: ").strip()
+            try:
+                choice = input("What would you like to do?\n"
+                              "[1] Fix tests first (recommended)\n"
+                              "[2] Commit only memory files\n"
+                              "[3] Commit everything anyway\n"
+                              "[4] Cancel\n"
+                              "Choice: ").strip()
+            except (EOFError, KeyboardInterrupt):
+                choice = "2"  # Safe default: commit only memory
             
             if choice == "1":
-                print("\n❌ Session closure cancelled. Please fix tests and try again.")
+                print("\nSession closure cancelled. Please fix tests and try again.")
                 print(f"   Test status: {test_message}")
                 sys.exit(1)
             elif choice == "2":
-                print("\n✅ Will commit only memory files.")
+                print("\nWill commit only memory files.")
                 has_code_changes = False
             elif choice == "3":
                 if not prompt_user("Are you sure? Committing failing code is not recommended"):
-                    print("\n❌ Session closure cancelled.")
+                    print("\nSession closure cancelled.")
                     sys.exit(1)
             else:
-                print("\n❌ Session closure cancelled.")
+                print("\nSession closure cancelled.")
                 sys.exit(0)
         else:
             if not prompt_user("Proceed with session closure?"):
-                print("\n❌ Session closure cancelled.")
+                print("\nSession closure cancelled.")
                 sys.exit(0)
+    elif non_interactive:
+        # Non-interactive: auto-decide
+        if has_code_changes and not tests_passed:
+            print("Non-interactive mode: tests failing, committing only memory files.")
+            has_code_changes = False
+        else:
+            print("Non-interactive mode: auto-proceeding with closure.")
     
     if args.dry_run:
-        print("\n✅ Dry run complete. No changes made.")
+        if args.json:
+            print(json_mod.dumps({
+                "status": "dry_run",
+                "memory_updated": False,
+                "committed": False,
+                "pushed": False,
+                "commit_message": "",
+                "test_status": str(test_message),
+                "planned_actions": actions
+            }))
+        else:
+            print("\nDry run complete. No changes made.")
         sys.exit(0)
     
     # Step 7: Execute git operations
-    print("\n🚀 Executing session closure...")
+    print("\nExecuting session closure...")
     print()
+    
+    # Track results for JSON output
+    committed = False
+    pushed = False
+    commit_message = ""
+    push_success = False
     
     # Stage memory files
     stage_memory_files()
-    print("✅ Memory files staged")
+    print("Memory files staged")
     
     # Stage code changes if appropriate
     if has_code_changes and tests_passed:
         run_command("git add -A")
-        print("✅ Code changes staged")
+        print("Code changes staged")
     
     # Create commit
     commit_message = create_commit_message(args.message)
     success, stdout, stderr = run_command(f'git commit -m "{commit_message}"')
     
     if success:
-        print(f"✅ Commit created: {commit_message}")
+        committed = True
+        print(f"Commit created: {commit_message}")
     else:
         # Check if it's just "nothing to commit"
         if "nothing to commit" in stderr or "nothing to commit" in stdout:
-            print("ℹ️  Nothing to commit (memory files unchanged)")
+            print("Nothing to commit (memory files unchanged)")
         else:
-            print(f"❌ Commit failed: {stderr}")
+            if args.json:
+                print(json_mod.dumps({
+                    "status": "failure",
+                    "error": f"Commit failed: {stderr}",
+                    "memory_updated": True,
+                    "committed": False,
+                    "pushed": False,
+                    "commit_message": commit_message,
+                    "test_status": str(test_message)
+                }))
+            else:
+                print(f"Commit failed: {stderr}")
             sys.exit(1)
     
     # Push if requested
     if not args.no_push:
-        print("\n📤 Pushing to remote...")
-        success, stdout, stderr = run_command("git push")
+        print("\nPushing to remote...")
+        push_success, stdout, stderr = run_command("git push")
+        pushed = push_success
         
-        if success:
-            print("✅ Pushed successfully")
+        if push_success:
+            print("Pushed successfully")
         else:
-            print(f"⚠️  Push failed: {stderr}")
+            print(f"Push failed: {stderr}")
             print("   You may need to push manually")
     
-    # Final summary
-    print("\n" + "=" * 70)
-    print("🎉 SESSION CLOSURE COMPLETE")
-    print("=" * 70)
-    print()
-    print("Summary:")
-    print(f"  • Memory files: Updated and committed")
-    if has_code_changes and tests_passed:
-        print(f"  • Code changes: {code_changes_count} file(s) committed")
-    elif has_code_changes:
-        print(f"  • Code changes: Skipped (tests failing)")
+    # Final output: JSON or text summary
+    if args.json:
+        result = {
+            "status": "success",
+            "memory_updated": True,
+            "committed": committed,
+            "pushed": pushed,
+            "commit_message": commit_message,
+            "test_status": str(test_message),
+            "code_changes_count": code_changes_count if has_code_changes else 0,
+            "code_committed": bool(has_code_changes and tests_passed)
+        }
+        print(json_mod.dumps(result))
     else:
-        print(f"  • Code changes: None")
-    print(f"  • Tests: {test_message}")
-    print(f"  • Commit: {commit_message[:50]}...")
-    if not args.no_push:
-        print(f"  • Push: {'Success' if success else 'Failed'}")
-    print()
-    print("Ready for next session!")
-    print()
-    print("💡 Tip: Run `python3 ~/.config/opencode/nso/scripts/init_session.py`")
-    print("   at the start of your next session to load all context.")
+        print("\n" + "=" * 70)
+        print("SESSION CLOSURE COMPLETE")
+        print("=" * 70)
+        print()
+        print("Summary:")
+        print(f"  - Memory files: Updated and committed")
+        if has_code_changes and tests_passed:
+            print(f"  - Code changes: {code_changes_count} file(s) committed")
+        elif has_code_changes:
+            print(f"  - Code changes: Skipped (tests failing)")
+        else:
+            print(f"  - Code changes: None")
+        print(f"  - Tests: {test_message}")
+        print(f"  - Commit: {commit_message[:50]}...")
+        if not args.no_push:
+            print(f"  - Push: {'Success' if pushed else 'Failed'}")
+        print()
+        print("Ready for next session!")
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | **Feature ID** | FEAT-HEARTBEAT-001 |
-| **Based On** | .opencode/docs/requirements/REQ-NSO-Heartbeat-API.md |
+| **Based On** | docs/requirements/REQ-NSO-Heartbeat-API.md |
 | **Status** | Pending Approval |
 | **Created** | 2026-02-07 |
 | **Oracle** | OpenCode |

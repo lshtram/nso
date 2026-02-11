@@ -189,6 +189,6 @@ def validate_integration():
 
 ## See Also
 
-- BUILD Workflow: `.opencode/docs/workflows/BUILD.md`
+- BUILD Workflow: `docs/workflows/BUILD.md`
 - Validation Gate: `.opencode/scripts/validate.py`
 - Gate Enforcement: `.opencode/scripts/gate_check.py`

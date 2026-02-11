@@ -474,7 +474,7 @@ The following are explicitly OUT OF SCOPE for Phase 2:
 
 ### Internal
 - `.opencode/context/03_proposals/RFC-Circuit-Breaker-Pattern-NSO.md`
-- `.opencode/docs/workflows/BUILD.md`
+- `docs/workflows/BUILD.md`
 - `.opencode/AGENTS.md`
 
 ### External

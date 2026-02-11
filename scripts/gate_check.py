@@ -147,7 +147,7 @@ def _check_result_score(filepath: Path, field: str, minimum: int) -> tuple[bool,
 def _find_req_files(task_dir: Path) -> list[Path]:
     """Find REQ-*.md files in standard locations."""
     req_patterns = [
-        (Path("."), ".opencode/docs/requirements/REQ-*.md"),
+        (Path("."), "docs/requirements/REQ-*.md"),
         (task_dir, "REQ-*.md"),
         (task_dir, "*_REQ-*.md"),
     ]
@@ -160,7 +160,7 @@ def _find_req_files(task_dir: Path) -> list[Path]:
 def _find_techspec_files(task_dir: Path) -> list[Path]:
     """Find TECHSPEC-*.md files in standard locations."""
     techspec_patterns = [
-        (Path("."), ".opencode/docs/architecture/TECHSPEC-*.md"),
+        (Path("."), "docs/architecture/TECHSPEC-*.md"),
         (task_dir, "TECHSPEC-*.md"),
         (task_dir, "*_TECHSPEC-*.md"),
     ]

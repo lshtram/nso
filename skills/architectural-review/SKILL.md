@@ -11,7 +11,7 @@ Oracle
 - When evaluating complex interfaces, new modalities, or major architectural shifts (e.g., swapping a core library).
 
 # Inputs
-- Draft `.opencode/docs/architecture/TECHSPEC-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/tech_spec.md`).
+- Draft `docs/architecture/TECHSPEC-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/tech_spec.md`).
 - Approved requirements (REQ-*.md)
 - Existing codebase patterns
 

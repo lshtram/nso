@@ -54,7 +54,7 @@ Oracle (Discovery) → Oracle (Architecture) → Builder (Implementation) → Ha
 - Context files (tech-stack, patterns, glossary)
 
 **Outputs:**
-- Requirements document: `.opencode/docs/requirements/REQ-<Feature-Name>.md`
+- Requirements document: `docs/requirements/REQ-<Feature-Name>.md`
 - Approval: User must approve before Architecture
 
 **Contract:**
@@ -76,7 +76,7 @@ router_contract:
 - Context files
 
 **Outputs:**
-- Tech Spec: `.opencode/docs/architecture/TECHSPEC-<Feature-Name>.md`
+- Tech Spec: `docs/architecture/TECHSPEC-<Feature-Name>.md`
 - Approval: User must approve before Implementation
 
 **Contract:**
@@ -397,14 +397,14 @@ router_contract:
 Formalize the existing BUILD workflow with all 5 phases.
 
 **Acceptance:**
-- Workflow definition exists in `.opencode/docs/workflows/BUILD.md`.
+- Workflow definition exists in `docs/workflows/BUILD.md`.
 - Template includes all 5 phases with inputs, outputs, and contracts.
 
 ### FR-2: DEBUG Workflow Template
 Create DEBUG workflow with Investigation → Fix → Validation → Closure.
 
 **Acceptance:**
-- Workflow definition exists in `.opencode/docs/workflows/DEBUG.md`.
+- Workflow definition exists in `docs/workflows/DEBUG.md`.
 - LOG FIRST approach enforced (evidence before fix).
 - Regression test required before fix.
 
@@ -412,7 +412,7 @@ Create DEBUG workflow with Investigation → Fix → Validation → Closure.
 Create REVIEW workflow with Scope → Analysis → Report.
 
 **Acceptance:**
-- Workflow definition exists in `.opencode/docs/workflows/REVIEW.md`.
+- Workflow definition exists in `docs/workflows/REVIEW.md`.
 - Confidence scoring (≥80 to report).
 - CRITICAL issues block shipping.
 
@@ -450,12 +450,12 @@ Memory is LOADed at workflow start and UPDATED at workflow end.
 - DEBUG workflow adds findings to patterns.md (Gotchas).
 
 ### FR-8: Workflow Documentation
-All workflows are documented in `.opencode/docs/workflows/`.
+All workflows are documented in `docs/workflows/`.
 
 **Acceptance:**
-- `.opencode/docs/workflows/BUILD.md` exists.
-- `.opencode/docs/workflows/DEBUG.md` exists.
-- `.opencode/docs/workflows/REVIEW.md` exists.
+- `docs/workflows/BUILD.md` exists.
+- `docs/workflows/DEBUG.md` exists.
+- `docs/workflows/REVIEW.md` exists.
 
 ## 6. Constraints & Standards
 - All workflow artifacts under `.opencode/`.

@@ -190,7 +190,7 @@ opencode
 The following files were intentionally left with relative `.opencode/` paths because they correctly refer to per-project context:
 
 - All SKILL.md files that reference `.opencode/context/01_memory/`
-- All documentation that references `.opencode/docs/`
+- All documentation that references `docs/`
 - All scripts that write to `.opencode/logs/`
 - All agent prompts that reference `.opencode/context/`
 

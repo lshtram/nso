@@ -9,7 +9,7 @@
 ### 1. Generating Quality Code
 **Definition:** A rigorous loop of *Requirements → Code → Test → Iteration* until all requirements are satisfied with full coverage.
 **Implementation:**
--   **Deep Context:** The Oracle reads not just the tech stack, but *all* existing Architecture (`.opencode/docs/architecture/`), Requirements (`.opencode/docs/requirements/`), and the Codebase Index before defining new work.
+-   **Deep Context:** The Oracle reads not just the tech stack, but *all* existing Architecture (`docs/architecture/`), Requirements (`docs/requirements/`), and the Codebase Index before defining new work.
 -   **The Complete Harness:** Development cannot close until `scripts/validate.py` passes ALL checks (Lint, Types, Unit, E2E).
 
 ### 2. Solid Processes (The Feature Lifecycle)
@@ -19,8 +19,8 @@
 -   **Gated Stages:** Discovery → Architecture (Internal Review + User Gate) → Development → Closure (Git + Docs).
 
 #### 2.1 Artifact Naming Conventions
-- **Requirements (permanent):** `.opencode/docs/requirements/REQ-<Feature-Name>.md`
-- **Tech Specs (permanent):** `.opencode/docs/architecture/TECHSPEC-<Feature-Name>.md`
+- **Requirements (permanent):** `docs/requirements/REQ-<Feature-Name>.md`
+- **Tech Specs (permanent):** `docs/architecture/TECHSPEC-<Feature-Name>.md`
 - **Temporary (optional, for active feature):**
   - `.opencode/context/active_features/<feature>/requirements.md`
   - `.opencode/context/active_features/<feature>/tech_spec.md`
@@ -94,14 +94,14 @@
 **Trigger:** `/new-feature "Add Dark Mode"` (Defined in `opencode.json`)
 
 **Stage 1: Discovery (Oracle)**
--   **Context:** Reads `.opencode/docs/requirements`, `.opencode/docs/architecture`, `.opencode/context/00_meta`, and LOADs `.opencode/context/01_memory`.
--   **Action:** Interview User → Draft `REQ-<Feature-Name>.md` in `.opencode/docs/requirements/` (or a temporary `requirements.md` under `.opencode/context/active_features/<feature>/`).
+-   **Context:** Reads `docs/requirements`, `docs/architecture`, `.opencode/context/00_meta`, and LOADs `.opencode/context/01_memory`.
+-   **Action:** Interview User → Draft `REQ-<Feature-Name>.md` in `docs/requirements/` (or a temporary `requirements.md` under `.opencode/context/active_features/<feature>/`).
 -   **Internal Review:** Oracle runs `rm-validate-intent` (History Check) and `rm-multi-perspective-audit` (Security/SRE/UX).
 -   **Gate:** User Approval.
 -   **Memory:** UPDATE memory files at phase end.
 
 **Stage 2: Architecture (Oracle)**
--   **Action:** Draft `TECHSPEC-<Feature-Name>.md` in `.opencode/docs/architecture/` (or a temporary `tech_spec.md` under `.opencode/context/active_features/<feature>/`).
+-   **Action:** Draft `TECHSPEC-<Feature-Name>.md` in `docs/architecture/` (or a temporary `tech_spec.md` under `.opencode/context/active_features/<feature>/`).
 -   **Internal Review:** Oracle runs `architectural-review` (Complexity check, Modularity check). *Iterates until satisfied.*
 -   **Gate:** User Approval.
 -   **Memory:** LOAD at start, UPDATE at phase end.
@@ -122,7 +122,7 @@
 
 **Stage 4: Closure (Librarian)**
 -   **Action:**
-    1.  Move/confirm artifacts in `.opencode/docs/`.
+    1.  Move/confirm artifacts in `docs/`.
     2.  **Git:** Run `git add . && git commit -m "feat: ..."`
     3.  **Gate:** Ask User "Ready to Push?".
     4.  **Action:** `git push`.

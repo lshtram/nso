@@ -35,7 +35,7 @@ def main():
             if delta > TIMEOUT_SECONDS:
                 status_icon = "🔴 STALLED"
             elif delta > 60:
-                status_icon = "ww🟡 LAGGING"
+                status_icon = "🟡 LAGGING"
                 
             print(f"{status_icon} [{agent_id}] {status}: {step} (Last heard {int(delta)}s ago)")
             

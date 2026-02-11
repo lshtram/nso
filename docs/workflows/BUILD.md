@@ -32,7 +32,7 @@ Oracle (Discovery) → Oracle (Architecture) → Builder (Implementation) → Ja
 - Context files (`.opencode/context/00_meta/`)
 
 **Outputs:**
-- Requirements document: `.opencode/docs/requirements/REQ-<Feature-Name>.md`
+- Requirements document: `docs/requirements/REQ-<Feature-Name>.md`
 - Approval: User must approve before Architecture
 
 **Skills Used:**
@@ -65,7 +65,7 @@ router_contract:
 - Context files (`.opencode/context/00_meta/`)
 
 **Outputs:**
-- Tech Spec: `.opencode/docs/architecture/TECHSPEC-<Feature-Name>.md`
+- Tech Spec: `docs/architecture/TECHSPEC-<Feature-Name>.md`
 - Approval: User must approve before Implementation
 
 **Skills Used:**
@@ -253,8 +253,8 @@ task(
 
 ## References
 
-- Requirements: `.opencode/docs/requirements/REQ-NSO-BUILD-Workflow.md`
-- Tech Spec: `.opencode/docs/architecture/TECHSPEC-NSO-WorkflowSystem.md`
+- Requirements: `docs/requirements/REQ-NSO-BUILD-Workflow.md`
+- Tech Spec: `docs/architecture/TECHSPEC-NSO-WorkflowSystem.md`
 - Router: `.opencode/skills/router/scripts/router_logic.py`
 - Validation: `.opencode/scripts/validate.py`
 - Agents: `.opencode/AGENTS.md`

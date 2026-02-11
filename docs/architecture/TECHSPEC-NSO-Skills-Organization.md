@@ -87,7 +87,7 @@ Note: No extra README or changelog files.
 
 ## 5. Documentation Updates
 Update these docs to reflect skills restructuring:
-- `.opencode/docs/STATUS_REPORT.md` (skills list and statuses)
+- `docs/STATUS_REPORT.md` (skills list and statuses)
 - `.opencode/ARCHITECTURE.md` (skills layout and standard)
 - Any NSO docs referencing old skill paths
 

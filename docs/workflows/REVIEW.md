@@ -269,8 +269,8 @@ task(
 
 ## References
 
-- Requirements: `.opencode/docs/requirements/REQ-NSO-BUILD-Workflow.md`
-- Tech Spec: `.opencode/docs/architecture/TECHSPEC-NSO-WorkflowSystem.md`
+- Requirements: `docs/requirements/REQ-NSO-BUILD-Workflow.md`
+- Tech Spec: `docs/architecture/TECHSPEC-NSO-WorkflowSystem.md`
 - Code-Reviewer Skill: `.opencode/skills/code-reviewer/SKILL.md`
 - Router: `.opencode/skills/router/scripts/router_logic.py`
 - Agents: `.opencode/AGENTS.md`

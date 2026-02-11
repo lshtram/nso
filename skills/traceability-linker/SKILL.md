@@ -10,7 +10,7 @@ Janitor
 - Pre-merge review or QA gate.
 
 # Inputs
-- `.opencode/docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`)
+- `docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`)
 - Code under `src/`
 - Tests under `tests/`
 

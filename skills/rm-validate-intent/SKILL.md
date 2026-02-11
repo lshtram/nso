@@ -11,7 +11,7 @@ Oracle
 
 # Inputs
 - Conversation history.
-- Draft `.opencode/docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`).
+- Draft `docs/requirements/REQ-<Feature-Name>.md` (or temporary `.opencode/context/active_features/<feature>/requirements.md`).
 
 # Outputs
 - Updated requirements that align with user intent.

@@ -355,7 +355,7 @@ This document defines all NSO agents, their roles, responsibilities, skills, too
 |------|---------|
 | `opencode.json` | Runtime configuration (authoritative) |
 | `.opencode/config/mcp-agents.json` | Per-agent MCP mapping |
-| `.opencode/docs/NSO-AGENTS.md` | This document (SSOT) |
+| `docs/NSO-AGENTS.md` | This document (SSOT) |
 | `.opencode/AGENTS.md` | Agent roles and responsibilities |
 
 ---

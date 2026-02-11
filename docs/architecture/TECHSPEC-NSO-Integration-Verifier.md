@@ -470,7 +470,7 @@ When E2E verification fails, present these options to the Oracle/User:
 
 ### 4.1 Updated BUILD Workflow - Validation Phase
 
-**File:** `.opencode/docs/workflows/BUILD.md`
+**File:** `docs/workflows/BUILD.md`
 
 Update the Validation phase to include Integration-Verifier:
 
