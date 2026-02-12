@@ -5,7 +5,7 @@
   "agents": {
     "oracle": {
       "mcpServers": ["memory", "parallel", "context7"],
-      "nativeTools": ["fetch", "web_search", "web_fetch"],
+      "nativeTools": ["fetch", "web_search", "web_fetch", "todowrite"],
       "rationale": "Research and memory for architecture decisions"
     },
     "builder": {
@@ -36,7 +36,7 @@
   },
   "defaults": {
     "mcpServers": ["memory"],
-    "nativeTools": ["read", "write", "edit", "bash", "grep", "glob"]
+    "nativeTools": ["read", "write", "edit", "bash", "grep", "glob", "todowrite"]
   },
   "notes": {
     "gh_cli": "gh CLI is accessed via native bash tool, not MCP",

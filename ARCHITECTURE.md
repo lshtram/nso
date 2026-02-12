@@ -1,162 +1,335 @@
-# Neuro-Symbolic Orchestrator: System Architecture
+# Neuro-Symbolic Orchestrator: System Architecture v2.0
 
-| Version | Date | Status |
-|---------|------|--------|
-| 7.0.0 | 2026-02-07 | Full Reliability Spec |
-
-## 1. Core Philosophy: The 8 Pillars of Reliability
-
-### 1. Generating Quality Code
-**Definition:** A rigorous loop of *Requirements → Code → Test → Iteration* until all requirements are satisfied with full coverage.
-**Implementation:**
--   **Deep Context:** The Oracle reads not just the tech stack, but *all* existing Architecture (`docs/architecture/`), Requirements (`docs/requirements/`), and the Codebase Index before defining new work.
--   **The Complete Harness:** Development cannot close until `scripts/validate.py` passes ALL checks (Lint, Types, Unit, E2E).
-
-### 2. Solid Processes (The Feature Lifecycle)
-**Definition:** Quality assurance via defined stages, reviews, and approvals.
-**Implementation:**
--   **Internal Review Loops:** Before asking the user, the Oracle runs a "Self-Review" skill (Checklist) to challenge its own architecture (Simplification, Modularity).
--   **Gated Stages:** Discovery → Architecture (Internal Review + User Gate) → Development → Closure (Git + Docs).
-
-#### 2.1 Artifact Naming Conventions
-- **Requirements (permanent):** `docs/requirements/REQ-<Feature-Name>.md`
-- **Tech Specs (permanent):** `docs/architecture/TECHSPEC-<Feature-Name>.md`
-- **Temporary (optional, for active feature):**
-  - `.opencode/context/active_features/<feature>/requirements.md`
-  - `.opencode/context/active_features/<feature>/tech_spec.md`
-
-### 3. Multi-Agent Capabilities
-**Definition:** Leveraging OpenCode's native ability to spawn sub-agents.
-**Implementation:**
--   **Native Integration:** Agents are defined in `opencode.json` as `custom_agents` (or tasks), each with a specific `system_prompt` and `tools` allowlist.
--   **Role Specialization:** Oracle (Planner), Builder (Coder), Janitor (QA), Scout (Researcher).
-
-### 4. Parallel Execution
-**Definition:** Running multiple work streams simultaneously.
-**Implementation:**
--   **Mechanism:** The Oracle uses the `task` tool to spawn independent sessions.
-    -   *Command:* `task(agent="Builder", prompt="Implement Feature A Context...")`
--   **Heartbeat:** Background agents write status to `.opencode/logs/task_status.json`. The user checks this via `/status`.
-
-### 5. Self-Improving (Evolution)
-**Definition:** Proactive learning from failures and the community.
-**Implementation:**
--   **Pattern Detection:** The `profiler.py` hook analyzes logs for repeated errors (e.g., "Agent failed to run npm dev 3 times").
--   **Auto-Correction:** If a pattern is detected, the Janitor creates an update to `.opencode/context/00_meta/patterns.md` (e.g., "Always run commands in root").
--   **The Scout:** Triggered via `/scout` or schedule, looks for external updates.
-
-### 6. Profiling & Observability
-**Definition:** Detecting stalls and inefficiencies.
-**Implementation:**
--   **Telemetry:** `PostToolUse` hook captures every action.
--   **Stall Detector:** The hook counts consecutive failures. If > 3, it injects a "STOP AND THINK" directive into the agent's context.
-
-### 7. Self-Healing
-**Definition:** Automatic error correction.
-**Implementation:**
--   **Micro-Correction:** `validate.py` (Fast Mode) runs on every write to catch syntax errors immediately.
--   **Macro-Correction:** The Builder cannot exit the loop until the Full Harness passes.
-
-### 8. Lightweight (Low Friction)
-**Definition:** Minimum overhead for User AND System.
-**Implementation:**
--   **User:** Simple slash commands (`/new-feature`). No manual doc writing.
--   **System:** Scripts are fast (Python/Bun). No heavy VMs. Docs live in standard `docs/` folders, not hidden contexts.
+**Version:** 2.0.0  
+**Date:** 2026-02-12  
+**Status:** Production Ready
 
 ---
 
-## 2. Directory Structure
+## Executive Summary
+
+NSO v2.0 is a **8-agent orchestration system** built on OpenCode that enforces:
+- **Quality:** TDD + spec compliance + independent code review
+- **Process:** 3 workflows (BUILD/DEBUG/REVIEW) with mandatory gates
+- **Evolution:** Post-mortem analysis + pattern detection + self-improvement
+
+**Key Innovation:** Split validation into two stages:
+1. **Janitor** validates spec compliance + automated harness
+2. **CodeReviewer** independently reviews code quality
+
+---
+
+## 1. Core Philosophy: Quality Through Process
+
+### 1.1 Test-Driven Development (TDD)
+- **RED** → Write failing test
+- **GREEN** → Make it pass
+- **REFACTOR** → Improve code
+- **Enforced by:** `tdd` skill, Builder prompt, Janitor validation
+
+### 1.2 Evidence-Based Completion
+- No "I think it works" or "should pass"
+- All claims backed by test output or tool evidence
+- **Enforced by:** `verification-gate` skill, anti-performative protocol
+
+### 1.3 Systematic Debugging
+- **LOG FIRST** — Add diagnostic logging before hypothesizing
+- **Backward data flow** — Trace from symptom to root cause
+- **3-fix escalation** — Same area fails 3x → architectural problem
+- **Enforced by:** `systematic-debugging` and `bug-investigator` skills
+
+### 1.4 Independent Validation
+- Builder writes code → Janitor validates spec → CodeReviewer audits quality
+- No self-review
+- **Enforced by:** Agent boundaries in `instructions.md`
+
+### 1.5 Continuous Improvement
+- Every workflow ends with post-mortem analysis
+- Pattern detection and learning
+- User approval before applying improvements
+- **Enforced by:** `post-mortem` skill, Librarian closure protocol
+
+---
+
+## 2. Architecture Components
+
+### 2.1 The 8 Agents
 
 ```
-.
-├── opencode.json              # NATIVE Integration (Agents & Commands)
-├── docs/                      # Project Documentation (The Truth)
-│   ├── requirements/          # Archived requirements
-│   ├── architecture/          # System Architecture
-│   └── api/                   # API Contracts
+Oracle ────────────┐
+   ├── Analyst     │ Discovery & Investigation
+   ├── Builder     │ Implementation
+   ├── Designer    │ Frontend/UX
+   ├── Janitor     │ Validation (Stage A: Spec, Stage B: Harness)
+   ├── CodeReviewer│ Quality Audit (Stage: Independent Review)
+   ├── Librarian   │ Knowledge Management
+   └── Scout       │ External Research
+```
+
+**Role Separation:**
+- **Oracle** = Architect (designs, doesn't code)
+- **Analyst** = Mastermind (discovers, doesn't implement)
+- **Builder** = Engineer (codes, doesn't review)
+- **Janitor** = QA (validates, doesn't fix)
+- **CodeReviewer** = Auditor (reviews, doesn't implement)
+
+### 2.2 The 20 Skills
+
+**New in v2.0 (4):**
+- `tdd` — TDD enforcement with rationalization prevention
+- `systematic-debugging` — 4-phase debugging methodology
+- `verification-gate` — Evidence-based completion
+- `post-mortem` — Session analysis + pattern detection
+
+**Kept (16):**
+- Requirements: `rm-intent-clarifier`, `rm-validate-intent`, `rm-multi-perspective-audit`
+- Architecture: `architectural-review`, `router`, `skill-creator`
+- Code: `minimal-diff-generator`
+- Quality: `silent-failure-hunter`, `traceability-linker`, `integration-verifier`, `code-reviewer`
+- Debug: `bug-investigator`
+- Memory: `memory-update`, `archive-conversation`
+- Research: `tech-radar-scan`
+
+**Deleted (12):**
+- Superseded by new skills or consolidated into `post-mortem`
+
+### 2.3 The 3 Workflows
+
+#### BUILD: Feature Development (7 phases)
+```
+Phase 0: Worktree (Oracle) → isolation
+Phase 1: Discovery (Analyst) → REQ document → USER APPROVAL
+Phase 2: Architecture (Oracle) → TECHSPEC → USER APPROVAL
+Phase 3: Implementation (Builder) → TDD code + tests
+Phase 4A: Validation (Janitor) → spec compliance + harness
+Phase 4B: Code Review (CodeReviewer) → quality audit
+Accountability: Oracle presents results → USER APPROVAL
+Phase 5: Closure (Librarian) → post-mortem + memory
+```
+
+#### DEBUG: Bug Fixing (5 phases)
+```
+Phase 1: Investigation (Analyst) → LOG FIRST, evidence collection
+Phase 2: Triage (Oracle) → assess scope, check 3-fix escalation
+Phase 3: Fix (Builder) → regression test (must fail) → minimal fix
+Phase 4: Validation (Janitor) → regression verification + harness
+Phase 5: Closure (Librarian) → Gotcha documentation + post-mortem
+```
+
+#### REVIEW: Code Quality (4 phases)
+```
+Phase 1: Scope (CodeReviewer) → define files + focus areas
+Phase 2: Analysis (CodeReviewer) → spec compliance + quality check
+Phase 3: Report (CodeReviewer) → verdict + confidence scores
+Phase 4: Closure (Librarian) → pattern documentation
+```
+
+---
+
+## 3. Quality Gates
+
+### 3.1 User Approval Gates (3)
+1. **After Discovery** — User approves REQ document
+2. **After Architecture** — User approves TECHSPEC
+3. **After Quality Review** — User approves code quality before commit
+
+### 3.2 Process Gates (4)
+1. **Worktree Safety** — `.gitignore` check, base branch up-to-date, baseline tests pass
+2. **Test Gate (Builder → Janitor)** — All tests pass, Builder shows evidence
+3. **Validation Gate (Janitor → CodeReviewer)** — Spec compliance PASS + harness PASS
+4. **Quality Gate (CodeReviewer → Closure)** — No CRITICAL issues
+
+### 3.3 Escalation Rules
+- **3-Fix Rule:** Same area fails 3+ times → escalate to architectural review
+- **Confidence Threshold:** Issues below 80 confidence not reported
+- **CRITICAL Severity:** Blocks shipping (security, correctness, compliance)
+
+---
+
+## 4. Directory Structure
+
+```
+Project Root/
+├── docs/
+│   ├── requirements/      # REQ-*.md (permanent)
+│   ├── architecture/      # TECHSPEC-*.md (permanent)
+│   └── analysis/          # Analysis docs
 ├── .opencode/
-│   ├── context/               # Active Context Engine
-│   │   ├── 00_meta/           # Stack, Patterns, Glossary
-│   │   ├── 01_memory/          # Persistent memory (active_context, patterns, progress)
-│   │   └── active_features/   # Isolation for running tasks
-│   ├── hooks/                 # Automation Scripts
-│   ├── scripts/               # Validation & Monitoring
-│   ├── skills/                # Skills (`skills/<name>/SKILL.md`)
-│   └── logs/                  # Telemetry
+│   ├── context/
+│   │   ├── 01_memory/        # active_context.md, patterns.md, progress.md
+│   │   └── active_tasks/     # Per-feature workspaces
+│   │       └── [feature]/
+│   │           ├── contract.md      # Input to agent
+│   │           ├── result.md        # Output from agent
+│   │           ├── validation_contract.md
+│   │           └── review_contract.md
+│   ├── templates/            # REQ and TECHSPEC templates
+│   └── logs/                 # Plugin and telemetry logs
+├── .worktrees/               # Isolated branches (BUILD only)
+│   └── feat-[name]/         # Active feature branch
+└── .gitignore                # Must include .worktrees/
+
+NSO Config (Global):
+~/.config/opencode/
+├── opencode.json             # Agent configuration (PARENT of nso/)
+└── nso/
+├── instructions.md           # Universal rules
+├── prompts/                  # Agent prompts (8 files)
+│   ├── Oracle.md
+│   ├── Analyst.md
+│   ├── Builder.md
+│   ├── Designer.md
+│   ├── Janitor.md
+│   ├── CodeReviewer.md
+│   ├── Librarian.md
+│   └── Scout.md
+├── scripts/                  # NSO scripts (all agents read from here)
+├── skills/                   # Skill definitions (20 skills)
+├── docs/                     # System documentation
+│   ├── NSO-AGENTS.md         # Complete agent reference
+│   └── workflows/            # Workflow details
+│       ├── BUILD.md
+│       ├── DEBUG.md
+│       └── REVIEW.md
+├── templates/                # REQ and TECHSPEC templates
+└── nso-plugin.js             # Event hooks (session init, tool validation)
 ```
 
 ---
 
-## 3. Mechanisms & Workflows
+## 5. Key Mechanisms
 
-### 3.1 The Feature Lifecycle
+### 5.1 Worktree Isolation (BUILD only)
+```bash
+# Oracle creates:
+git worktree add -b feat/[name] .worktrees/feat/[name] [base]
 
-**Trigger:** `/new-feature "Add Dark Mode"` (Defined in `opencode.json`)
+# Safety checks:
+- .worktrees/ in .gitignore? ✓
+- Base branch up to date? ✓
+- Baseline tests pass? ✓
 
-**Stage 1: Discovery (Oracle)**
--   **Context:** Reads `docs/requirements`, `docs/architecture`, `.opencode/context/00_meta`, and LOADs `.opencode/context/01_memory`.
--   **Action:** Interview User → Draft `REQ-<Feature-Name>.md` in `docs/requirements/` (or a temporary `requirements.md` under `.opencode/context/active_features/<feature>/`).
--   **Internal Review:** Oracle runs `rm-validate-intent` (History Check) and `rm-multi-perspective-audit` (Security/SRE/UX).
--   **Gate:** User Approval.
--   **Memory:** UPDATE memory files at phase end.
+# All agents work in .worktrees/feat/[name]/
 
-**Stage 2: Architecture (Oracle)**
--   **Action:** Draft `TECHSPEC-<Feature-Name>.md` in `docs/architecture/` (or a temporary `tech_spec.md` under `.opencode/context/active_features/<feature>/`).
--   **Internal Review:** Oracle runs `architectural-review` (Complexity check, Modularity check). *Iterates until satisfied.*
--   **Gate:** User Approval.
--   **Memory:** LOAD at start, UPDATE at phase end.
+# Oracle closes:
+git merge --squash feat/[name]
+git push origin main
+git worktree remove .worktrees/feat/[name]
+git branch -d feat/[name]
+```
 
-**Stage 3: Development (Builder)**
--   **Trigger:** Oracle spawns Builder(s).
--   **Micro-Loop:**
-    1.  Write Test (Red).
-    2.  Write Code (Green).
-    3.  **Auto-Check:** Hook runs `validate.py --fast` (Syntax/Lint).
-    4.  **Refactor.**
--   **Exit Condition:** Builder runs `validate.py --full` (All Tests + E2E). If Pass → Done.
--   **Memory:** LOAD at start, UPDATE at phase end with verified deliverables.
+### 5.2 Contract-Based Delegation
+```yaml
+# Oracle writes contract.md before delegating:
+contract:
+  workflow: BUILD
+  phase: IMPLEMENTATION
+  agent: Builder
+  techspec: "docs/architecture/TECHSPEC-Feature.md"
+  worktree_path: ".worktrees/feat-feature/"
+  deliverable: "Working code with passing tests"
+  tdd_required: true
 
-**Debug & Review Workflows**
--   **Debug End:** After root cause confirmation + regression test, UPDATE memory files.
--   **Review End:** After review completion, UPDATE memory files.
+# Builder reads contract, implements, writes result.md:
+result:
+  status: COMPLETE
+  tests_pass: true
+  evidence: "npm test output shows 47/47 passing"
+  files_changed: ["src/feature.ts", "tests/feature.test.ts"]
+```
 
-**Stage 4: Closure (Librarian)**
--   **Action:**
-    1.  Move/confirm artifacts in `docs/`.
-    2.  **Git:** Run `git add . && git commit -m "feat: ..."`
-    3.  **Gate:** Ask User "Ready to Push?".
-    4.  **Action:** `git push`.
+### 5.3 Two-Stage Validation
+```
+Stage A (Janitor): Spec Compliance
+├─ Every TECHSPEC requirement → implemented code?
+└─ Binary: PASS or FAIL (if FAIL → STOP, back to Builder)
 
-### 3.2 The Self-Healing & Profiling Loop
+Stage B (Janitor): Automated Harness
+├─ TypeScript typecheck
+├─ Lint
+├─ Tests (unit + integration)
+├─ TDD compliance check
+└─ Silent failure scan
 
-**The Hook (`hooks/post_tool_use/profiler.py`):**
-1.  **Log:** Writes to `logs/sessions/current.json`.
-2.  **Analyze:**
-    -   *Is this the 3rd time the same tool failed?* -> **Trigger:** "Pause Strategy".
-    -   *Did `npm run dev` fail on directory?* -> **Trigger:** Janitor Update "Always run in root".
-3.  **Feedback:** Returns standard output + "System Guidance" if needed.
+Stage C (CodeReviewer): Quality Review
+├─ Confidence scoring (≥80 to report)
+├─ Severity: CRITICAL / IMPORTANT / MINOR
+├─ Verdict: BLOCK / CHANGES_REQUESTED / APPROVE_WITH_NOTES / APPROVE
+└─ Mandatory positive findings
+```
 
-### 3.3 Parallelism Mechanism
-
-**The Spawning Protocol:**
-1.  **Orchestrator:** Oracle identifies tasks in `flight_plan.json`.
-2.  **Execution:** Oracle calls `task()` tool multiple times.
-    *   *Input:* `agent="Builder"`, `prompt="Execute Task 1 in context feature-dark-mode"`.
-3.  **Isolation:** Each Builder receives a pointer to `.opencode/context/active_features/feature-X/`. They do not see each other's active scratchpads.
-4.  **Monitoring:** Each Builder writes status to `task_status.json`. User runs `/status` to view this aggregation.
+### 5.4 Post-Mortem & Evolution
+```
+Librarian runs post-mortem skill:
+1. Analyze session logs
+2. Detect patterns (real issues vs normal development)
+3. Classify by severity
+4. Present findings to user
+5. User approves/rejects improvements
+6. Apply approved improvements to NSO or project
+```
 
 ---
 
-## 4. The Hexagon Squad: Skills & Configuration
+## 6. Anti-Performative Protocol
 
-| Agent | System Prompt Focus | Key Skills |
-|-------|---------------------|------------|
-| **Oracle** | "You are the Architect. Look at the whole system. Challenge assumptions." | `rm-intent-clarifier`, `rm-validate-intent`, `rm-multi-perspective-audit`, `architectural-review`, `router` |
-| **Builder** | "You are the Implementer. TDD is law. Fix errors before asking." | `tdflow-unit-test`, `minimal-diff-generator`, `code-generation`, `debugging-patterns`, `verification-before-completion` |
-| **Janitor** | "You are Quality. Nothing passes without traceability." | `traceability-linker`, `silent-failure-hunter`, `code-review-patterns` |
-| **Scout** | "You are the Explorer. Look outside." | `tech-radar-scan` |
+### Forbidden Language
+| Phrase | Why Forbidden | Correct Alternative |
+|--------|---------------|---------------------|
+| "I've verified this works" | No evidence shown | Show test output |
+| "Tests should pass" | "Should" is not proof | Run them, show output |
+| "I believe this is correct" | Belief ≠ proof | Prove with tests/evidence |
+| "This looks good" | Vague, non-actionable | Specify what was checked |
+
+### The 1% Rule
+If there is even a 1% chance a skill applies, invoke it. Skills are cheap. Missing a quality check is expensive.
 
 ---
 
-## 5. Summary
-This architecture is **integrated** (via `opencode.json`), **reliable** (via Hooks/Harness), and **intelligent** (via Context/Self-Improvement).
+## 7. Integration with OpenCode
+
+### 7.1 Native Agent System
+- Agents defined in `opencode.json` → `agent` section
+- Each agent has: `name`, `description`, `prompt`, `skill` array
+- OpenCode's `task()` tool spawns agents
+
+### 7.2 Plugin Hooks
+```javascript
+// nso-plugin.js provides:
+- event: "session.created" → init_session.py
+- tool.execute.before → validate_intent.py (security checks)
+```
+
+### 7.3 MCP Integration
+- Memory MCP: Persistent knowledge graph
+- Filesystem MCP: File access
+- Playwright/Chrome DevTools: Browser automation (Designer)
+- Parallel/Context7/Tavily: Research (Scout, Oracle)
+
+---
+
+## 8. Evolution & History
+
+### v1.0 (Pre-2026-02-12)
+- 6 agents
+- 32 skills
+- Janitor handled both validation AND code review
+- Oracle handled discovery
+
+### v2.0 (2026-02-12)
+- 8 agents (+ Analyst, + CodeReviewer)
+- 20 skills (deleted 12, created 4)
+- Split validation: Janitor (spec+harness) + CodeReviewer (quality)
+- Analyst handles discovery (BUILD) and investigation (DEBUG)
+- Post-mortem skill consolidates 4 old skills
+- Anti-performative protocol enforced system-wide
+
+---
+
+## References
+
+- **User Guide:** `USER_GUIDE.md`
+- **Agent Reference:** `docs/NSO-AGENTS.md`
+- **Workflows:** `docs/workflows/{BUILD,DEBUG,REVIEW}.md`
+- **Configuration:** `~/.config/opencode/opencode.json`
+- **Universal Instructions:** `instructions.md`

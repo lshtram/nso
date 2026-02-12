@@ -343,6 +343,12 @@ def create_opencode_structure(project_name: str, project_type: str) -> dict:
         "nso_version": "3.0.0",
     }, indent=2)
 
+    # CODING_STANDARDS.md — copy from NSO template if not already present
+    coding_standards_dest = Path("CODING_STANDARDS.md")
+    coding_standards_template = Path.home() / ".config" / "opencode" / "nso" / "templates" / "CODING_STANDARDS.md"
+    if not coding_standards_dest.exists() and coding_standards_template.exists():
+        memory_files[coding_standards_dest] = coding_standards_template.read_text()
+
     for filepath, content in memory_files.items():
         if filepath.exists():
             skipped.append(str(filepath))

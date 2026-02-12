@@ -1,15 +1,15 @@
 # NSO Agents: Complete Reference
 
 **Single Source of Truth for Agent Configuration**
-**Version:** 1.0.0
-**Date:** 2026-02-07
-**Related Files:** `opencode.json`, `.opencode/config/mcp-agents.json`
+**Version:** 2.0.0
+**Date:** 2026-02-12
+**Related Files:** `~/.config/opencode/opencode.json`
 
 ---
 
 ## Overview
 
-This document defines all NSO agents, their roles, responsibilities, skills, tools, and MCP access. This is the authoritative reference for agent configuration.
+This document defines all 8 NSO agents, their roles, responsibilities, skills, tools, and workflow assignments. This is the authoritative reference for agent configuration.
 
 ---
 
@@ -17,335 +17,318 @@ This document defines all NSO agents, their roles, responsibilities, skills, too
 
 | Agent | Role | Primary Function |
 |-------|------|------------------|
-| **Oracle** | System Architect | Requirements and architecture |
-| **Builder** | Software Engineer | Code implementation |
+| **Oracle** | System Architect | Architecture, orchestration, delegation |
+| **Analyst** | Mastermind | Requirements discovery (BUILD), Investigation (DEBUG) |
+| **Builder** | Software Engineer | Code implementation (TDD) |
 | **Designer** | Frontend/UX Specialist | UI/UX implementation |
-| **Librarian** | Knowledge Manager | Memory and documentation |
-| **Janitor** | QA and Health Monitor | Quality assurance |
-| **Scout** | Researcher | External research |
+| **Janitor** | QA & Health Monitor | Spec compliance + automated validation |
+| **CodeReviewer** | Quality Auditor | Independent code quality review |
+| **Librarian** | Knowledge Manager | Memory, documentation, self-improvement |
+| **Scout** | Researcher | External research, technology evaluation |
 
 ---
 
 ## 1. The Oracle
 
-**Role:** System Architect - Defines requirements and architecture.
+**Role:** System Architect & Orchestrator
+**Subagent Type:** `Oracle`
+**Prompt:** `~/.config/opencode/nso/prompts/Oracle.md`
 
 ### Responsibilities
-- Receives user requests and interprets intent
-- Invokes Router skill to detect workflow type
-- Manages BUILD workflow phases (Discovery, Architecture)
-- Enforces architectural integrity
-- Resolves conflicts between other agents
-- Makes strategic decisions about feature scope
+- Orchestrates all workflows (BUILD, DEBUG, REVIEW)
+- Drafts architecture (TECHSPEC) — does NOT write implementation code
+- Delegates to other agents via `task()` with formal contracts
+- Enforces worktree isolation for BUILD workflow
+- Manages accountability gates and user approval checkpoints
 
 ### Skills
-| Skill | Purpose | When Used |
-|-------|---------|-----------|
-| `rm-intent-clarifier` | Clarify ambiguous intent | At start of any request |
-| `rm-validate-intent` | Verify requirements match intent | Before finalizing REQ-*.md |
-| `rm-multi-perspective-audit` | Security/SRE/UX review | Before finalizing requirements |
-| `architectural-review` | Simplicity, modularity checks | Before finalizing TECHSPEC-*.md |
-| `brainstorming-bias-check` | Detect cognitive bias | During planning |
-| `rm-conflict-resolver` | Detect conflicts with existing code | During architecture |
+| Skill | Purpose |
+|-------|---------|
+| `architectural-review` | Self-critique of architecture decisions |
+| `router` | Detect workflow type from user intent |
+| `skill-creator` | Create new skills for NSO system |
 
-### Native Tools
-- `read` - Read files
-- `write` - Write new files
-- `task` - Delegate to other agents
-- `web_search` - Web search
-
-### MCP Tools
-| MCP | Tools | Purpose |
-|-----|-------|---------|
-| **Memory** | `save_memory`, `search_memory` | Persistent context |
-| **Parallel Search** | `search` | Technical research |
-| **Context7** | `resolve_library_id`, `query_docs` | Library documentation |
+### Role Boundary
+- MAY edit: `docs/*`, `.opencode/context/*`, NSO config files
+- MUST NOT edit: `src/*`, runtime code, tests, app configs
+- Implementation → always delegate to Builder
 
 ### Workflow Assignments
-| Workflow | Phase | Responsibility |
-|----------|-------|----------------|
-| BUILD | Discovery | Requirements gathering, user clarification |
-| BUILD | Architecture | Technical design, tech spec creation |
-| Any | Routing | Invokes Router skill to determine workflow |
-
-### Context Access
-- Full Read/Write to `.opencode/context/01_memory/`
+| Workflow | Phase | Role |
+|----------|-------|------|
+| BUILD | Phase 0 (Worktree) | Setup branch isolation |
+| BUILD | Phase 2 (Architecture) | Draft TECHSPEC |
+| BUILD | Phase 4B→5 (Accountability) | Present results, get approval |
+| DEBUG | Phase 2 (Triage) | Assess scope, determine strategy |
+| REVIEW | Orchestration | Delegate to CodeReviewer |
 
 ---
 
-## 2. The Builder
+## 2. The Analyst
 
-**Role:** Software Engineer - Implements code and tests.
+**Role:** Mastermind — Analytical Agent
+**Subagent Type:** `Analyst`
+**Prompt:** `~/.config/opencode/nso/prompts/Analyst.md`
 
 ### Responsibilities
-- Writes production code following specifications
-- Implements features using TDD cycle (RED → GREEN → REFACTOR)
-- Fixes bugs identified during DEBUG workflow
-- Ensures code passes validation harness
-- Writes and maintains tests
+- **MODE A (BUILD):** Requirements discovery via structured user interaction
+- **MODE B (DEBUG):** Bug investigation via LOG FIRST methodology
 
 ### Skills
-| Skill | Purpose | When Used |
-|-------|---------|-----------|
-| `tdflow-unit-test` | Test-driven development cycle | During implementation |
-| `minimal-diff-generator` | Small, focused code changes | During implementation |
+| Skill | Purpose |
+|-------|---------|
+| `rm-intent-clarifier` | Clarify ambiguous user intent |
+| `rm-validate-intent` | Verify requirements match intent |
+| `rm-multi-perspective-audit` | Security/SRE/UX review of requirements |
+| `bug-investigator` | LOG FIRST debugging, evidence collection |
 
-### Native Tools
-- `read` - Read files
-- `write` - Write new files
-- `edit` - Edit existing files
-- `bash` - Run commands, tests, git operations
-
-### MCP Tools
-| MCP | Tools | Purpose |
-|-----|-------|---------|
-| **Memory** | `save_memory`, `search_memory` | Persistent context |
-| **Tree-sitter** | `search`, `parse_file`, `find_callers` | Semantic code navigation |
-| **Parallel Search** | `search` | Technical research |
-| **Context7** | `resolve_library_id`, `query_docs` | Library documentation |
+### Interaction Protocol
+- One question at a time (200-300 word sections)
+- YAGNI check on each requirement
+- Confidence scoring for root cause analysis (≥80 threshold)
+- Human signal detection for implied context
 
 ### Workflow Assignments
-| Workflow | Phase | Responsibility |
-|----------|-------|----------------|
-| BUILD | Implementation | Feature development, TDD, code |
-| DEBUG | Fix | Bug fixes, regression tests |
-
-### Context Access
-- Read-Only to `.opencode/context/00_meta/`
-- Read access to active feature context
+| Workflow | Phase | Role |
+|----------|-------|------|
+| BUILD | Phase 1 (Discovery) | Requirements gathering |
+| DEBUG | Phase 1 (Investigation) | Evidence gathering, root cause |
 
 ---
 
-## 3. The Designer
+## 3. The Builder
 
-**Role:** Frontend/UX Specialist - Owns visual experience.
+**Role:** Software Engineer — Implementer
+**Subagent Type:** `Builder`
+**Prompt:** `~/.config/opencode/nso/prompts/Builder.md`
+
+### Responsibilities
+- Writes production code following TECHSPEC
+- Implements features using strict TDD (RED → GREEN → REFACTOR)
+- Fixes bugs with regression tests (must fail before fix)
+- Applies verification gate before claiming completion
+
+### Skills
+| Skill | Purpose |
+|-------|---------|
+| `tdd` | Test-driven development enforcement |
+| `minimal-diff-generator` | Small, focused code changes |
+| `verification-gate` | Evidence-based completion claims |
+| `systematic-debugging` | 4-phase debugging methodology |
+
+### Question Gate
+Before starting implementation, Builder MUST verify understanding:
+- Can I restate the requirements in my own words?
+- Are there ambiguous terms I need clarified?
+- Do I know the test strategy?
+
+### Workflow Assignments
+| Workflow | Phase | Role |
+|----------|-------|------|
+| BUILD | Phase 3 (Implementation) | TDD feature development |
+| DEBUG | Phase 3 (Fix) | Regression test + minimal fix |
+
+---
+
+## 4. The Designer
+
+**Role:** Frontend/UX Specialist
+**Subagent Type:** `Designer`
+**Prompt:** `~/.config/opencode/nso/prompts/Designer.md`
 
 ### Responsibilities
 - Implements UI components
 - Ensures accessibility compliance
-- Manages design tokens and assets
 - Creates visual prototypes and mockups
+- Manages design tokens and assets
 
 ### Skills
-| Skill | Purpose | When Used |
-|-------|---------|-----------|
-| `ui-component-gen` | Create UI components | During frontend work |
-| `accessibility-audit` | WCAG compliance | During review |
-
-### Native Tools
-- `chrome-devtools` - Browser DevTools
-- `edit` - Edit existing files
-- `read` - Read files
-- `write` - Write new files
-
-### MCP Tools
-| MCP | Tools | Purpose |
-|-----|-------|---------|
-| **Memory** | `save_memory`, `search_memory` | Persistent context |
-| **Playwright** | `navigate`, `screenshot`, `click` | Browser automation, testing |
-| **Chrome DevTools** | `performance_start_trace`, `performance_stop_trace` | Debugging, performance analysis |
-| **Parallel Search** | `search` | Technical research |
+| Skill | Purpose |
+|-------|---------|
+| `ui-component-gen` | Create UI components |
+| `accessibility-audit` | WCAG compliance |
 
 ### Workflow Assignments
-| Workflow | Phase | Responsibility |
-|----------|-------|----------------|
-| BUILD | Implementation | Frontend components, UI/UX |
-| REVIEW | Analysis | UX quality review |
-
-### Context Access
-- Read-Only to `.opencode/context/00_meta/`
-- Read access to design files
-
----
-
-## 4. The Librarian
-
-**Role:** Knowledge Manager - Maintains documentation and memory.
-
-### Responsibilities
-- Maintains memory files (active_context.md, patterns.md, progress.md)
-- Performs workflow closure (memory update, git commit)
-- Indexes codebase and documentation
-- Retrieves relevant context for other agents
-- Ensures documentation matches code reality
-
-### Skills
-| Skill | Purpose | When Used |
-|-------|---------|-----------|
-| `context-manager` | Memory file organization | During updates |
-| `doc-updater` | Documentation consistency | After implementation |
-
-### Native Tools
-- `grep` - Search file contents
-- `glob` - Find files by pattern
-- `read` - Read files
-- `write` - Write new files
-
-### MCP Tools
-| MCP | Tools | Purpose |
-|-----|-------|---------|
-| **Memory** | `save_memory`, `search_memory` | Persistent context |
-| **Parallel Search** | `search` | Research |
-
-### Workflow Assignments
-| Workflow | Phase | Responsibility |
-|----------|-------|----------------|
-| BUILD | Closure | Memory update, git operations |
-| DEBUG | Closure | Memory update, pattern documentation |
-| REVIEW | Closure | Memory update, pattern documentation |
-
-### Context Access
-- Full Read/Write to `.opencode/context/01_memory/`
-- Read access to all docs
+| Workflow | Phase | Role |
+|----------|-------|------|
+| BUILD | Phase 1 (Discovery) | UI mockups when UI involved |
+| BUILD | Phase 3 (Implementation) | Frontend components |
 
 ---
 
 ## 5. The Janitor
 
-**Role:** QA and Health Monitor - Maintains code quality.
+**Role:** QA & Health Monitor — Automated Validation
+**Subagent Type:** `Janitor`
+**Prompt:** `~/.config/opencode/nso/prompts/Janitor.md`
 
 ### Responsibilities
-- Investigates bugs using LOG FIRST approach
-- Conducts code reviews with confidence scoring
-- Runs validation harness and ensures quality gates pass
-- Identifies patterns in recurring failures
-- Updates patterns.md with discovered issues
+- **Stage A:** Spec compliance (binary PASS/FAIL against TECHSPEC)
+- **Stage B:** Automated harness (typecheck, lint, tests)
+- TDD compliance verification
+- Silent failure detection
+- Requirements traceability
 
 ### Skills
-| Skill | Purpose | When Used |
-|-------|---------|-----------|
-| `linter-fixer` | Fix linting issues | During code review |
-| `silent-failure-hunter` | Detect empty catches, log-only handlers | During code review |
-| `traceability-linker` | Ensure requirements map to implementation | During validation |
+| Skill | Purpose |
+|-------|---------|
+| `silent-failure-hunter` | Detect empty catches, log-only handlers |
+| `traceability-linker` | Requirements → implementation mapping |
+| `integration-verifier` | E2E scenario verification |
+| `verification-gate` | Evidence-based validation |
 
-### Native Tools
-- `read` - Read files
-- `write` - Write new files
-- `edit` - Edit existing files
-- `bash` - Run commands, tests
-
-### MCP Tools
-| MCP | Tools | Purpose |
-|-----|-------|---------|
-| **Memory** | `save_memory`, `search_memory` | Persistent context |
-| **Tree-sitter** | `search`, `parse_file` | Code analysis |
-| **Chrome DevTools** | `performance_start_trace`, `performance_stop_trace`, `heap_snapshot` | Debugging, performance |
-| **Parallel Search** | `search` | Technical research |
+### Two-Stage Process
+1. **Stage A (Spec Compliance):** Every TECHSPEC requirement → implemented code. FAIL = STOP immediately.
+2. **Stage B (Harness):** Typecheck → Lint → Tests → Silent failure scan → Traceability check.
 
 ### Workflow Assignments
-| Workflow | Phase | Responsibility |
-|----------|-------|----------------|
-| DEBUG | Investigation | Evidence gathering, root cause analysis |
-| REVIEW | Scope | Define review boundaries and focus areas |
-| REVIEW | Analysis | Code analysis, issue identification |
-| REVIEW | Report | Generate review report with confidence scores |
-| BUILD | Validation | Runs validation harness |
-
-### Context Access
-- Read-Only to `.opencode/context/00_meta/`
-- Read access to all code files
+| Workflow | Phase | Role |
+|----------|-------|------|
+| BUILD | Phase 4A (Validation) | Spec compliance + harness |
+| DEBUG | Phase 4 (Validation) | Regression + full harness |
 
 ---
 
-## 6. The Scout
+## 6. The CodeReviewer
 
-**Role:** Researcher - External knowledge acquisition.
+**Role:** Quality Auditor — Independent Code Review
+**Subagent Type:** `CodeReviewer`
+**Prompt:** `~/.config/opencode/nso/prompts/CodeReviewer.md`
 
 ### Responsibilities
-- Searches for new libraries, patterns, and tools
-- Evaluates "Buy vs Build" decisions
-- Updates research findings with industry best practices
-- Monitors updates to allowed dependencies
-- Performs external research for planning
+- Independent code quality review (READ-ONLY — does not fix code)
+- Confidence scoring (≥80 threshold to report issues)
+- Severity classification (CRITICAL / IMPORTANT / MINOR)
+- Verdict determination (BLOCK / CHANGES_REQUESTED / APPROVE_WITH_NOTES / APPROVE)
+- Mandatory positive findings
 
 ### Skills
-| Skill | Purpose | When Used |
-|-------|---------|-----------|
-| `tech-radar-scan` | Evaluate emerging technologies | Before planning |
-| `rfc-generator` | Document new patterns | When proposing changes |
+| Skill | Purpose |
+|-------|---------|
+| `code-reviewer` | Confidence scoring, severity classification |
 
-### Native Tools
-- `web_search` - Web search
-- `read` - Read files
-- `write` - Write new files
-
-### MCP Tools
-| MCP | Tools | Purpose |
-|-----|-------|---------|
-| **Memory** | `save_memory`, `search_memory` | Persistent context |
-| **Playwright** | `navigate` | Browser automation |
-| **Parallel Search** | `search` | Deep technical research |
-| **Context7** | `resolve_library_id`, `query_docs` | Library documentation |
+### Anti-Performative Agreement
+- No rubber-stamping
+- Every finding must have confidence score
+- Technical acknowledgment only — no gratitude expressions
 
 ### Workflow Assignments
-| Workflow | Phase | Responsibility |
-|----------|-------|----------------|
-| PLAN | Research | External technology research |
-| Any | Discovery | Technology evaluation for requirements |
+| Workflow | Phase | Role |
+|----------|-------|------|
+| BUILD | Phase 4B (Code Review) | Independent quality review |
+| REVIEW | Primary Agent | Full review workflow (Scope → Analysis → Report) |
 
-### Context Access
-- Read-Only to `.opencode/context/00_meta/`
-- Write to `.opencode/context/03_proposals/` (RFCs)
+---
+
+## 7. The Librarian
+
+**Role:** Knowledge Manager — Memory & Self-Improvement
+**Subagent Type:** `Librarian`
+**Prompt:** `~/.config/opencode/nso/prompts/Librarian.md`
+
+### Responsibilities
+- Maintains memory files (`active_context.md`, `patterns.md`, `progress.md`)
+- Runs post-mortem analysis at workflow closure
+- Proposes and implements approved NSO improvements
+- Archives sessions
+- Ensures documentation hygiene
+
+### Skills
+| Skill | Purpose |
+|-------|---------|
+| `memory-update` | Refresh memory files |
+| `archive-conversation` | Session archival |
+| `post-mortem` | Session analysis, pattern detection, improvement proposals |
+
+### NSO-First Learning Protocol
+- If a pattern is universal → propose NSO global improvement
+- If project-specific → add to project `patterns.md`
+- Always get user approval before implementing improvements
+
+### Workflow Assignments
+| Workflow | Phase | Role |
+|----------|-------|------|
+| BUILD | Phase 5 (Closure) | Post-mortem, memory update, git |
+| DEBUG | Phase 5 (Closure) | Gotcha documentation, memory update |
+| REVIEW | Phase 4 (Closure) | Pattern documentation, memory update |
+
+---
+
+## 8. The Scout
+
+**Role:** Researcher — External Knowledge Acquisition
+**Subagent Type:** `Scout`
+**Prompt:** `~/.config/opencode/nso/prompts/Scout.md`
+
+### Responsibilities
+- Research new libraries, patterns, and tools
+- Evaluate "Buy vs Build" decisions
+- Monitor dependency updates and security advisories
+- Provide technology recommendations with trade-offs
+
+### Skills
+| Skill | Purpose |
+|-------|---------|
+| `tech-radar-scan` | Evaluate emerging technologies |
+
+### Workflow Assignments
+| Workflow | Phase | Role |
+|----------|-------|------|
+| Any | Research | Technology evaluation on demand |
+
+---
+
+## Skills by Agent (Canonical)
+
+| Agent | Skills |
+|-------|--------|
+| **Oracle** | `architectural-review`, `router`, `skill-creator` |
+| **Analyst** | `rm-intent-clarifier`, `rm-validate-intent`, `rm-multi-perspective-audit`, `bug-investigator` |
+| **Builder** | `tdd`, `minimal-diff-generator`, `verification-gate`, `systematic-debugging` |
+| **Designer** | `ui-component-gen`, `accessibility-audit` |
+| **Janitor** | `silent-failure-hunter`, `traceability-linker`, `integration-verifier`, `verification-gate` |
+| **CodeReviewer** | `code-reviewer` |
+| **Librarian** | `memory-update`, `archive-conversation`, `post-mortem` |
+| **Scout** | `tech-radar-scan` |
+
+---
+
+## Workflow Assignments (Canonical)
+
+### BUILD Workflow
+```
+Analyst → Oracle → Builder → Janitor → CodeReviewer → Oracle → Librarian
+```
+
+### DEBUG Workflow
+```
+Analyst → Oracle → Builder → Janitor → Oracle → Librarian
+```
+
+### REVIEW Workflow
+```
+CodeReviewer → Oracle → Librarian
+```
 
 ---
 
 ## MCP Servers Reference
 
 ### Local MCPs
-
 | MCP | Package | Purpose |
 |-----|---------|---------|
-| **Memory** | `@modelcontextprotocol/server-memory` | Persistent memory |
+| **Memory** | `@modelcontextprotocol/server-memory` | Persistent memory (knowledge graph) |
 | **Playwright** | `@playwright/mcp` | Browser automation |
 | **Chrome DevTools** | `chrome-devtools-mcp@latest` | Debugging, performance |
 | **Filesystem** | `@modelcontextprotocol/server-filesystem` | File access |
 
 ### Remote MCPs
-
 | MCP | URL | Purpose |
 |-----|-----|---------|
+| **gh_grep** | `https://mcp.grep.app` | GitHub code search |
 | **Parallel Search** | `https://search-mcp.parallel.ai/mcp` | Technical search |
-| **Tavily** | `https://mcp.tavily.com/mcp` | Web search |
+| **Tavily** | `https://mcp.tavily.com/mcp` | Web search + extraction |
 | **Context7** | `https://mcp.context7.com/mcp` | Library documentation |
-
----
-
-## MCP Access by Agent
-
-| Agent | Local MCPs | Remote MCPs |
-|-------|------------|-------------|
-| **Oracle** | Memory | Parallel, Context7 |
-| **Builder** | Memory, Tree-sitter | Parallel, Context7 |
-| **Designer** | Memory, Playwright, Chrome DevTools | Parallel |
-| **Librarian** | Memory | Parallel |
-| **Janitor** | Memory, Tree-sitter, Chrome DevTools | Parallel |
-| **Scout** | Memory, Playwright | Parallel, Context7 |
-
----
-
-## Native Tools by Agent
-
-| Agent | Tools |
-|-------|-------|
-| **Oracle** | read, write, task, web_search |
-| **Builder** | read, write, edit, bash |
-| **Designer** | chrome-devtools, edit, read, write |
-| **Librarian** | grep, glob, read, write |
-| **Janitor** | read, write, edit, bash |
-| **Scout** | web_search, read, write |
-
----
-
-## Skills by Agent
-
-| Agent | Skills |
-|-------|--------|
-| **Oracle** | rm-intent-clarifier, rm-validate-intent, rm-multi-perspective-audit, architectural-review, brainstorming-bias-check, rm-conflict-resolver |
-| **Builder** | tdflow-unit-test, minimal-diff-generator |
-| **Designer** | ui-component-gen, accessibility-audit |
-| **Librarian** | context-manager, doc-updater |
-| **Janitor** | linter-fixer, silent-failure-hunter, traceability-linker |
-| **Scout** | tech-radar-scan, rfc-generator |
 
 ---
 
@@ -353,25 +336,24 @@ This document defines all NSO agents, their roles, responsibilities, skills, too
 
 | File | Purpose |
 |------|---------|
-| `opencode.json` | Runtime configuration (authoritative) |
-| `.opencode/config/mcp-agents.json` | Per-agent MCP mapping |
-| `docs/NSO-AGENTS.md` | This document (SSOT) |
-| `.opencode/AGENTS.md` | Agent roles and responsibilities |
+| `~/.config/opencode/opencode.json` | Runtime configuration (authoritative) |
+| `~/.config/opencode/nso/docs/NSO-AGENTS.md` | This document (SSOT) |
+| `~/.config/opencode/nso/prompts/*.md` | Agent prompts |
+| `~/.config/opencode/nso/skills/*/SKILL.md` | Skill definitions |
+| `~/.config/opencode/nso/instructions.md` | Universal instructions |
 
 ---
 
 ## Updating This Document
 
 When adding or modifying agents:
-
-1. Update `opencode.json` with new configuration
-2. Update `.opencode/config/mcp-agents.json` with MCP mapping
-3. Update this document (NSO-AGENTS.md) with changes
-4. Update `.opencode/AGENTS.md` if roles change
-5. Run `.opencode/scripts/test_mcps.py` to verify configuration
+1. Update `~/.config/opencode/opencode.json` with new agent config
+2. Create/update prompt at `~/.config/opencode/nso/prompts/[Agent].md`
+3. Update this document (NSO-AGENTS.md)
+4. Update `~/.config/opencode/nso/instructions.md` if workflows change
 
 ---
 
-**Document Status:** ✅ Complete  
-**Last Updated:** 2026-02-07  
-**Next Review:** When agent configuration changes
+**Document Status:** ✅ Complete
+**Last Updated:** 2026-02-12
+**Version:** 2.0.0 (Major overhaul: added Analyst, CodeReviewer, restructured skills)

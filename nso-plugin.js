@@ -130,7 +130,9 @@ export default async function plugin(context = {}) {
           tool: input.tool,
           args: output.args,
           sessionID: input.sessionID,
-          callID: input.callID
+          callID: input.callID,
+          agent: input.agent,
+          mode: input.mode
         });
 
         const start = performance.now();
@@ -151,7 +153,14 @@ export default async function plugin(context = {}) {
         }
       } catch (e) {
         // Re-throw blocking errors (from validate_intent)
-        if (e.message && e.message.includes("SECURITY ALERT")) {
+        if (
+          e.message &&
+          (
+            e.message.includes("SECURITY ALERT") ||
+            e.message.includes("NSO ORACLE GUARD") ||
+            e.message.includes("NSO POLICY BLOCK")
+          )
+        ) {
           throw e;
         }
         // Log but don't block on plugin infrastructure errors

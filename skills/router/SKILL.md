@@ -49,7 +49,7 @@ Record the routing decision for traceability.
 # Usage
 ```bash
 # Via command line
-python3 .opencode/skills/router/scripts/router_logic.py "build a new feature"
+python3 ~/.config/opencode/nso/scripts/router_logic.py "build a new feature"
 
 # Via OpenCode
 /router "debug the login issue"

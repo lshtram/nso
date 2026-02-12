@@ -2,216 +2,170 @@
 
 **Purpose:** Review code for quality, security, and correctness with confidence scoring.
 
-**Trigger:** Router detects REVIEW intent or user invokes `/router --workflow=review`.
+**Trigger:** User requests a code review, or Oracle detects REVIEW intent.
 
 ---
 
 ## Agent Chain
 
 ```
-Janitor (Scope, Analysis, Report, using Code-Reviewer skill)
+CodeReviewer (Scope → Analysis → Report) → Oracle (Summary) → Librarian (Closure)
 ```
 
 | Phase | Agent | Responsibility |
 |-------|-------|----------------|
-| Scope | Janitor | Define review boundaries |
-| Analysis | Janitor | Code analysis, issue identification |
-| Report | Janitor | Generate review report |
-| Closure | Librarian | Memory persistence |
+| 1. Scope | CodeReviewer | Define review boundaries |
+| 2. Analysis | CodeReviewer | Code analysis, issue identification |
+| 3. Report | CodeReviewer | Generate review report with verdict |
+| 4. Closure | Librarian | Memory persistence |
 
-**Note:** Code-Reviewer is a **skill** used by the Janitor, not a separate agent.
+**Note:** CodeReviewer is the PRIMARY agent for REVIEW workflow. It is a dedicated agent (not a skill on Janitor).
 
 ---
 
 ## Key Principles
 
 - **Confidence Scoring:** Only report issues with ≥80 confidence
-- **Two-Stage Review:** Spec compliance → Quality
+- **Two-Stage Review:** Spec compliance → Code quality
 - **CRITICAL Blocking:** Security/correctness issues block shipping
-- **Git Context:** Recent changes and blame inform review
+- **Anti-Performative Agreement:** Technical acknowledgment only, no rubber-stamping
+- **Mandatory Positive Findings:** Every review MUST include what was done well
 
 ---
 
-## Phase 1: Scope (Janitor)
+## Phase 1: Scope (CodeReviewer)
 
-**Agent:** The Janitor
+**Agent:** CodeReviewer (`task(subagent_type="CodeReviewer")`)
 
 **Skills Used:**
-- `code-reviewer` - Scope definition
+- `code-reviewer` — Scope definition, focus area identification
 
 **Inputs:**
-- User request
-- Code to review (files or PR)
-- Git context (recent changes, blame)
+- User request (files, PR, or general scope)
+- Git context (recent changes, blame, diff)
+- TECHSPEC if available (for spec compliance)
+
+**Process:**
+1. Identify files to review (from user request or git diff)
+2. Determine focus areas (security, performance, maintainability, etc.)
+3. Load TECHSPEC if referenced for spec compliance stage
+4. Define blocking threshold
 
 **Outputs:**
-- Review scope definition (files, focus areas)
-
-**Contract:**
-```yaml
-router_contract:
-  status: COMPLETE
-  workflow: REVIEW
-  phase: SCOPE
-  agent: Janitor
-  files_reviewed:
-    - "src/auth.py"
-    - "src/login.py"
-  focus_areas:
-    - "security"
-    - "performance"
-  blocking_threshold: "CRITICAL" | "ALL"
-  next_phase: ANALYSIS
-```
-
-**Gate:** Scope defined (files + focus areas) before proceeding to Analysis.
+- Review scope (files + focus areas)
 
 ---
 
-## Phase 2: Analysis (Janitor)
-
-**Agent:** The Janitor
+## Phase 2: Analysis (CodeReviewer)
 
 **Skills Used:**
-- `code-reviewer` - Confidence scoring, issue identification
+- `code-reviewer` — Confidence scoring, issue identification
 
 **Inputs:**
-- Code files
-- Review scope
-- Git context (recent changes, blame)
+- Code files within scope
+- Git context (blame, history)
+- TECHSPEC (if available)
 
-**Outputs:**
-- Issues found (with confidence scores)
-- CRITICAL issues identified
+**Process:**
+
+### Stage 1: Spec Compliance (if TECHSPEC available)
+- Every TECHSPEC requirement maps to implementation
+- Identify any unmet requirements
+- Flag any deviations from architecture
+
+### Stage 2: Code Quality
+- Security review (injection, auth bypass, data exposure)
+- Correctness review (logic errors, edge cases, error handling)
+- Performance review (N+1 queries, unnecessary allocations, blocking I/O)
+- Maintainability review (naming, complexity, coupling)
 
 **Confidence Scoring:**
 | Evidence Type | Confidence Points |
 |--------------|-------------------|
-| Clear error/exception | 30 |
-| Test failure | 25 |
+| Clear error/exception path | 30 |
+| Test failure reproduction | 25 |
 | Static analysis finding | 20 |
-| Code inspection | 15 |
+| Code inspection (provable) | 15 |
 | Heuristic/pattern match | 10 |
 
-**Reporting threshold:** ≥80 points
-
-**Contract:**
-```yaml
-router_contract:
-  status: COMPLETE
-  workflow: REVIEW
-  phase: ANALYSIS
-  agent: Janitor
-  files_reviewed:
-    - "src/auth.py"
-    - "src/login.py"
-  critical_issues: 1
-  important_issues: 3
-  minor_issues: 5
-  confidence_threshold: 80
-  blocking: true | false
-  next_phase: REPORT
-```
-
-**Gate:** Analysis complete before proceeding to Report.
+**Reporting Threshold:** ≥80 points. Issues below threshold are NOT reported.
 
 ---
 
-## Phase 3: Report (Janitor)
-
-**Agent:** The Janitor
-
-**Skills Used:**
-- `code-reviewer` - Report generation
+## Phase 3: Report (CodeReviewer)
 
 **Inputs:**
-- Analysis results
-
-**Outputs:**
-- Review report with verdict and findings
+- Analysis results from Stage 1 and Stage 2
 
 **Verdict Logic:**
 ```
 IF critical_issues > 0:
     verdict = BLOCK
-    blocking = true
-ELIF important_issues > 0 OR minor_issues > 0:
+ELIF important_issues > 0:
     verdict = CHANGES_REQUESTED
-    blocking = false
+ELIF minor_issues > 0:
+    verdict = APPROVE_WITH_NOTES
 ELSE:
     verdict = APPROVE
-    blocking = false
 ```
 
-**Contract:**
+**Output Format (`result.md`):**
 ```yaml
-router_contract:
-  status: COMPLETE
-  workflow: REVIEW
-  phase: REPORT
-  agent: Janitor
-  verdict: APPROVE | CHANGES_REQUESTED | BLOCK
-  issues_reported: 9
-  critical_blocking: true | false
-  summary: "Code review for authentication module"
+review_result:
+  verdict: APPROVE | APPROVE_WITH_NOTES | CHANGES_REQUESTED | BLOCK
+  files_reviewed: ["src/auth.ts", "src/login.ts"]
+  spec_compliance: PASS | FAIL | N/A
   critical_issues:
-    - file: "src/auth.py"
+    - file: "src/auth.ts"
       line: 42
+      severity: CRITICAL
       type: "security"
-      message: "SQL injection vulnerability"
+      message: "SQL injection vulnerability via unparameterized query"
       confidence: 95
       recommendation: "Use parameterized queries"
   important_issues:
-    - file: "src/session.py"
+    - file: "src/session.ts"
       line: 15
+      severity: IMPORTANT
       type: "performance"
-      message: "N+1 query pattern"
+      message: "N+1 query pattern in user loading"
       confidence: 85
-      recommendation: "Use eager loading"
+      recommendation: "Use eager loading or batch query"
   minor_issues:
-    - file: "src/auth.py"
+    - file: "src/auth.ts"
       line: 100
-      type: "style"
-      message: "Variable naming could be improved"
-      confidence: 70
+      severity: MINOR
+      type: "maintainability"
+      message: "Variable name 'x' is unclear"
+      confidence: 82
+      recommendation: "Rename to 'authToken'"
   positive_findings:
     - "Good test coverage (>80%)"
-    - "Clean separation of concerns"
-  next_action: none
+    - "Clean separation of concerns in auth module"
+    - "Proper error handling in session management"
 ```
-
-**Gate:** Report generated with verdict before completion.
 
 ---
 
 ## Phase 4: Closure (Librarian)
 
-**Agent:** The Librarian
+**Agent:** Librarian (`task(subagent_type="Librarian")`)
 
 **Skills Used:**
-- `memory-update` - Refresh memory files
+- `memory-update` — Refresh memory files
+- `post-mortem` — Pattern detection from review findings
 
 **Inputs:**
-- Completed review
-- Issues found
-- Patterns identified
+- Completed review report
+- Issues found and patterns identified
+
+**Process:**
+1. Update `patterns.md` with any new patterns discovered
+2. Update `progress.md` with review record
+3. If recurring issues found, propose NSO improvement
 
 **Outputs:**
-- Memory update: patterns.md (new patterns)
-- Memory update: progress.md (review completed)
-
-**Contract:**
-```yaml
-router_contract:
-  status: COMPLETE
-  workflow: REVIEW
-  phase: CLOSURE
-  agent: Librarian
-  memory_updated: true
-  patterns_updated: true
-  previous_phase: REPORT
-  next_action: none
-```
+- Updated memory files
 
 **No gate:** Closure is the final phase.
 
@@ -221,56 +175,58 @@ router_contract:
 
 | From → To | Gate | Criteria |
 |-----------|------|----------|
-| Scope → Analysis | Scope Gate | Scope defined (files + focus areas) |
-| Analysis → Report | Analysis Gate | Analysis complete |
-| Report → Closure | Report Gate | Report generated with verdict |
-
----
-
-## Task Delegation Pattern
-
-```python
-# Oracle delegates to Janitor (full REVIEW workflow)
-task(
-    agent="Janitor",
-    prompt="Review the authentication module code. Focus on security and performance. Generate a review report with confidence scoring."
-)
-
-# Oracle delegates to Librarian (Closure)
-task(
-    agent="Librarian",
-    prompt="Update memory after code review. Add any new patterns to patterns.md and add review to progress.md."
-)
-```
+| Scope → Analysis | Scope Gate | Files and focus areas defined |
+| Analysis → Report | Analysis Gate | All files analyzed, confidence scores calculated |
+| Report → Closure | Verdict Gate | Verdict determined, report written |
 
 ---
 
 ## Issue Categories
 
 ### CRITICAL (Blocks Shipping)
-- Security vulnerabilities (SQL injection, XSS, etc.)
-- Correctness bugs (data corruption, crashes)
+- Security vulnerabilities (injection, XSS, auth bypass)
+- Correctness bugs (data corruption, crashes, data loss)
 - Compliance violations
 - Authentication/authorization bypasses
 
 ### IMPORTANT (Should Fix)
-- Performance concerns (N+1 queries, inefficient algorithms)
-- Maintainability issues (complex code, poor naming)
-- Resource leaks (connections, file handles)
-- Error handling gaps
+- Performance concerns (N+1 queries, blocking I/O, memory leaks)
+- Maintainability issues (high complexity, tight coupling)
+- Resource leaks (connections, file handles, event listeners)
+- Error handling gaps (empty catches, swallowed errors)
 
 ### MINOR (Nice to Fix)
-- Code style violations
-- Minor documentation issues
-- Cosmetic improvements
+- Code style inconsistencies
+- Minor documentation gaps
 - Deprecated API usage
+- Naming improvements
+
+---
+
+## Task Delegation Pattern
+
+```python
+# Oracle → CodeReviewer (full REVIEW workflow)
+task(
+    subagent_type="CodeReviewer",
+    prompt="Read review_contract.md at .opencode/context/active_tasks/[review]/. "
+           "Review the specified code. Apply two-stage review (spec compliance → quality). "
+           "Use confidence scoring. Write result.md with verdict and findings."
+)
+
+# Oracle → Librarian (Closure)
+task(
+    subagent_type="Librarian",
+    prompt="Update memory after code review. Add patterns to patterns.md. "
+           "Update progress.md with review record. Write result.md."
+)
+```
 
 ---
 
 ## References
 
-- Requirements: `docs/requirements/REQ-NSO-BUILD-Workflow.md`
-- Tech Spec: `docs/architecture/TECHSPEC-NSO-WorkflowSystem.md`
-- Code-Reviewer Skill: `.opencode/skills/code-reviewer/SKILL.md`
-- Router: `.opencode/skills/router/scripts/router_logic.py`
-- Agents: `.opencode/AGENTS.md`
+- CodeReviewer Prompt: `~/.config/opencode/nso/prompts/CodeReviewer.md`
+- Code Reviewer Skill: `~/.config/opencode/nso/skills/code-reviewer/SKILL.md`
+- Agent Reference: `~/.config/opencode/nso/docs/NSO-AGENTS.md`
+- Configuration: `~/.config/opencode/opencode.json`
