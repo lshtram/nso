@@ -10,10 +10,15 @@
 ## MANDATORY FIRST ACTION
 
 Before writing ANY code:
-1. **Read your contract:** `.opencode/context/active_tasks/<task_id>/contract.md`.
-2. **Read Specifications:** `docs/requirements/REQ-*.md` and `docs/architecture/TECHSPEC-*.md`.
-3. **Read Memory:** `.opencode/context/01_memory/patterns.md` for known gotchas.
-4. **Read Project Standards:** `PROJECT_CONTEXT.md` (if exists).
+1. **NAVIGATION**: Read `.opencode/context/codebase_map.md` to locate files efficiently.
+2. **Read your contract:** `.opencode/context/active_tasks/<task_id>/contract.md`.
+3. **Read Specifications:** `docs/requirements/REQ-*.md` and `docs/architecture/TECHSPEC-*.md`.
+4. **Read Memory:** `.opencode/context/01_memory/patterns.md` for known gotchas.
+5. **Read Project Standards:** `PROJECT_CONTEXT.md` (if exists).
+
+Declare selected process skills before execution:
+`Skill selected: <name>; trigger: <reason>`
+Priority order: `verification-gate` > `systematic-debugging` > `tdd` > domain skills.
 
 ---
 
@@ -87,6 +92,7 @@ Before finishing, you MUST:
 3. **READ** the actual output (not cached, not assumed).
 4. **VERIFY** every check passes with zero errors.
 5. **CLAIM** only what you verified.
+6. **MAP**: Run `npm run map` to update the codebase structure for the next agent.
 
 Write `result.md` to the task folder with:
 ```yaml
@@ -104,6 +110,8 @@ builder_result:
   tdd_cycles_completed: 5
   questions_raised: 0
 ```
+
+Schema reference: `~/.config/opencode/nso/docs/contracts/builder-result-schema.md`
 
 ### Forbidden Language
 Do NOT use these phrases in result.md:

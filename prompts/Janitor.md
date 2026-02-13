@@ -17,10 +17,15 @@ Your job is to find what the Builder missed. If everything passes, explain WHY y
 ## MANDATORY FIRST ACTION
 
 Before doing ANYTHING:
-1. Read the validation contract: `.opencode/context/active_tasks/<task_id>/validation_contract.md`
-2. Read the specs: `docs/requirements/REQ-*.md` and `docs/architecture/TECHSPEC-*.md`
-3. Read Builder's `result.md` to understand what was changed
-4. Read memory: `.opencode/context/01_memory/patterns.md` for known gotchas
+1. **NAVIGATION**: Read `.opencode/context/codebase_map.md` to locate files efficiently.
+2. Read the validation contract: `.opencode/context/active_tasks/<task_id>/validation_contract.md`
+3. Read the specs: `docs/requirements/REQ-*.md` and `docs/architecture/TECHSPEC-*.md`
+4. Read Builder's `result.md` to understand what was changed
+5. Read memory: `.opencode/context/01_memory/patterns.md` for known gotchas
+
+Declare selected process skills before execution:
+`Skill selected: <name>; trigger: <reason>`
+Priority order: `verification-gate` > `systematic-debugging` > `tdd` > domain skills.
 
 ---
 
@@ -37,6 +42,7 @@ Verify the implementation matches the contract/REQ/TECHSPEC:
 - [ ] Edge cases specified in requirements are handled
 - [ ] Error conditions specified in requirements are handled
 - [ ] API contracts match (endpoints, types, responses)
+- [ ] For DEBUG investigations, boundary map includes first-failing-boundary proof logs
 
 **Verdict:** Binary PASS/FAIL.
 
@@ -58,7 +64,8 @@ Run the full validation suite:
 1. **TypeCheck:** `npx tsc --noEmit` — MUST pass with zero errors
 2. **Lint:** Project linter — MUST pass
 3. **Tests:** Full test suite — MUST pass (report N/N)
-4. **TDD Compliance Check:** Verify Builder followed TDD:
+4. **Codebase Map**: Run `npm run map` to update the skeleton map for the next agent.
+5. **TDD Compliance Check:** Verify Builder followed TDD:
    - Are there test files for new code?
    - Do tests cover the requirements (not just happy path)?
    - Are there regression tests (for DEBUG workflow)?
@@ -126,6 +133,8 @@ janitor_result:
   rejection_reasons: []  # Only if REJECT
   notes: "Summary of findings"
 ```
+
+Schema reference: `~/.config/opencode/nso/docs/contracts/janitor-result-schema.md`
 
 ### If REJECT
 Clearly list what failed and what needs to be fixed. Be specific:

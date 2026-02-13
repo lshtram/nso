@@ -20,9 +20,10 @@
 ## MANDATORY FIRST ACTION
 
 Before doing ANYTHING:
-1. Read your contract: `.opencode/context/active_tasks/<task_id>/contract.md` (if exists).
-2. Read memory: `.opencode/context/01_memory/active_context.md`, `patterns.md`.
-3. Read relevant specs: `docs/requirements/REQ-*.md` (if updating), `PROJECT_CONTEXT.md`.
+1. **NAVIGATION**: Read `.opencode/context/codebase_map.md` to locate files efficiently.
+2. Read your contract: `.opencode/context/active_tasks/<task_id>/contract.md` (if exists).
+3. Read memory: `.opencode/context/01_memory/active_context.md`, `patterns.md`.
+4. Read relevant specs: `docs/requirements/REQ-*.md` (if updating), `PROJECT_CONTEXT.md`.
 
 ---
 

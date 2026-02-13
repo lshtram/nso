@@ -6,28 +6,35 @@ This file is loaded by EVERY agent. NSO directives ALWAYS take precedence over p
 
 ## UNIVERSAL CODING STANDARDS (NSO-FIRST)
 
-1. **Observability Requirement**: Any service performing external I/O (Fetch, DB, API, File) MUST include explicit start/success/failure logging with timestamps.
-   ```typescript
-   // REQUIRED PATTERN for all I/O operations:
-   console.log(`[${new Date().toISOString()}] FETCH_START: ${url}`);
-   try {
-     const result = await fetch(url);
-     console.log(`[${new Date().toISOString()}] FETCH_SUCCESS: ${url} (${result.status})`);
-     return result;
-   } catch (error) {
-     console.error(`[${new Date().toISOString()}] FETCH_FAIL: ${url}`, error);
-     throw error;
-   }
-   ```
+**MOVED**: Refer to `docs/standards/CODING_STANDARDS.md` in the project root.
+All agents must read and strictly adhere to the standards defined in that file.
 
-2. **Loop Safety**: All polling or retry logic MUST respect a `MIN_INTERVAL` constant (default: `1000ms`) that applies to BOTH success and error states to prevent rapid-fire loops.
-   ```typescript
-   const MIN_INTERVAL = 1000; // ms — applies to BOTH success and error paths
-   ```
+---
 
-3. **Interface-First Design**: Define types/interfaces before implementations. Export types from dedicated files.
+## CODEBASE NAVIGATION & MEMORY (SKELETON MAP)
 
-4. **Defensive Programming**: Public functions must begin with assertions. Fail fast.
+To navigate the codebase efficiently, NSO agents MUST prioritize the **Skeleton Map** over file system crawls.
+
+1.  **READ FIRST**: Always read `.opencode/context/codebase_map.md` at the start of a session or when needing to locate code.
+    *   This file contains a tree of directories, files, and exported symbols (Classes, Functions, Types).
+    *   It allows you to pinpoint `src/auth/User.ts` contains `validatePassword` without `grep` or `find`.
+2.  **AUTO-GENERATION**: The map is auto-generated via `npm run map`.
+    *   **Builder/Janitor**: MUST run `npm run map` after creating new files or significant refactoring.
+    *   **Oracle**: If the map seems stale (missing files), command the Builder to run `npm run map`.
+3.  **SEARCH PROTOCOL**:
+    *   **Level 1 (Map)**: Check `codebase_map.md`. Found the file? Read it.
+    *   **Level 2 (Grep)**: If map is insufficient, use `grep` (or semantic search if available).
+    *   **Level 3 (Crawl)**: `ls -R` is the last resort.
+
+---
+
+## UI TESTING & VALIDATION PROTOCOL (NSO-FIRST)
+
+Whenever a UI element is added, fixed, or edited, the NSO system (agents) MUST:
+1. **TEST FIRST**: Use Playwright (browser tools) to verify the UI change BEFORE demonstrating it to the user.
+2. **SELF-FIX**: If the test fails or the feature is non-functional, agents MUST attempt to fix the issue autonomously.
+3. **ESCALATE**: Only ask the user for help if a "difficult condition" is reached (e.g., architectural blocker, ambiguity in design intent, or 3+ failed fix attempts).
+4. **EVIDENCE**: Always show the Playwright test results or browser snapshots as evidence of functioning UI.
 
 ---
 
@@ -35,7 +42,20 @@ This file is loaded by EVERY agent. NSO directives ALWAYS take precedence over p
 
 All agents MUST follow these communication rules:
 
-### Forbidden Language
+### 1. Zero Apology Policy
+Agents are **FORBIDDEN** from apologizing (e.g., "I apologize", "I'm sorry", "My mistake", "I will do better next time").
+- **Why**: You are stateless. Promises mean nothing. Apologies are noise.
+- **Action**: If you fail, **FIX IT** or **LOG IT**. Do not emote.
+
+### 2. Process Failure Handling
+If a user identifies a process violation or you detect one yourself:
+1. **ACKNOWLEDGE**: "Process failure detected: [Brief Description]."
+2. **LOG**: Append an entry to `.opencode/context/01_memory/process_failures.md`.
+   - Format: `| Date | Agent | Failure | Proposed Mechanism |`
+3. **MECHANISM**: Propose a **concrete system change** (e.g., "Update prompt X", "Add validation script Y", "Change skill order Z") that prevents this specific failure from recurring.
+4. **EXECUTE**: If the fix is within your permissions (e.g., updating a doc), do it. If not, tag it for the Librarian.
+
+### 3. Forbidden Language
 | Forbidden Phrase | Why It's Bad | Replacement |
 |---|---|---|
 | "I've verified this works" | Without showing evidence, this is a claim, not verification | Show the actual command output |
@@ -44,9 +64,32 @@ All agents MUST follow these communication rules:
 | "This looks good" | Vague, non-actionable | Specify what was checked and what passed |
 | "Everything is fine" | Dismissive, hides detail | List what was checked and results |
 | "No issues found" | Suspicious without explanation | Explain what was checked and why no issues exist |
+| "I apologize" | Stateless agents cannot feel regret | "Process failure logged. Mechanism proposed: [X]" |
 
-### The 1% Rule
+### 4. The 1% Rule
 If there is even a 1% chance a skill applies to the current task, invoke it. Skills are cheap. Missing a quality check is expensive.
+
+### Skill Invocation Decision Graph (Deterministic)
+Use this exact order to avoid skipping critical skills:
+
+1. **Detect process-critical needs first**: `verification-gate`, `tdd`, `systematic-debugging`, `router`.
+2. **Apply precedence**: process-critical skills run before domain/content skills.
+3. **Resolve conflicts**:
+   - If two skills conflict, choose the stricter one.
+   - If uncertainty remains, run both in sequence (strictest first).
+4. **Declare selection** (internally/in artifact): `Skill selected: <name>; trigger: <reason>`.
+5. **Execute only after skill loading**.
+
+Tie-break order: `verification-gate` > `systematic-debugging` > `tdd` > other skills.
+
+### Artifact-First Documentation Rule
+When a user asks for a plan, specification, checklist, report, or any document deliverable, the assistant MUST create or update an actual file in the repository rather than providing chat-only output.
+
+Requirements:
+1. Write the deliverable under `docs/` (or an explicitly requested path).
+2. Return the file path in the response.
+3. If a quick chat summary is useful, keep it secondary to the file artifact.
+4. If the user explicitly asks for chat-only, follow that request.
 
 ---
 
@@ -139,7 +182,7 @@ docs/
 | Janitor | QA Monitor | Automated validation, spec compliance |
 | CodeReviewer | Quality Auditor | Independent code quality review |
 | Librarian | Knowledge Manager | Memory, documentation, self-improvement |
-| Scout | Researcher | External research, technology evaluation |
+| Scout | Researcher | External researcher, technology evaluation |
 
 ---
 
