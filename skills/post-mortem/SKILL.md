@@ -295,10 +295,11 @@ After implementing approved changes:
 | Universal (e.g., "Builder skips reading requirements") | Propose NSO instruction change |
 
 For NSO-level improvements:
-1. Identify the specific instruction/prompt change needed
-2. Draft the change
-3. Present to user with rationale
-4. Only implement after explicit user approval
+1. **ALWAYS append** to `~/.config/opencode/nso/docs/session-improvements.md` (MANDATORY, no approval needed for logging)
+2. Identify the specific instruction/prompt change needed
+3. Draft the change
+4. Present to user with rationale
+5. Only implement after explicit user approval (applying the change requires approval)
 
 ---
 
@@ -337,6 +338,7 @@ For NSO-level improvements:
 | `.opencode/context/01_memory/patterns.md` | Modified | New patterns added |
 | `.opencode/context/01_memory/progress.md` | Modified | Workflow completion |
 | `.opencode/context/01_memory/active_context.md` | Modified | Current state |
+| `~/.config/opencode/nso/docs/session-improvements.md` | Modified | Session improvement pipeline (append-only) |
 
 ---
 

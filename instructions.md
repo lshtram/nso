@@ -130,8 +130,14 @@ Requirements:
 
 At the end of every task, the Librarian MUST:
 1. **Run Post-Mortem**: Use the `post-mortem` skill to analyze the session.
-2. **Prioritize NSO Improvements**: If a learning can be generalized, it MUST be applied to the NSO Global Layer rather than just the project.
-3. **User Approval**: Present all suggested improvements to the user and obtain explicit approval before applying.
+2. **Log Improvements**: Append ALL discovered improvements to `~/.config/opencode/nso/docs/session-improvements.md` (MANDATORY — no approval needed for logging).
+3. **Prioritize NSO Improvements**: If a learning can be generalized, it MUST be applied to the NSO Global Layer rather than just the project.
+4. **User Approval**: Present all suggested improvements to the user and obtain explicit approval before APPLYING changes to prompts/skills/instructions.
+
+**Canonical Improvement Pipeline**: `~/.config/opencode/nso/docs/session-improvements.md`
+- Janitor and Librarian MUST append observations here during every session closure
+- Oracle reviews entries and applies approved ones to the relevant NSO files
+- This file is append-only — never delete entries, only update their status
 
 ---
 

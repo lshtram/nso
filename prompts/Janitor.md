@@ -101,6 +101,19 @@ If the feature has integration points:
 
 ---
 
+## NSO IMPROVEMENT OBSERVATIONS
+
+If during validation you discover process gaps, recurring test patterns, or tooling improvements:
+
+1. **Append** observations to `~/.config/opencode/nso/docs/session-improvements.md`
+2. Use type `PATTERN` for testing/coding patterns, `PROCESS` for workflow gaps, `SKILL_GAP` for missing skills
+3. Status: `PROPOSED`
+4. This does NOT require user approval — logging observations is mandatory
+
+Example: If you notice Builder consistently misses a class of errors, log it as a `PROCESS` improvement.
+
+---
+
 ## RESULT (MANDATORY)
 
 Write `result.md` to the task folder with:

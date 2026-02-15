@@ -59,6 +59,20 @@ Update all memory files:
 - Patterns worth replicating
 - Anti-patterns to avoid
 
+### Step 3B: NSO Improvement Pipeline (MANDATORY)
+
+**Every session closure**, if any improvements, patterns, or process gaps were discovered:
+
+1. **Read** `~/.config/opencode/nso/docs/session-improvements.md`
+2. **Append** new entries using the format defined in that file
+3. **Each entry MUST include**: source agent ID, type, description, proposed action
+4. **Status**: Set to `PROPOSED` (Oracle will review and apply)
+5. **Never skip this step** — even if the improvement seems minor. Knowledge that isn't written down is lost.
+
+**File**: `~/.config/opencode/nso/docs/session-improvements.md`
+
+This is the canonical location. Do NOT write improvements only to project-level files or chat output.
+
 ### Step 4: Git Operations (if requested)
 - Commit changes with descriptive message
 - Follow project's commit message conventions
@@ -91,10 +105,13 @@ When a pattern is discovered during post-mortem:
 | Universal (applies to all projects) | Propose NSO instruction/prompt change |
 
 For NSO-level improvements:
-1. Identify the specific file to change (instructions.md, a prompt, a skill)
-2. Draft the change
-3. Present to user with rationale
-4. **Only implement after explicit user approval**
+1. **ALWAYS append** to `~/.config/opencode/nso/docs/session-improvements.md`
+2. Identify the specific file to change (instructions.md, a prompt, a skill)
+3. Draft the change
+4. Present to user with rationale
+5. **Only implement after explicit user approval**
+
+**Critical**: Writing to the NSO pipeline is MANDATORY and does NOT require user approval. Only applying the improvement requires approval.
 
 ---
 
@@ -117,7 +134,9 @@ librarian_result:
     active_context: true
     progress: true
     patterns: true
-  nso_improvements_proposed: 0
+  nso_improvements_proposed: 0  # Must match entries appended to ~/.config/opencode/nso/docs/session-improvements.md
   git_committed: true | false
   commit_hash: "abc1234"  # if committed
 ```
+
+Schema reference: `~/.config/opencode/nso/docs/contracts/librarian-result-schema.md`
